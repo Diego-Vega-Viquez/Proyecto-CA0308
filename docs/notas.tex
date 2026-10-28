@@ -1,0 +1,514 @@
+\documentclass{article} % A4 paper and 11pt font size
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PAQUETES            											    %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[spanish]{babel}
+\linespread{1} % Interlineado
+\usepackage[utf8]{inputenc} % Para poner notas al pie
+\usepackage[hidelinks]{hyperref}
+\usepackage[table]{xcolor}
+\usepackage[most]{tcolorbox} 
+\usepackage{diegocon}
+\usetikzlibrary{arrows.meta, positioning, calc}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Formateo de página            									  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ------------------ MÁRGENES ------------------
+\geometry{
+    left=2.5cm,
+    right=2.5cm,
+    top=2.5cm,
+    bottom=2.5cm
+}
+
+% ------------------ ENCABEZADOS PERSONALIZADOS ------------------
+\fancypagestyle{miestilo}{ % Definimos un nuevo estilo
+    \fancyhf{} % Borra encabezado y pie de página
+    \fancyhead[L]{Caso 07}
+    \fancyhead[C]{Apuntes para el Proyecto}
+    \fancyhead[R]{EMat-UCR}
+    \fancyfoot[L]{CA-0308}
+    \fancyfoot[R]{\thepage}
+}
+
+\usepackage[backend=biber, style=authoryear]{biblatex}
+\addbibresource{references.bib}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Comandos específicos para este documento
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\definecolor{azul}{RGB}{20,60,120}
+\definecolor{verde}{RGB}{20,110,60}
+\definecolor{rojo}{RGB}{170,30,30}
+\definecolor{gris}{RGB}{245,245,245}
+
+\newcommand{\pg}[1]{(p.~#1)}
+\newcommand{\eur}{\texteuro}
+
+
+\newtcolorbox{pendiente}[1]{enhanced,breakable,colback=red!4,colframe=rojo,
+  fonttitle=\bfseries\small,title={ #1},boxrule=0.5pt,arc=1.5pt,left=5pt,right=5pt,top=3pt,bottom=3pt}
+\newtcolorbox{nota}[1]{enhanced,breakable,colback=gris,colframe=azul!70,
+  fonttitle=\bfseries\small,title={#1},boxrule=0.5pt,arc=1.5pt,left=5pt,right=5pt,top=3pt,bottom=3pt}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Inicia el documento
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Indice
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\clearpage
+\begingroup
+\begin{spacing}{1.05} % Aquí defines el interlineado
+\fontsize{12pt}{15pt}\selectfont
+
+\tableofcontents
+
+\end{spacing}
+\endgroup
+\clearpage 
+
+\newpage
+
+\pagestyle{miestilo}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Inicia el documento         									  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Consideraciones previas}
+
+    \subsection{Qué analiza el artículo} 
+    Un panel de empresas, no una empresa. 
+    Muestra inicial: todas las empresas europeas cotizadas con operaciones principales en energía 
+    y servicios públicos (salvo agua), según S\&P Capital IQ; muestra final de \textbf{120 empresas únicas} 
+    \ \pg{4}. La variable explicativa clave (el proxy de llamadas de margen) varía entre empresas, y 
+    los resultados provienen de regresiones de diferencias en diferencias con efectos fijos de empresa y trimestre \ \pg{9}.
+
+    \subsection{Fecha de corte} 
+
+    El artículo contiene fechas con significados distintos que no deben mezclarse:
+
+    \begin{table}[h]
+        \centering\small
+        \begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{3.3cm}>{\raggedright\arraybackslash}p{3.3cm}X}
+            \toprule
+                \textbf{Tipo de fecha} & \textbf{Fecha en el artículo} & \textbf{Observación} \\
+            \midrule
+                Publicación & Recibido 29-dic-2024; Aceptado 11-abr-2026; En línea 15-abr-2026 \ \pg{1} & Irrelevante como fecha de mercado. Solo fija la antigüedad del texto. \\
+                Fin de la muestra & 2023-Q4; CDS hasta 30-dic-2023 \ \pg{4, 11} & Incluye todo el desenlace de la crisis. \\
+                Choque (evento) & Invasión rusa de Ucrania, 24-feb-2022 \ \pg{2--3} & Inicio de los saltos extremos de precios y volatilidad. \\
+                Pico de estrés & 26-ago-2022 (gas 339,2 \eur/MWh; electricidad 644,2 \eur/MWh) \ \pg{3} & Fecha de la variable ``Post Margin Calls'' en la Tabla 4 \pg{11--12}. \\
+                Referencia previa & 2021-Q2 (30-jun-2021) \ \pg{5, 8} & Activos totales y variables ex ante se miden aquí; betas estimadas hasta 30-jun-2021 \pg{6}. \\
+                Período de estimación de betas & 1-ene-2015 a 30-jun-2021 \ \pg{6} & Ejemplo de estimación \emph{ex ante} hecha por los autores. \\
+                Período previo / crisis / posterior & 2020-Q4 a 2021-Q2; 2021-Q3 a 2022-Q3; fin de 2022-Q3 a 2023-Q4 \ \pg{4} & Frecuencia trimestral en el panel; diaria en CDS y volatilidades. \\
+            \bottomrule
+        \end{tabularx}
+        \caption{Fechas del artículo y su significado.}
+    \end{table}
+
+    \begin{figure}[h]
+        \centering
+            \begin{tikzpicture}[x=1.03cm,y=1cm,font=\scriptsize]
+                \fill[green!15] (0,0) rectangle (3,0.7);
+                \fill[red!15] (3,0) rectangle (8,0.7);
+                \fill[blue!12] (8,0) rectangle (13,0.7);
+                \draw[thick] (0,0) rectangle (13,0.7);
+                \foreach \i/\l in {0/{20-Q4},1/{21-Q1},2/{21-Q2},3/{21-Q3},4/{21-Q4},5/{22-Q1},6/{22-Q2},7/{22-Q3},8/{22-Q4},9/{23-Q1},10/{23-Q2},11/{23-Q3},12/{23-Q4}}{
+                    \draw (\i,0)--(\i,0.7); \node at (\i+0.5,0.35) {\l};}
+                \draw (13,0)--(13,0.7);
+                \node[align=center] at (1.5,1.25) {Previo (estable)};
+                \node[align=center] at (5.5,1.25) {Turbulencia y llamadas de margen};
+                \node[align=center] at (10.5,1.25) {Posterior};
+                \draw[-{Stealth},thick,rojo] (5.2,-1.1)--(5.2,0); \node[rojo,align=center] at (5.2,-1.55) {24-feb-2022\\invasión};
+                \draw[-{Stealth},thick,rojo] (7.6,-1.1)--(7.6,0); \node[rojo,align=center] at (7.6,-1.55) {26-ago-2022\\picos gas y\\electricidad};
+                \draw[-{Stealth},thick,azul] (2.95,-1.1)--(2.95,0); \node[azul,align=center] at (2.6,-1.55) {30-jun-2021\\referencia ex ante};
+                \draw[-{Stealth},thick,verde!60!black] (3.9,-1.1)--(3.9,0); \node[verde!60!black,align=center] at (3.9,-2.25) {fin 2021: gas y\\electricidad suben};
+            \end{tikzpicture}
+        \caption{Línea de tiempo del artículo (trimestres). Elaboración propia con fechas de las p.~3--4. La posición dentro de cada trimestre es aproximada.}
+    \end{figure}
+    \newpage
+    \textbf{Alternativas de fecha de corte} \hfill (por ser una evaluación; las fechas base son):
+
+    \begin{itemize}
+        \item \textbf{30-jun-2021 (referencia previa del artículo).} 
+        \begin{itemize}
+            \item \textbf{Ventaja:} es el punto limpio que usan los autores para medir activos, deuda y betas; todo el material del artículo es compatible sin mirar al futuro. 
+            \item \textbf{Limitación:} queda lejos del choque; omite que gas y electricidad ya subían hacia fines de 2021 \pg{3} y que la volatilidad empezó a verse en el segundo semestre de 2021 \pg{2}.
+        \end{itemize}
+        \item \textbf{Último día hábil antes del 24-feb-2022 (23-feb-2022, derivada).} 
+        \begin{itemize}
+            \item \textbf{Ventaja:} responde con más fidelidad a ``¿dónde estaba parada la empresa?'' justo antes del choque; permite una volatilidad ex ante limpia. 
+            \item \textbf{Limitación:} el artículo no da precios de ese día (\textit{\textbf{Esto tocaría buscarlo por aparte}}); y los estados financieros disponibles en esa fecha pueden corresponder a un cierre anterior (verificar la fecha de publicación en la empresa elegida).
+        \end{itemize}
+        \item \textbf{26-ago-2022 (pico de estrés).} 
+        \begin{itemize}
+            \item \textbf{Ventaja:} es la fecha que el propio artículo usa para separar antes y después \pg{11}, con los precios extremos documentados.
+            \item \textbf{Limitación:} ya hubo una primera ola de margen en 2022-Q1; es una fecha de \emph{evaluación del daño}, no de \emph{decisión de cobertura}.
+        \end{itemize}
+        \item \textbf{Fin de 2022-Q3 o 2023-Q4.} Útiles solo para medir persistencia de efectos (CDS, costo de deuda, margen de beneficio). No son fecha de corte para la exposición.
+    \end{itemize}
+
+    \begin{nota}{Recomendación de trabajo (\textit{\textbf{Esta podría ser la propuesta de la presentación}})}
+        Para el análisis de posición y sensibilidad (Secciones 4--6): 
+        \textbf{23-feb-2022} como fecha de corte principal (última observación previa al choque), 
+        con 30-jun-2021 como referencia de balance y 26-ago-2022 como escenario de estrés ex post. 
+    \end{nota}
+
+    \begin{nota}{Regla anti-sesgo de anticipación (se mantiene en todo el documento)}
+        Las volatilidades del artículo (Brent 41\,\%, TTF 75\,\%, electricidad neerlandesa 62\,\%, EUR/USD 8\,\%) se calcularon con datos diarios \textbf{de 2015 a 2023} \pg{2}. Son estadísticas retrospectivas que incluyen la crisis. \textbf{No son la volatilidad que un analista habría tenido el 23-feb-2022.} Se usan solo como referencia comparativa y para ilustrar órdenes de magnitud, siempre rotuladas así. La volatilidad ex ante debe recalcularse con datos hasta la fecha de corte (Sección 5.3).
+        Como lo indican \textcite{GIANNOZZI2026107700}:
+        \begin{quote}
+            In particular, the historical annualized volatility from 2015 to 2023 of Brent crude oil futures is 41\%, that of TTF natural gas futures is 75\%, and that of Dutch power futures is 62\%. As a comparison, the most traded currency pair in the world, the EUR/USD, has an annualized volatility of only 8\% during the same historical period.\ \parencite{BARTRAM20199}
+        \end{quote}
+    \end{nota}
+
+    \newpage
+
+\section{Descripción de la empresa, su negocio y el problema financiero}
+
+    \subsection{Características de las empresas estudiadas}
+
+    \textbf{Qué son.} Empresas europeas cotizadas con actividad principal en petróleo y gas, refinación, generación eléctrica, transmisión y distribución de gas y electricidad 
+    (14 clasificaciones industriales, códigos SIC 1311 a 4991, incluye cogeneración y pequeños productores) \pg{4}. 
+    Deben estar constituidas en Europa para asegurar que aplican las NIIF (IFRS) \pg{4}. 
+    Los ejemplos del Apéndice A3 incluyen, entre otras, a BP, Shell, TotalEnergies, Equinor, RWE, Enel, EDP, Engie, SSE, Drax, National Grid y Elia \pg{16--17}.
+
+    \textbf{Heterogeneidad de tamaño} (Tabla 2, 2021-Q2, millones de euros; \pg{8}):
+
+    \begin{table}[h]
+        \centering\small
+        \begin{tabular}{lrrrrrr}
+        \toprule
+        Variable (\eur\ mill.) & N & Media & Mediana & p5 & p95 & Desv. est. \\
+        \midrule
+        Capitalización de mercado & 116 & 8.704 & 1.635 & 41 & 43.189 & 20.163 \\
+        Activos totales & 120 & 21.458 & 2.651 & 41 & 120.465 & 52.048 \\
+        Efectivo y equivalentes & 120 & 1.484 & 177 & 1,6 & 7.109 & 4.545 \\
+        Deuda total & 120 & 6.044 & 965 & 0,2 & 38.853 & 14.268 \\
+        Deuda bancaria & 103 & 996 & 432 & 0,0 & 4.087 & 1.606 \\
+        Préstamos a plazo & 95 & 969 & 374 & 0,1 & 3.699 & 1.555 \\
+        Crédito rotatorio no dispuesto & 52 & 1.399 & 396 & 21 & 5.447 & 2.181 \\
+        \bottomrule
+        \end{tabular}
+        \caption{Tamaño y financiamiento antes de las llamadas de margen (extracto de la Tabla 2 del artículo, p.~8).}
+    \end{table}
+
+    Los datos de la Tabla 2 permiten comprender la situación financiera de las empresas antes de que se intensifique la crisis energética europea. Una característica importante es la gran diferencia de tamaño entre las compañías estudiadas
+    %Por ejemplo, mientras que el valor promedio de los activos totales alcanza los 21.458 millones de euros, la mitad de las empresas posee activos inferiores a 2.651 millones de euros. Esta diferencia se explica porque la muestra incluye tanto grandes corporaciones energéticas internacionales como empresas considerablemente más pequeñas. Por lo tanto, el promedio se encuentra influido por unas pocas compañías de gran tamaño y no necesariamente representa la situación de una empresa típica del sector 
+    \parencite{GIANNOZZI2026107700}.
+
+    % Esta diversidad también se refleja en los recursos financieros disponibles. Antes de la crisis, las empresas mantienen, en promedio, 1.484 millones de euros en efectivo y equivalentes, frente a una deuda total promedio de 6.044 millones de euros. Sin embargo, estas cantidades varían considerablemente entre compañías, por lo que no todas tienen la misma capacidad para responder a una necesidad inesperada de dinero. Algunas disponen de importantes reservas de efectivo o de líneas de crédito previamente negociadas con los bancos, mientras que otras cuentan con recursos mucho más limitados. Esta diferencia resulta especialmente relevante porque las llamadas de margen obligan a las empresas a conseguir grandes cantidades de efectivo en períodos muy cortos, incluso cuando sus operaciones comerciales continúan siendo rentables.
+
+    Otro aspecto importante es que las empresas que posteriormente experimentan las mayores llamadas de margen no necesariamente se encuentran en peores condiciones financieras antes de la crisis. Al comparar compañías de tamaño similar, los autores no identifican diferencias estadísticamente significativas en sus reservas de efectivo, deuda total, activos fijos y otros indicadores generales de estabilidad financiera. De hecho, las empresas que posteriormente enfrentan mayores exigencias de garantías presentan, en promedio, mayores montos de préstamos bancarios y líneas de crédito disponibles, así como un costo de financiamiento aproximadamente 0,4 puntos porcentuales menor. Esto sugiere que mantienen relaciones bancarias más desarrolladas y condiciones de financiamiento relativamente favorables antes del aumento extraordinario de los precios energéticos \parencite{GIANNOZZI2026107700}.
+
+    %En conjunto, estos resultados muestran que las empresas europeas del sector energético llegan a la crisis de 2022 con capacidades financieras muy diferentes, pero que 
+    %\textbf{el tamaño de la empresa o su situación financiera inicial no explican por sí solos la magnitud del riesgo que enfrenta}. 
+    %Una compañía puede contar con activos importantes, acceso al crédito y condiciones de financiamiento favorables y, aun así, experimentar dificultades si sus contratos de derivados requieren depósitos de efectivo superiores a los recursos disponibles. Por ello, el problema central no consiste únicamente en determinar si las empresas son rentables o poseen suficientes activos, sino en evaluar si pueden obtener el dinero necesario para cumplir oportunamente con las llamadas de margen durante períodos de elevada volatilidad.
+        
+    \subsection{Modelo de negocio y dependencia de los precios energéticos}
+
+        \begin{itemize}
+            \item Los productores y distribuidores enfrentan un riesgo sustancial sobre los precios que reciben por petróleo, gas y electricidad, y usan derivados para cubrirse contra movimientos desfavorables \pg{2}.
+            \item Práctica típica: \textbf{vender por adelantado la producción de uno o más años con posiciones cortas en derivados}, lo que asegura un precio mínimo y protege el flujo de caja cuando los precios bajan \pg{2}.
+            \item Costo de esa cobertura: cuando los precios suben, la empresa suele ser la \emph{contraparte perdedora} y puede recibir llamadas de margen \pg{2}.
+            \item Uso casi universal de derivados: 96\,\% de los informes anuales mencionan cobertura y 98\,\% derivados (N = 102); 59\,\% mencionan futuros, 75\,\% forwards, 70\,\% opciones y 82\,\% swaps \pg{7}. Valor razonable de derivados sobre activos totales: media 8,3\,\% (mediana 2,0\,\%; p95 35,0\,\%; N = 64), de los cuales alrededor del 80\,\% vencen en menos de un año \pg{6--7}.
+            \item Las betas ex ante de los rendimientos accionarios frente a los precios de materias primas son positivas pero pequeñas (media: petróleo 0,06; gas 0,01; electricidad 0,01), consistentes con coberturas extendidas \pg{6--7}.
+            \item Empresas que cubren insumos y producción (p.~ej., generadoras eléctricas) mantienen posiciones largas en combustibles y cortas en electricidad; con precios al alza ganan en las largas y pierden en las cortas, y el efecto en liquidez no se compensa necesariamente \pg{5}.
+        \end{itemize}
+
+    \subsection{Derivados, objetivos de cobertura y funcionamiento de las llamadas de margen}
+
+        \textbf{Objetivos de la cobertura \pg{1}.} La literatura citada por los autores \textcite{Bartram_Brown_Conrad_2011}, \textcite{CHEN2014221}, \textcite{Gilje2017}; sostienen que cubrir con derivados aumenta el valor de la empresa, reduce el riesgo de quiebra y el riesgo total, reduce el costo de la deuda y mitiga la subinversión.
+
+        \textbf{Mecánica del margen:}
+        \begin{enumerate}
+            \item Los derivados cotizados (ETD) se valoran a mercado y las pérdidas y ganancias se liquidan diariamente; ambas contrapartes depositan fondos líquidos en una cuenta de margen \pg{1}.
+            \item \begin{itemize}
+                \item \emph{Margen inicial:} se deposita para abrir posiciones. 
+                \item \emph{Margen de variación:} se deposita cuando la volatilidad exige cubrir pérdidas \pg{1}. 
+            \end{itemize}
+            El margen inicial puede aportarse en efectivo o en valores de alta calidad; el de variación solo en efectivo \pg{4}, nota 9.
+            \item Plazo de aporte: uno a cinco días desde la llamada \pg{2}; típicamente menos de cinco días y a veces 24 horas \pg{11}.
+            \item Si no se aporta, la bolsa (o la contraparte en OTC) puede cerrar las posiciones, lo que realiza la pérdida antes del vencimiento y puede llevar a distress o quiebra \pg{2}.
+            \item Si los precios vuelven a la normalidad, el efectivo se devuelve; por eso, en teoría, las llamadas no deberían tener efectos duraderos. La tesis del artículo es que \emph{sí los tienen} por la forma en que se obtuvo el efectivo \pg{2, 4}.
+        \end{enumerate}
+
+    \subsection{El problema financiero: cadena de transmisión}
+
+        \begin{figure}[h]
+            \centering
+                \begin{tikzpicture}[node distance=0.5cm and 0.45cm,font=\scriptsize,
+                    box/.style={draw=azul,fill=azul!6,rounded corners=2pt,minimum width=2.35cm,minimum height=1.0cm,align=center,text width=2.3cm},
+                    arr/.style={-{Stealth},thick,azul}]
+                        \node[box] (a) {Alza de precios de gas, electricidad y petróleo};
+                        \node[box,right=of a] (b) {Pérdida mark-to-market en posiciones cortas};
+                        \node[box,right=of b] (c) {Llamada de margen: efectivo en 1--5 días};
+                        \node[box,right=of c] (d) {Fuente: deuda, efectivo propio o venta de activos};
+                        \node[box,below=0.7cm of a] (e) {Más endeudamiento o menos activos};
+                        \node[box,right=of e,fill=red!8,draw=rojo] (f) {Mayor spread CDS (riesgo de incumplimiento)};
+                        \node[box,right=of f,fill=red!8,draw=rojo] (g) {Mayor costo de deuda (pequeñas, poca línea de crédito)};
+                        \node[box,right=of g,fill=red!8,draw=rojo] (h) {Menor margen de beneficio (grandes, corto plazo)};
+                    \draw[arr] (a)--(b); \draw[arr] (b)--(c); \draw[arr] (c)--(d);
+                    \draw[arr] (d.south)--++(0,-0.35)-|(e.north);
+                    \draw[arr] (e)--(f); \draw[arr] (f)--(g); \draw[arr] (g)--(h);
+                \end{tikzpicture}
+            \caption{Mecanismo documentado por el artículo (elaboración propia a partir de las p.~2--3 y las Secciones 3.2--3.5).}
+        \end{figure}
+
+    \subsection{Dónde estaban paradas las empresas: antes, durante y después}
+
+        \begin{table}[H]
+            \centering\small
+                \begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{2.6cm}X}
+                    \toprule
+                        \textbf{Fase} & \textbf{Posición financiera y riesgo documentados} \\
+                    \midrule
+                        \textbf{Antes} \newline (2020-Q4 a 2021-Q2) &
+                        Precios relativamente estables \pg{4}. Cubiertas con derivados (98\,\% mencionan derivados). Betas de precio pequeñas. Sin diferencias ex ante entre empresas, una vez controlado el tamaño, salvo mayor deuda bancaria y mayor crédito disponible en las que luego sufrieron más llamadas \pg{7--8}. CDS medio de 47,6 pb (21 empresas) \pg{8}. \\
+                    \midrule
+                        \textbf{Durante} (2021-Q3 a 2022-Q3) &
+                        Gas y electricidad suben desde fines de 2021; el 24-feb-2022 los mayores rendimientos diarios (gas 51,1\,\%; electricidad 46,2\,\%; petróleo 8,3\,\%, en 2022-Q1) \pg{3}. Los depósitos de margen del tercil más afectado empiezan a subir en 2021-Q3, alcanzan su máximo entre 2022-Q1 y 2022-Q3 y bajan después \pg{6--7}, Fig.~2. Se mantienen las posiciones (no se salió de las coberturas) \pg{7}. Fuente de caja: crédito en sus distintas formas; las pequeñas venden activos \pg{10--11}. Segunda ola de turbulencia en 2022-Q3 \pg{3}. \\
+                    \midrule
+                        \textbf{Después} \newline (desde fin de 2022-Q3 a 2023-Q4) &
+                        Los precios bajan en el último trimestre de 2022 y en 2023 y los depósitos se devuelven \pg{4}. Pero: CDS del tercil superior llegó a 3 veces su nivel previo (3,6 veces el máximo diario) en 2022-Q3 y no regresó al nivel inicial \pg{11}; costo de deuda más alto por más de un año en pequeñas y con poca línea de crédito \pg{13}; margen antes de impuestos más bajo en 2022-Q3 (significativo) \pg{14}. \\
+                    \bottomrule
+                \end{tabularx}
+            \caption{Posición de las empresas en cada fase (síntesis de información categoría ).}
+        \end{table}
+
+        \textit{En esta parte me parece que lo mejor es utilizar las filas de \comillas{Antes} y \comillas{Durante}, para cumplir con el requerimiento del profe, debemos buscar datos, fuentes que respalden estas afirmaciones respecto a los precios de mercado.}
+
+\section{Estado del mercado en la fecha de corte: precios, tipo de cambio, tasas, regulación y competencia}
+
+    \begin{pendiente}{\textit{Limitación central de esta sección}}
+        Mientras no se fije una fecha de corte y una empresa, el artículo permite describir el \emph{régimen} de mercado (niveles máximos, saltos y fechas), pero \textbf{no} los niveles de precio, tipo de cambio ni tasas en una fecha de corte específica.
+    \end{pendiente}
+
+    \subsection{Precios}
+
+        \begin{table}[H]
+            \centering\small
+                \begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{4.1cm}X>{\raggedright\arraybackslash}p{1.5cm}}
+                    \toprule
+                        \textbf{Dato} & \textbf{Valor} & \textbf{Pág.} \\
+                    \midrule
+                        Gas y electricidad antes del choque & Comienzan a subir hacia fines de 2021; el petróleo se mantenía relativamente estable & 3 \\
+                        Mayores rendimientos diarios (2022-Q1) & Gas 51,1\,\%; electricidad 46,2\,\%; petróleo 8,3\,\% & 3 \\
+                        Máximo del petróleo & 117,5 \eur/barril (marzo 2022); nunca volvió a ese máximo & 3 \\
+                        Máximos de gas y electricidad & 26-ago-2022: 339,2 \eur/MWh (gas) y 644,2 \eur/MWh (electricidad) & 3 \\
+                        Mayor aumento diario de margen (ESMA) & 11\,\% para todas las cámaras de compensación de materias primas en ``ese día'' (el texto lo enlaza con los máximos de agosto de 2022; confirmar la fecha en el informe ESMA citado) & 4 \\
+                        Evolución posterior & Los precios bajaron en el último trimestre de 2022 y siguieron bajando en 2023 & 4 \\
+                    \bottomrule
+                \end{tabularx}
+            \caption{Hitos de precios documentados.}
+        \end{table}
+
+        Series de referencia: Brent (ICE), gas natural TTF (ICE) y electricidad base neerlandesa (Dutch Power Base Load, ICE) en \eur\ por barril o MWh \pg{3, 4}. La Figura 1 del artículo (julio 2020 a diciembre 2023) grafica las tres series, con gas y electricidad en el eje primario (0 a 700) y petróleo en el secundario (0 a 120) \pg{4}. Para este trabajo se debe \textbf{recopilar la serie diaria completa} (Sección 5.3); las lecturas visuales de la figura no se usan como datos.
+
+    \subsection{Tipo de cambio}
+
+        \paragraph{Qué da el artículo.} 
+        Solo la volatilidad anualizada de EUR/USD 2015--2023 (8\,\%), como comparación con la volatilidad de las materias primas \pg{2}, y un tipo de conversión implícito en el ejemplo de Drax (459 millones de euros equivalen a 407 millones de libras, al tipo del 31-dic-2022 de S\&P Capital IQ)\ \pg{17}. 
+        
+        En el paper se deduce que $459/407\approx 1{,}128$ \eur/£ (Anexo B, B3). Los precios del artículo ya están convertidos a euros (Fig.~1). 
+        
+        \textit{\textbf{Hace falta investigar}} el nivel spot de EUR/USD y EUR/GBP en la fecha de corte, y si las empresas cubren su exposición cambiaria (el artículo menciona que el riesgo de tipo de cambio es poco significativo para la mayoría de las carteras, p.~2).
+
+    \subsection{Tasas de interés y costo de crédito}
+
+        \pg{8, 11--13}: no se informan tasas de política monetaria ni curvas. Lo que sí hay es:
+        \begin{itemize}
+            \item Costo de deuda de la empresa (rendimiento medio ponderado de sus bonos, de Bloomberg): media 0,006, mediana 0,004, p5 $-0{,}002$, p95 0,017 en 2021-Q2.
+            \item CDS a 5 años (21 empresas), promedio diario 47,6 pb y máximo 51,9 pb en 2021-Q2; el tercil más afectado alcanzó 3 (3,6) veces esos niveles en 2022-Q3.
+            \item Coeficientes de las Tablas 4 y 5 (Secciones 5 y 6 del documento).
+        \end{itemize}
+        \textit{\textbf{Hace falta investigar}} el nivel de tasas de referencia y de rendimientos de bonos corporativos en la fecha de corte; condiciones de acceso a crédito bancario.
+
+    \subsection{Regulación}
+
+        \pg{2, 15, 17--18}:
+
+        \begin{itemize}
+        \item Después de la crisis de 2008 se endureció la regulación de derivados: compensación central y márgenes más estrictos. Eso reduce el riesgo de contraparte pero puede \emph{generar riesgo de liquidez} en estrés.
+        \item EMIR (2012): los contratos OTC estandarizados deben compensarse en una CCP. EMIR Refit (2019): el umbral de compensación para contrapartes no financieras en derivados de materias primas es de 4.000 millones de euros de nocional bruto; por encima, deben compensar.
+        \item Contratos OTC no compensados: el Artículo 11 de EMIR exige valoración diaria a mercado e intercambio oportuno de garantías; el Reglamento 2016/2251 aclara que incluye márgenes iniciales y de variación. Aplica a financieras y a no financieras sobre el umbral. Bajo el umbral, la contraparte financiera igualmente debe exigir garantías.
+        \item Solo 9\,\% de los derivados OTC de materias primas se compensaban centralmente en el período (ESMA). Un 64\,\% de las operaciones OTC de materias primas no compensadas tenían acuerdo de garantías aun antes de la regulación, y 83\,\% de las garantías se entregaba en efectivo (encuesta ISDA 2010).
+        \item Cuota OTC sobre ETD: subió a 52,8\,\% en 2022-Q4 y volvió a cerca de 40\,\% en 2023; alrededor del 60\,\% permaneció en bolsa \pg{18}.
+        \item Otros marcos: UK EMIR, equivalencias de la Comisión Europea con otros países y el marco BCBS-IOSCO desde 2016 para márgenes en OTC no compensados.
+        \item Propuestas tras la crisis: ampliar activos elegibles como garantía en las CCP y aceptar garantías bancarias; no son preferidas por los participantes y se aplican solo temporalmente. EBA y BIS piden más transparencia en los modelos de margen \pg{15}.
+        \item Intervenciones directas mencionadas: rescate y nacionalización de Uniper (fn.~11, p.~4); impuestos extraordinarios a empresas energéticas en varios países europeos (p.~14).
+        \end{itemize}
+        \textit{\textbf{Hace falta investigar}} el regulación vigente \emph{en la fecha de corte} (umbrales, modelos de margen de la CCP elegida, medidas de emergencia y su fecha de entrada en vigor).
+
+    \subsection{Competencia y estructura de mercado}
+
+        El artículo \textbf{no} analiza competencia. 
+        Solo menciona que, si las empresas gestionan bien el riesgo de margen, 
+        no deberían perder posición competitiva ni rentabilidad \pg{13}, 
+        y que los bancos aumentaron su exposición al sector energético por el apoyo prestado 
+        (EBA, p.~15). 
+        
+        Todo lo demás \textit{\textbf{hace falta investigar}}: participantes y cuotas del mercado, 
+        posición relativa de la empresa elegida, barreras, 
+        regulación tarifaria y estrategia de pares frente a la volatilidad. 
+        \textit{Esto pasa si elegimos una empresa para analizar}
+
+    \subsection{Tamaño del mercado de derivados}
+
+        \pg{2}: contratos de materias primas negociados en bolsa pasaron de casi 4 mil millones (2014) 
+        a más de 11 mil millones (2023) según la WFE. Nocional de derivados de materias primas en la UE: 
+        más de 2,5 billones de euros a fines de 2021 y 3,3 billones a fines de 2022 (ESMA), 
+        de los cuales cerca del 40\,\% corresponde a empresas no financieras. 
+        En el paper se deduce que el crecimiento 2021--2022 $=3{,}3/2{,}5-1=32\%$; 
+        magnitud no financiera $\approx0{,}40\times3{,}3\approx1{,}3$ billones 
+        (cota superior, pues el texto dice ``casi 40\,\%''; Anexo B, B4--B5).
+
+\section{Variable subyacente: qué es, dónde cotiza y fuente de los datos}
+
+    \begin{table}[H]
+        \centering\footnotesize
+            \begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{2.2cm}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{2.0cm}>{\raggedright\arraybackslash}p{2.1cm}>{\raggedright\arraybackslash}p{2.2cm}}
+                \toprule
+                    \textbf{Subyacente} & \textbf{Contrato de referencia (según el artículo)} & \textbf{Mercado} & \textbf{Fuente de datos} & \textbf{Volatilidad 2015--2023 (retrospectiva)} \\
+                \midrule
+                    Gas natural & Futuros TTF (``Natural Gas -- TTF'') en \eur/MWh \pg{3--4} & ICE & Bloomberg \pg{3} & 75\,\% \pg{2} \\
+                    Electricidad & Dutch Power Base Load Futures en \eur/MWh \pg{3--4} & ICE & Bloomberg & 62\,\% \\
+                    Petróleo & Brent crude oil futures en \eur/barril \pg{3--4} & ICE & S\&P Capital IQ & 41\,\% \\
+                    EUR/USD (comparación) & Par de divisas & -- & Capital IQ y Bloomberg (nota 5) & 8\,\% \\
+                \bottomrule
+            \end{tabularx}
+        \caption{Subyacentes del artículo.}
+    \end{table}
+
+    Contratos adicionales usados para estimar betas \pg{6}, nota 16: futuros de gas natural del Reino Unido, Phelix DE Base Month (electricidad alemana) y precios mayoristas de electricidad europeos promediados por país (datos de Ember). Las volatilidades se calcularon con datos diarios de Capital IQ y Bloomberg (nota 5, p.~2).
+
+    \textit{\textbf{Propuesta de subyacente principal}} (a confirmar): \textbf{gas TTF}, porque 
+    \begin{enumerate}
+    \item[(i)] es el que da nombre al caso; 
+    \item[(ii)] tiene la mayor volatilidad histórica documentada (75\,\%) y el mayor rendimiento diario (51,1\,\%) \pg{2--3}; 
+    \item[(iii)] los autores lo vinculan con los mayores aumentos de margen y está en la Figura 1. La electricidad neerlandesa es la alternativa si la empresa elegida es una generadora.
+    \end{enumerate}
+
+    \begin{pendiente}{Datos que faltan para la Sección 3}
+    \begin{enumerate}
+        \item[(i)] Vencimiento del contrato (el artículo habla de ``principales contratos de referencia'' sin precisar mes de vencimiento);
+        \item[(ii)] Serie diaria completa;
+        \item[(iii)] Mercado exacto de cotización y plataforma de la que se extraerá el dato en el trabajo final; 
+        \item[(iv)] Si la empresa elegida cubre con TTF directamente o con otro punto de entrega (riesgo de base). Ver fila 2 de la Sección~\ref{sec:faltante}.
+    \end{enumerate}
+    \end{pendiente}
+
+\section{Posición: ¿larga o corta?}
+
+\textbf{Respuesta a partir del artículo:} los productores y distribuidores venden por adelantado su producción mediante \textbf{posiciones cortas} en derivados \pg{2}. Por tanto, \textbf{pierden en el derivado cuando el precio sube} y reciben llamadas de margen. Sus ingresos físicos, en cambio, aumentan con el precio (betas positivas \pg{6}).
+
+\begin{table}[H]
+    \centering\small
+        \begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{3.3cm}>{\raggedright\arraybackslash}p{3.6cm}X}
+            \toprule
+                \textbf{Capa de exposición} & \textbf{Dirección cuando el precio sube} & \textbf{Base en el artículo} \\
+            \midrule
+                1. Económica (actividad física) & Gana (productor) & Betas positivas de rendimientos accionarios frente a gas, electricidad y petróleo (medias 0,01; 0,01; 0,06) \pg{6--7}. \\
+                2. Financiera (derivados) & Pierde (posición corta) & Pre-venta de producción con posiciones cortas \pg{2}; pierde ``contraparte perdedora'' \pg{2}. \\
+                3. Neta tras cobertura & Gana poco: betas cercanas a cero indican cobertura alta & Las betas pequeñas ``sugieren alta prevalencia de cobertura'' \pg{6}. Si la cobertura fuera de 100\,\% las betas serían cero. \\
+                4. De liquidez & Pierde efectivo \emph{ahora}, gana ingresos \emph{después} (se deduce en el paper) & Margen en 1--5 días \pg{2}; ingresos al vender la producción. Desfase temporal, inferencia a partir de las p.~2 y 4. \\
+            \bottomrule
+        \end{tabularx}
+    \caption{Posición por capas.}
+\end{table}
+
+\textbf{Matices que condicionan la respuesta para una empresa concreta:}
+\begin{itemize}
+    \item \textbf{Productor puro o integrado:} corta en derivados, larga en lo físico (arriba).
+    \item \textbf{Generadora que cubre insumos y producción:} larga en combustibles y corta en electricidad; el efecto sobre el margen depende del tipo de contrato (con CCP no recibe las ganancias de las largas; en OTC no compensado puede recibirlas) \pg{5}. Los autores reconocen que no pueden medir los márgenes \emph{recibidos}, lo que limita el proxy \pg{5}.
+    \item \textbf{Distribuidor o comercializador comprador neto:} el artículo agrupa ``productores y distribuidores'' pero describe la pre-venta como práctica típica; \footnote{no establece si un distribuidor puro estaría largo. La dirección debe confirmarse con las notas de derivados de la empresa elegida.}
+\end{itemize}
+
+\begin{pendiente}{Qué hay que averiguar para afirmarlo de una empresa}
+    Informe anual (notas de instrumentos financieros y gestión de riesgos, IFRS~7 y IFRS~9): volumen anual de producción o compra por commodity; porcentaje cubierto por año; instrumentos y contrapartes; nocional por posición; vencimientos; valor razonable; garantías depositadas y condiciones de margen. Con esto se construye la \emph{posición neta física-financiera}. Ver fila 1 de la Sección~\ref{sec:faltante}.
+\end{pendiente}
+
+    \subsection{Cómo mide el artículo el dinero en riesgo (proxy de llamadas de margen)}
+
+    \textbf{Definición \pg{5}.}
+
+    \[
+    \text{Ind}_{i,t}=\frac{\text{OCxC}_{i,t}+\text{EfRestr}_{i,t}+\text{OAC}_{i,t}-\text{IntDev}_{i,t}-\text{ActDisc}_{i,t}-\text{DerivAct}_{i,t}}{\text{Activos totales}_{i,\,2021\text{-Q2}}}
+    \]
+
+    donde OCxC son otras cuentas por cobrar, EfRestr efectivo restringido, OAC otros activos corrientes, IntDev interés devengado por cobrar, ActDisc activos de operaciones discontinuadas y DerivAct derivados activos corrientes.
+    
+    \[
+    \text{Proxy}_i=\max\Big\{\text{Ind}_{i,t} \;\big|\; t\in[2021\text{-Q3},2022\text{-Q3}]\Big\}-\text{Ind}_{i,\,2021\text{-Q2}}
+    \]
+
+    Es el \emph{máximo aumento de depósitos de margen} durante la crisis, como fracción de los activos totales previos. Los autores validan las tres cuentas con 25 empresas que dicen en su informe anual dónde las registran \pg{16--17}.
+    \newpage
+    \textbf{Distribución del proxy (Tabla 1, N = 120) \pg{7}:}
+    \begin{table}[H]
+    \centering\small
+    \begin{tabular}{lrrrrrrr}
+    \toprule
+    & Media & Desv. est. & p5 & p25 & Mediana & p75 & p95 \\
+    \midrule
+    Proxy (fracción de activos totales) & 0,11 & 0,22 & 0,00 & 0,01 & 0,03 & 0,10 & 0,44 \\
+    \bottomrule
+    \end{tabular}
+    \caption{Distribución del proxy de llamadas de margen.}
+    \end{table}
+
+    \textbf{Traducción a euros:} 
+    $$\text{Margen}_i\ (\text{\eur})=\text{Proxy}_i\times \text{Activos totales}_{i,2021\text{-Q2}}$$
+    Con la media: $0{,}11\times21.458=2.360$ millones 
+    (el artículo dice ``aproximadamente 2.300''; 
+    la diferencia se debe al redondeo del 0,11 y a que el producto de medias no es la media del producto) 
+    \pg{6, 8}. Referencias de comparación (con esa salvedad): equivale a $2.360/1.484\approx1{,}6$ veces 
+    el efectivo medio y a $\approx39\%$ de la deuda total media (6.044) (Anexo B, B1).
+
+    \subsection{Volatilidad: lo que da el artículo y cómo usarlo}
+
+    \begin{itemize}
+        \item \pg{2}, nota 5: volatilidad anualizada 2015--2023 (datos diarios): Brent 41\,\%, TTF 75\,\%, electricidad neerlandesa 62\,\%, EUR/USD 8\,\%. \textbf{Retrospectiva e incluye la crisis.}
+        \item \pg{3}: mayores rendimientos diarios en 2022-Q1: gas 51,1\,\%, electricidad 46,2\,\%, petróleo 8,3\,\%.
+        \item Con una volatilidad constante de 75\,\%, un rendimiento diario de 51,1\,\% equivale a unas 8,7 desviaciones estándar diarias (9,7 en electricidad con 62\,\%; 3,1 en petróleo con 41\,\%). Supuestos: rendimiento simple convertido a logarítmico; 252 días hábiles por año; volatilidad constante. Un evento de esa magnitud es inverosímil bajo normalidad: el modelo con volatilidad constante subestima los extremos y las volatilidades 2015--2023 ya incluyen esos días.
+        \item \pg{6}: las \textbf{betas ex ante} se estimaron con datos diarios del 1-ene-2015 al 30-jun-2021, \emph{antes} del estrés: es el ejemplo de estimación sin información posterior que sí respeta una fecha de corte de mediados de 2021.
+    \end{itemize}
+
+    \subsection{Procedimiento propuesto para calcular la volatilidad histórica hasta la fecha de corte}
+
+    \textit{Todo esto hay que hacerlo por nuestra cuenta} en datos, pero el \emph{método} es financiero estándar y se documenta aquí:
+
+    \begin{enumerate}
+    \item Descargar precios diarios de liquidación del contrato (p.~ej., TTF a un mes) desde una fecha de inicio hasta la fecha de corte $T$, \textbf{sin ninguna observación posterior a $T$}.
+    \item Rendimientos logarítmicos: $r_t=\ln(P_t/P_{t-1})$.
+    \item Volatilidad histórica anualizada: $\hat\sigma=\sqrt{N_a}\cdot s(r_t)$, con $s$ la desviación estándar muestral y $N_a$ el número de observaciones por año del mercado elegido (252 como convención). Calcular con varias ventanas (60, 126, 252 días y todo el historial disponible) para mostrar sensibilidad a la ventana.
+    \item Opcionalmente, ponderación exponencial (EWMA) para dar más peso a lo reciente.
+    \item Informar \textbf{varias fechas de corte} lado a lado (30-jun-2021, 31-dic-2021, 23-feb-2022, 26-ago-2022) y la cifra retrospectiva del artículo, para evidenciar el cambio de régimen.
+    \item Verificar que ninguna fórmula del Excel use datos posteriores a $T$ (control en la Sección~\ref{sec:excel}).
+    \end{enumerate}
+
+%\section{Datos utilizados} 
+%La investigación emplea datos financieros de 120 empresas europeas que cotizan en bolsa y 
+%pertenecen a los sectores energético y de servicios públicos. 
+%La información proviene principalmente de S\&P Capital IQ y Bloomberg. 
+%Se utilizan estados financieros trimestrales, precios diarios del gas natural, 
+%petróleo y electricidad, información sobre derivados financieros, endeudamiento, 
+%liquidez, activos, costo de deuda, riesgo de incumplimiento y rentabilidad empresarial. 
+%El análisis se desarrolla mediante herramientas econométricas, incluyendo modelos de diferencias en diferencias.
+
+
+\newpage
+
+\printbibliography[title=Referencias]
+
+\end{document}

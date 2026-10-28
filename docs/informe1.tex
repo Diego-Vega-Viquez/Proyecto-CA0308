@@ -1,0 +1,163 @@
+%==============================
+% PLANTILLA IEEE - MATEMÁTICA PURA (TAREA)
+% Solo paquetes de matemática pura + TikZ
+% Bibliografía estilo IEEE
+%==============================
+
+\documentclass[letterpaper,11pt]{article}
+
+%==============================
+% GEOMETRÍA Y FORMATO GENERAL
+%==============================
+\usepackage[a4paper, margin=2.54cm]{geometry}
+\usepackage{indentfirst}
+\usepackage{setspace}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0pt}
+\setstretch{1}
+
+%==============================
+% IDIOMA, CODIFICACIÓN Y TIPOGRAFÍA
+%==============================
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+%==============================
+% PAQUETES MATEMÁTICOS
+%==============================
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}
+\usepackage{mathrsfs}   % letras caligráficas para sigma-álgebras, espacios, etc.
+
+%==============================
+% GRÁFICOS (SOLO TIKZ)
+%==============================
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{patterns}
+
+%==============================
+% COLORES
+%==============================
+\usepackage[dvipsnames]{xcolor}
+
+%==============================
+% LISTAS
+%==============================
+\usepackage{enumitem}
+\setlist[itemize]{noitemsep, topsep=0pt, leftmargin=1cm}
+\setlist[enumerate]{label=\arabic*.}
+
+%==============================
+% HIPERVÍNCULOS
+%==============================
+\usepackage[colorlinks=true,linkcolor=black,urlcolor=black,citecolor=black]{hyperref}
+
+%==============================
+% ENCABEZADO Y PIE DE PÁGINA
+%==============================
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Nombre del Curso}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+%==============================
+% RECUADROS PARA ENTORNOS MATEMÁTICOS
+%==============================
+\usepackage{tcolorbox}
+\tcbset{colframe=blue!50!black, colback=white, boxrule=1pt}
+
+%==============================
+% DEFINICIÓN DE COLORES POR ENTORNO
+%==============================
+\definecolor{definitioncolor}{HTML}{002c3e}
+\definecolor{axiomcolor}{HTML}{004c70}
+\definecolor{theoremcolor}{HTML}{006494}
+\definecolor{corollarycolor}{HTML}{0096c7}
+\definecolor{lemacolor}{HTML}{00b4d8}
+\definecolor{propositioncolor}{HTML}{90e0ef}
+\definecolor{exercisecolor}{HTML}{bdeff8}
+\definecolor{background}{HTML}{FFFFFF}
+\definecolor{resultcolor}{HTML}{ffb703}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definición}[section]
+\newtheorem{axiom}{Axioma}[section]
+\newtheorem{theorem}{Teorema}[section]
+\newtheorem{corollary}{Corolario}[section]
+\newtheorem{lemma}{Lema}[section]
+\newtheorem{proposition}{Proposición}[section]
+\newtheorem{exercise}{Ejercicio}[section]
+\newtheorem{result}{Resultado}[section]
+
+\tcolorboxenvironment{definition}{colframe=definitioncolor, colback=background, coltitle=white, fonttitle=\bfseries, boxrule=0.5mm, arc=0.2mm}
+\tcolorboxenvironment{axiom}{colframe=axiomcolor, colback=background, coltitle=white, fonttitle=\bfseries, boxrule=0.5mm, arc=0.2mm}
+\tcolorboxenvironment{theorem}{colframe=theoremcolor, colback=background, coltitle=white, fonttitle=\bfseries, boxrule=0.5mm, arc=0.2mm}
+\tcolorboxenvironment{corollary}{colframe=corollarycolor, colback=background, coltitle=white, fonttitle=\bfseries, boxrule=0.5mm, arc=0.2mm}
+\tcolorboxenvironment{lemma}{colframe=lemacolor, colback=background, coltitle=white, fonttitle=\bfseries, boxrule=0.5mm, arc=0.2mm}
+\tcolorboxenvironment{proposition}{colframe=propositioncolor, colback=background, coltitle=white, fonttitle=\bfseries, boxrule=0.5mm, arc=0.2mm}
+\tcolorboxenvironment{exercise}{colframe=exercisecolor, colback=background, coltitle=white, fonttitle=\bfseries, boxrule=0.5mm, arc=0.2mm}
+\tcolorboxenvironment{result}{colframe=resultcolor, colback=background, coltitle=white, fonttitle=\bfseries, boxrule=0.5mm, arc=0.2mm}
+
+\renewcommand{\refname}{Referencias}
+
+
+%==============================
+% INFORMACIÓN DEL DOCUMENTO
+%==============================
+\newcommand{\titulo}{Título de la Tarea}
+\newcommand{\autor}{Nombre del Estudiante}
+\newcommand{\fecha}{\today}
+
+\title{\titulo}
+\author{\autor}
+\date{\fecha}
+
+\begin{document}
+
+\begin{titlepage}
+	\begin{center}
+		\vspace*{2cm}
+		\Huge
+		\textbf{Universidad de Costa Rica} \\
+		\vspace{1.5cm}
+		\huge
+		\titulo \\[1.5cm]
+		Tarea I\\[1.5cm]
+		\Large
+		Estudiante: \autor \space (Carné)\\[1cm]
+		Profesor(a): Nombre del Profesor \\[1cm]
+		\fecha
+	\end{center}
+\end{titlepage}
+
+\newpage
+
+\begin{exercise}
+	Enunciado del ejercicio 1.
+\end{exercise}
+
+Solución del ejercicio 1.
+
+\begin{definition}
+	Enunciado de la definición de ejemplo.
+\end{definition}
+
+\begin{theorem}
+	Enunciado del teorema de ejemplo.
+\end{theorem}
+
+\begin{proof}
+	Demostración del teorema.
+\end{proof}
+
+\nocite{sharples2003}
+\bibliographystyle{IEEEtran}
+\bibliography{referencias}
+
+\end{document}

@@ -1,0 +1,54 @@
+# Archivos auxiliares
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.fmt
+*.fot
+*.glg
+*.glo
+*.gls
+*.idx
+*.ilg
+*.ind
+*.ist
+*.lof
+*.log
+*.lot
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+*.xdv
+
+# Bibliografía (biber/bibtex)
+*.nav
+*.snm
+
+# TikZ y compilaciones intermedias
+*.dpth
+*.md5
+
+# Minted
+_minted*
+*.pyg
+
+# latexmk
+latexmkrc
+
+# Archivos de editores
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# MacOS / Windows
+.DS_Store
+Thumbs.db
+
+# Mantener PDFs y TEX
+!*.pdf
+!*.tex

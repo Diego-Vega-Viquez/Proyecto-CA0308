@@ -1,0 +1,131 @@
+%====================================================================
+% INFORME DE ANTEPROYECTO — ESTADO Y DESARROLLO DEL PROYECTO
+%
+% Compilar con LuaLaTeX, dos veces.
+%====================================================================
+\documentclass[11pt,letterpaper]{article}
+
+% ---------- Matemática y fuentes ----------
+\usepackage{amsmath,mathtools}
+\usepackage{amsthm}
+\usepackage{fontspec}
+\usepackage{unicode-math}
+\setmainfont{Latin Modern Roman}
+\setmathfont{NewCMMath-Book}
+
+% ---------- Idioma ----------
+\usepackage{polyglossia}
+\setmainlanguage{spanish}
+
+% ---------- Diseño ----------
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage[table]{xcolor}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{fancyhdr}
+\setlength{\headheight}{14pt}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyhead[R]{\small\itshape Informe de avance del proyecto}
+\fancyfoot[C]{\small\thepage}
+
+\lstset{
+	language=Python, basicstyle=\ttfamily\small, frame=lines,
+	keywordstyle=\bfseries, commentstyle=\itshape\color{gray},
+	showstringspaces=false, columns=fullflexible, xleftmargin=1em
+}
+
+% ---------- Enlaces y referencias cruzadas ----------
+\usepackage[colorlinks=true,linkcolor=blue!40!black,citecolor=blue!40!black,urlcolor=blue!40!black]{hyperref}
+\usepackage[capitalise]{cleveref}
+\crefname{theorem}{Teorema}{Teoremas}
+\crefname{proposition}{Proposición}{Proposiciones}
+\crefname{lemma}{Lema}{Lemas}
+\crefname{corollary}{Corolario}{Corolarios}
+\crefname{definition}{Definición}{Definiciones}
+\crefname{example}{Ejemplo}{Ejemplos}
+\crefname{conjecture}{Conjetura}{Conjeturas}
+\crefname{section}{Sección}{Secciones}
+\crefname{table}{Tabla}{Tablas}
+\crefname{equation}{ecuación}{ecuaciones}
+
+
+% ---------- Teoremas (numeración por sección) ----------
+\theoremstyle{plain}
+\newtheorem{theorem}{Teorema}[section]
+\newtheorem{proposition}[theorem]{Proposición}
+\newtheorem{lemma}[theorem]{Lema}
+\newtheorem{corollary}[theorem]{Corolario}
+\newtheorem{conjecture}[theorem]{Conjetura}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definición}
+\newtheorem{example}[theorem]{Ejemplo}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Observación}
+\numberwithin{equation}{section}
+\gappto\captionsspanish{\renewcommand{\proofname}{Demostración}}
+
+% ---------- Macros y entornos usados en el desarrollo teórico ----------
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\E}{\mathbb{E}}
+\renewcommand{\P}{\mathbb{P}}
+\newcommand{\dd}{\,\mathrm{d}}
+\newcommand{\norm}[1]{\lVert #1\rVert}
+\newcommand{\Sh}{\mathcal{S}}
+\DeclareMathOperator{\LSE}{LSE}
+
+\newtheorem{teorema}[theorem]{Teorema}
+\newtheorem{proposicion}[theorem]{Proposición}
+\newtheorem{lema}[theorem]{Lema}
+\newtheorem{corolario}[theorem]{Corolario}
+\newtheorem{definicion}[theorem]{Definición}
+\newtheorem{ejemplo}[theorem]{Ejemplo}
+\newtheorem{observacion}[theorem]{Observación}
+
+% Texto predeterminado
+\newcommand{\ph}[1]{\textcolor{red!70!black}{\textit{[#1]}}}
+
+% Estados para la tabla de avance
+\newcommand{\done}{\textcolor{green!45!black}{\textbf{Completado}}}
+\newcommand{\wip}{\textcolor{orange!80!black}{\textbf{En curso}}}
+\newcommand{\todo}{\textcolor{red!70!black}{\textbf{Pendiente}}}
+
+%====================================================================
+% DATOS DEL DOCUMENTO
+%====================================================================
+\title{\textbf{Nombre del informe} \\[0.4em]
+	\large Informe de anteproyecto}
+
+\author{%
+	{Anthonny Flores Rojas}\thanks{{Escuela de Matemáticas, Universidad de Costa Rica}. \texttt{anthonny.flores@ucr.ac.cr}} \and
+	{Andrey Gonzalez Bastos}\thanks{{Escuela de Matemáticas, Universidad de Costa Rica}. \texttt{andrey.gonzalezbastos@ucr.ac.cr}} \and
+	{Diego Vega}\thanks{{Escuela de Matemáticas, Universidad de Costa Rica}. \texttt{diego.vega@ucr.ac.cr}}}
+	
+\date{Curso: Valoración de instrumentos financieros (CA0308) \\
+	Profesor: Daniel Vargas Carrillo \\[0.3em] \today}
+
+\begin{document}
+	
+	
+	\maketitle
+	\tableofcontents   % opcional; muchos papers largos lo incluyen
+	
+	% =====================================================================
+	\section{Introducción}\label{sec:intro}
+	
+	
+	
+	% =====================================================================
+	% Bibliografía (estilo numérico alfabético, típico de AMS)
+	\begin{thebibliography}{99}
+		
+		\bibitem{ChaintronDaudin2025}
+		L.-P. Chaintron, S. Daudin, ``Optimal rate of convergence in the vanishing viscosity for quadratic Hamilton--Jacobi equations,'' \emph{arXiv preprint}, arXiv:2502.09103 [math.AP], 2025, doi: \url{https://doi.org/10.48550/arXiv.2502.09103}.
+		
+	\end{thebibliography}
+	
+\end{document}

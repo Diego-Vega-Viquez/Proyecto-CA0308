@@ -276,6 +276,41 @@
 }
 
 %====================================================================
+% ENTORNO PARA CÓDIGO PYTHON
+%====================================================================
+
+\lstdefinestyle{pythonstyle}{
+    language=Python,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue!65!black}\bfseries,
+    commentstyle=\color{green!35!black}\itshape,
+    stringstyle=\color{orange!60!black},
+    numberstyle=\tiny\color{gray},
+    numbers=left,
+    numbersep=10pt,
+    stepnumber=1,
+    backgroundcolor=\color{gray!5},
+    frame=single,
+    rulecolor=\color{gray!35},
+    framerule=0.4pt,
+    framesep=8pt,
+    breaklines=true,
+    breakatwhitespace=false,
+    breakindent=0pt,
+    showstringspaces=false,
+    keepspaces=true,
+    columns=fullflexible,
+    tabsize=4,
+    captionpos=b,
+    aboveskip=12pt,
+    belowskip=12pt
+}
+
+\lstnewenvironment{pythoncode}[1][]%
+    {\lstset{style=pythonstyle,#1}}%
+    {}
+
+%====================================================================
 % 16. DATOS INSTITUCIONALES
 %====================================================================
 
@@ -333,13 +368,11 @@
 	
 	\maketitle
 
-	\newpage
-
 	\tableofcontents   % opcional; muchos papers largos lo incluyen
 
 	\newpage
 	
-% =====================================================================
+
 \section{Introducción}\label{sec:intro}
 
 Giannozzi y Kirilova \parencite{GIANNOZZI2026107700} investigan por qué una cobertura 
@@ -452,7 +485,7 @@ no contiene . El contrato de 2023 es el anual más cercano, con serie continua h
 corte y 49\% de la generación vendida. El de 2024 es secundario. ČEZ informa coberturas 
 alemanas para suministros checos de 2021 a 2024 \parencite{cez_q2_2021}, lo que respalda 
 el uso del mercado alemán, pero sus documentos no identifican el contrato exacto, la bolsa 
-ni la cámara de compensación ; el riesgo de base entre los mercados checo y alemán se acota 
+ni la cámara de compensación  ;el riesgo de base entre los mercados checo y alemán se acota 
 con el diferencial spot de la sección anterior. La serie es homogénea (cada columna es 
 un año de entrega fijo, sin empalmes), coincide con valores publicados (EUR 315,00 el 
 21 de diciembre de 2021 para 2022 \parencite{platts_2021_dec} y EUR 985,00 el 
@@ -516,7 +549,7 @@ contrato usado para cubrir.
 				EWMA ($\lambda=0{,}94$) & 61,7\% & --- & 295 \\
 			\bottomrule
 		\end{tabular}
-	\caption{Volatilidad anualizada del futuro base alemán (cálculo propio ; Excel, hoja Volatilidad).}
+	\caption{Volatilidad anualizada del futuro base alemán (cálculo propio  ;Excel, hoja Volatilidad).}
 	\label{tab:vol}
 \end{table}
 \ew
@@ -563,7 +596,14 @@ cobro de la producción, el mecanismo descrito por Giannozzi y Kirilova. La info
 faltante (precio pactado, fracción con garantías, $\theta$, hedge ratio al corte y precios 
 de 2022) se detalla en el Anexo~E.
 
-\section{Gráficos de la serie histórica}
+%====================================================================
+% APÉNDICE: CÓDIGO DE EXTRACCIÓN DE DATOS
+%====================================================================
+
+\clearpage
+\appendix
+
+\section{Gráficos}
 
 \begin{figure}[H]
 \centering
@@ -577,7 +617,7 @@ de 2022) se detalla en el Anexo~E.
 \caption{Contexto spot (no es el subyacente): promedios diarios de la subasta Day Ahead de República Checa y Alemania-Luxemburgo. Fuente: \parencite{energycharts_spot2021,energycharts_spot2022}; los promedios son cálculo propio.}
 \end{figure}
 
-\section{Tablas de sensibilidad y probabilidades}
+\section{Tablas}
 
 \sw
 \begin{table}[H]
@@ -597,7 +637,7 @@ $+20\%$ & 187,7 & $-698$ & $+1.424$ & $+726$ & $-227$ & $-925$ & $-23,0$ & 23,0 
 $+30\%$ & 203,4 & $-1.046$ & $+2.135$ & $+1.089$ & $-341$ & $-1.387$ & $-34,5$ & 34,5 \\
 \bottomrule
 \end{tabular}
-\caption{Sensibilidad. $P_0=156{,}43$, $Q_h=22{,}3$ TWh (2023) y 9,6 TWh (2024), $Q_T=45{,}5$ TWh, CZK 24,860/EUR. Liquidez de referencia: CZK 39,4 mil millones; con $\theta=50\%$, $L$ se reduce a la mitad. Cálculo propio ; supuestos en el Excel.}
+\caption{Sensibilidad. $P_0=156{,}43$, $Q_h=22{,}3$ TWh (2023) y 9,6 TWh (2024), $Q_T=45{,}5$ TWh, CZK 24,860/EUR. Liquidez de referencia: CZK 39,4 mil millones; con $\theta=50\%$, $L$ se reduce a la mitad. Cálculo propio; supuestos en el Excel.}
 \end{table}
 
 \begin{table}[H]
@@ -622,69 +662,184 @@ Frecuencia empírica, 275 ventanas & 34,2 & 10,5 & 5,1 & 0,7 & 0,0 & 0,0 \\
 \end{table}
 \ew
 
-\section{Diagnóstico de los archivos de datos}
+\section{Código utilizado para la obtención de datos históricos}
+\label{ap:codigo_futuros}
 
-\sw
-\begin{table}[H]
-\centering
-\scriptsize
-\begin{tabularx}{\textwidth}{@{}>{\RaggedRight}p{3.2cm}>{\RaggedRight}X@{}}
-\toprule
-Aspecto & Resultado y tratamiento \\
-\midrule
-Spot 2021 y 2022 & Cada archivo tiene 8.760 registros horarios; la primera fila tras el encabezado contiene unidades y se excluye. Fechas del 1-ene-2021 al 31-dic-2022; marcas con desplazamiento +01:00 y +02:00, de modo que el cambio de horario no genera duplicados ni huecos (días de 23 y 25 horas, uno cada uno). Sin valores faltantes ni duplicados en CZ y DE-LU. Variables: producción (MW) y precios Day Ahead por zona (EUR/MWh). Se retienen 10.056 horas hasta el 23-feb-2022 y se descartan las posteriores. \\
-Precios negativos & 33 horas en CZ y 147 en DE-LU: se conservan; impiden rendimientos logarítmicos de promedios diarios. \\
-Futuros & 1.494 filas diarias del 4-ene-2021 al 30-oct-2026; una columna por año de entrega (2022 a 2036), en EUR/MWh con dos decimales. Cada columna es un contrato de año fijo con vida limitada (la de 2022 termina el 29-dic-2021, la de 2023 el 28-dic-2022): las celdas vacías corresponden a períodos sin cotización. Sin duplicados; 5 días hábiles ausentes en la serie de 2023; 2 rendimientos nulos. No hay mezcla de vencimientos dentro de una columna, por lo que los rendimientos son comparables; no se calculan entre columnas. \\
-Naturaleza de los precios & El archivo no indica si son liquidación o indicativos. Las coincidencias exactas con EUR 985,00 (26-ago-2022) y EUR 315,00 (21-dic-2021) son compatibles con precios de liquidación, sin demostrarlo. \\
-\bottomrule
-\end{tabularx}
-\caption{Control de calidad de los datos.}
-\end{table}
-\ew
+\noindent
+El presente sección del apéndice documenta el procedimiento computacional
+empleado para obtener la serie histórica de precios de futuros
+de electricidad utilizada en el análisis. Los datos proceden
+de la plataforma Energy-Charts, desarrollada por Fraunhofer ISE,
+que identifica a European Energy Exchange (EEX) como la fuente
+original de la información presentada en su visualización
+de futuros energéticos
+\parencite{energycharts_futuros_de}.
 
-\section{Trazabilidad y método de obtención de los datos}
+\vspace{0.2cm}
 
-\textbf{Spot.} Fuente original según Energy-Charts: ENTSO-E; plataforma: Energy-Charts (Fraunhofer ISE); descarga directa de CSV; actualización informada del 27/10/2026 (14:44 y 15:36 CET), aunque los registros son de 2021 y 2022. El aviso del propio archivo atribuye los precios Day Ahead de CZ y DE-LU a Bundesnetzagentur | SMARD.de bajo licencia CC BY 4.0 y reserva el resto de datos para uso privado e interno; por ello el informe cita ambas atribuciones y usa solo esas dos zonas.
+\noindent
+Debido a que la plataforma no ofrece una opción de descarga
+directa para la serie consultada, se recurre a un procedimiento
+de extracción mediante Python para generar el archivo
+\texttt{futuros\_DE\_historico.csv}. Este archivo constituye
+un producto del procesamiento propio de los datos disponibles
+en la visualización y no corresponde a un documento distribuido
+directamente por EEX ni por Energy-Charts.
 
-\textbf{Futuros.} Fuente original según Energy-Charts: EEX; plataforma de visualización: Energy-Charts. La plataforma no ofrecía descarga directa, por lo que el CSV resulta de un procedimiento propio en Python que accedió a la información de la gráfica. No es un archivo de EEX ni de Energy-Charts. No se adjuntó el código, de modo que no puede afirmarse si extrajo valores numéricos estructurados o reconstruyó valores a partir de coordenadas visuales. La evidencia es favorable a lo primero (valores con dos decimales, fechas de negociación y exactitud de 985,00 y 315,00), pero la verificación queda pendiente: revisar el código y contrastar una muestra de fechas con EEX.
+\vspace{0.2cm}
 
-\section{Diagnóstico de cumplimiento y acciones restantes}
+\noindent
+La inclusión del código tiene como propósito facilitar
+la trazabilidad del procedimiento, permitir su revisión
+y contribuir a la reproducibilidad de los resultados.
+En particular, permite examinar el mecanismo de extracción
+de los valores, su asociación con las fechas de negociación
+y las operaciones realizadas para construir el archivo final.
+La posibilidad de reproducir exactamente los resultados
+depende de la disponibilidad y estructura de los datos
+en la plataforma al momento de ejecutar el procedimiento.
 
-\sw
-\begin{table}[H]
-\centering
-\scriptsize
-\begin{tabularx}{\textwidth}{@{}>{\RaggedRight}p{3.6cm}>{\RaggedRight}p{1.7cm}>{\RaggedRight}X@{}}
-\toprule
-Requisito & Estado & Qué falta o condiciona \\
-\midrule
-1. Empresa, negocio y problema & COMPLETO & Confirmar visualmente cifras de diapositivas. \\
-2. Contexto de mercado & PARCIAL & EUR/CZK y PRIBOR al corte; verificar la norma primaria (EMIR) y competidores. \\
-3. Subyacente & PARCIAL & Contrato, bolsa y cámara usados por ČEZ (notas IFRS 7/9). \\
-4. Posición larga o corta & PARCIAL & Fracción con garantías; porcentaje vendido al corte. \\
-5. Exposición monetaria & PARCIAL & Precio pactado de 2023, nocional contable, precios de 2022. \\
-6. Volatilidad histórica & PARCIAL & Cálculo hecho; falta verificar el código de extracción. \\
-7. Sensibilidad & PARCIAL & $\theta$ y precio pactado. \\
-8. Probabilidades & PARCIAL & Hereda la verificación de datos; horizonte es supuesto. \\
-9. Gráfico histórico & COMPLETO & Figura 1 del Anexo A. \\
-10. Excel auditable & COMPLETO & Generado y recalculado con LibreOffice (16 controles verdaderos); sin revisión independiente. \\
-11. Informe de cinco páginas & COMPLETO & Contenido principal en cinco páginas; anexos aparte. \\
-12. Presentación de 15 minutos & PENDIENTE & No preparada. \\
-\bottomrule
-\end{tabularx}
-\caption{Matriz de cumplimiento.}
-\end{table}
-\ew
+\vspace{0.3cm}
 
-\textbf{Pendientes por prioridad.} (1) Indispensable: estados consolidados de ČEZ de 2021, notas 18 y 19 (págs.~81--94), para el contrato, el nocional y las garantías; informe de resultados del tercer trimestre de 2021 para el precio pactado de 2023 y el porcentaje vendido, a confirmar visualmente. (2) Indispensable: código Python de extracción y contraste con EEX. (3) Indispensable: preparar la presentación. (4) Complementario: cotización EUR/CZK de la ČNB y PRIBOR del 23-feb-2022; precios mensuales de EEX para el resto de 2022; reglamento delegado de EMIR en EUR-Lex; depósitos de margen de 2022 releídos en los comunicados de ČEZ; sustituir réplicas de documentos por enlaces oficiales.
+\subsection{Implementación en Python}
+\label{ap:implementacion_python}
 
-\clearpage
-  \printbibliography[title={Referencias bibliográficas}]
+\noindent
+El siguiente código corresponde al procedimiento utilizado
+para generar el archivo CSV empleado en el análisis.
 
-% ===================== ANEXOS =====================
-\clearpage
-\appendix
-\renewcommand{\thesection}{\Alph{section}}
+\vspace{0.2cm}
+
+\begin{pythoncode}[
+    caption={Código Python para la obtención de precios históricos de futuros},
+    label={cod:extraccion_futuros}
+]
+"""
+Descarga los "Futuros energéticos (Base)" de Energy-Charts (Fraunhofer ISE / EEX)
+y los guarda en CSV con UNA COLUMNA POR AÑO DE ENTREGA (2022, 2023, ... 2036)
+y una fila por día de negociación.
+
+Instalación (una sola vez):   pip install requests pandas
+Uso:                          python energy_charts_futuros.py
+                              python energy_charts_futuros.py --pais DE --sep ";"
+                              python energy_charts_futuros.py --calendario D
+
+Cada ejecución baja el histórico completo (desde 01.01.2021) y actualiza
+  <salida>/futuros_DE_historico.csv
+y guarda además el JSON original del día en <salida>/crudo/.
+Las fechas sin datos en la fuente quedan como filas con celdas vacías.
+Programarlo a diario con cron (Linux/Mac) o el Programador de tareas (Windows).
+"""
+import argparse
+import json
+from datetime import datetime
+from pathlib import Path
+
+import pandas as pd
+import requests
+
+URL = "https://energy-charts.info/charts/price_futures/data/{pais}/{archivo}"
+HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+           "Referer": "https://energy-charts.info/charts/price_futures/chart.htm"}
+
+
+def descargar(pais: str, archivo: str):
+    url = URL.format(pais=pais.lower(), archivo=archivo)
+    r = requests.get(url, headers=HEADERS, timeout=60)
+    r.raise_for_status()
+    return url, r.json()
+
+
+def a_tabla(series: list) -> pd.DataFrame:
+    """Lista de series [{name, data, xAxisValues}, ...] -> tabla fecha x año de entrega."""
+    fechas = next((s["xAxisValues"] for s in series if s.get("xAxisValues")), None)
+    if not fechas:
+        raise ValueError("El JSON no trae 'xAxisValues' (eje de fechas).")
+    idx = pd.to_datetime(fechas, format="%d.%m.%Y")
+    n = len(idx)
+    cols = {}
+    for s in series:
+        # 'data' viene rellenado con nulls al final: se recorta al largo del eje de fechas
+        cols[str(s["name"])] = pd.Series(s["data"][:n], index=idx, dtype="float64")
+    df = pd.DataFrame(cols)
+    df.index.name = "fecha"
+    return df.dropna(how="all").sort_index()
+
+
+def rellenar_saltos(df: pd.DataFrame, freq: str):
+    """Inserta filas vacías en las fechas sin datos de la fuente y devuelve (tabla, rangos_faltantes)."""
+    completo = pd.date_range(df.index.min(), df.index.max(), freq=freq)
+    faltan = completo.difference(df.index)
+    df = df.reindex(df.index.union(completo))
+    df.index.name = "fecha"
+
+    # Agrupa las fechas faltantes consecutivas (según el calendario elegido) en rangos
+    rangos = []
+    pos = completo.get_indexer(faltan)
+    for p, d in zip(pos, faltan):
+        if rangos and p == rangos[-1][2] + 1:
+            rangos[-1][1] = d
+            rangos[-1][2] = p
+        else:
+            rangos.append([d, d, p])
+    return df, [(ini, fin) for ini, fin, _ in rangos]
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--pais", default="DE", help="código de país (DE, FR, ...)")
+    ap.add_argument("--archivo", default="power_year.json",
+                    help="archivo de datos (por defecto power_year.json = contratos anuales)")
+    ap.add_argument("--salida", default="energy_charts_datos")
+    ap.add_argument("--sep", default=",", help='separador del CSV; usa ";" si lo abres en Excel en español')
+    ap.add_argument("--calendario", default="B", choices=["B", "D"],
+                    help="B = días hábiles (por defecto), D = todos los días naturales; "
+                         "define qué fechas sin datos se rellenan como vacías")
+    a = ap.parse_args()
+
+    out = Path(a.salida); (out / "crudo").mkdir(parents=True, exist_ok=True)
+    url, js = descargar(a.pais, a.archivo)
+    hoy = datetime.now().strftime("%Y-%m-%d")
+    (out / "crudo" / f"{a.pais}_{hoy}.json").write_text(json.dumps(js, ensure_ascii=False), encoding="utf-8")
+
+    nuevo = a_tabla(js)
+    hist = out / f"futuros_{a.pais}_historico.csv"
+    if hist.exists():
+        previo = pd.read_csv(hist, sep=a.sep, index_col="fecha", parse_dates=True)
+        nuevo = nuevo.combine_first(previo)      # lo nuevo manda; se conservan filas antiguas
+        nuevo = nuevo[sorted(nuevo.columns)]
+
+    # Detecta saltos reales en las fechas y deja esas filas vacías
+    nuevo, saltos = rellenar_saltos(nuevo.sort_index().dropna(how="all"), a.calendario)
+    nuevo.to_csv(hist, sep=a.sep, encoding="utf-8-sig", float_format="%.2f")
+
+    print("Fuente:", url)
+    print(f"Guardado: {hist}  ({len(nuevo)} días, columnas: {', '.join(nuevo.columns)})")
+    print("Último día:", nuevo.index.max().date())
+    if saltos:
+        print(f"Saltos en las fechas de la fuente ({len(saltos)}), dejados vacíos:")
+        for ini, fin in saltos:
+            print(f"  {ini.date()}" if ini == fin else f"  {ini.date()} -> {fin.date()}")
+    else:
+        print("Sin saltos en las fechas.")
+    print(nuevo.tail(3).round(2).to_string())
+
+
+if __name__ == "__main__":
+    main()
+\end{pythoncode}
+
+\vspace{0.2cm}
+
+\noindent
+El resultado del procedimiento es el archivo
+\texttt{futuros\_DE\_historico.csv}, que contiene la serie
+histórica utilizada en el estudio. Para verificar la
+consistencia de los datos, corresponde contrastar una
+muestra de fechas y precios con los registros de la fuente
+original, además de revisar que las transformaciones
+aplicadas durante la extracción no alteren los valores
+observados.
 
 
 \end{document}

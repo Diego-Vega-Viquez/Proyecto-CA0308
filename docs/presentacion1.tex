@@ -889,9 +889,9 @@
       \centering{\footnotesize\bfseries Volatilidad anualizada del futuro base alemán (\%)}\\[2mm]
       \begin{tikzpicture}
         \begin{axis}[cez,height=4.6cm,ybar,bar width=11pt,ymin=0,ymax=90,
-          symbolic x coords={{60 d},{126 d},{252 d},{Completo},{EWMA}},xtick=data,
+          symbolic x coords={{60 d},{126 d},{252 d},{Completo}},xtick=data,
           legend style={at={(0.5,1.0)},anchor=south,legend columns=2,font=\scriptsize},enlarge x limits=0.12,nodes near coords]
-          \addplot[fill=cezblue] coordinates {({60 d},72.4) ({126 d},57.2) ({252 d},43.7) ({Completo},41.2) ({EWMA},61.7)};
+          \addplot[fill=cezblue] coordinates {({60 d},72.4) ({126 d},57.2) ({252 d},43.7) ({Completo},41.2)};
           \addplot[fill=cezamber] coordinates {({60 d},42.1) ({126 d},34.4) ({252 d},28.8) ({Completo},27.5)};
           \legend{Cal-23,Cal-24}
         \end{axis}
@@ -900,7 +900,7 @@
     \begin{column}{0.37\textwidth}
       \kpi[4.6cm]{41\% $\to$ 72\%}{historial completo frente a 60 días}\\[1mm]
       \kpi[4.6cm]{14,0\%}{máximo rendimiento diario (4-ene-2022): 3,1 desviaciones diarias de 60 días}\\[1.5mm]
-      {\tiny Rendimientos logarítmicos diarios, anualizados con $\sqrt{252}$; EWMA con $\lambda=0{,}94$. No se usa el spot: DE-LU tuvo 147 horas con precio negativo.}
+      {\tiny Rendimientos logarítmicos diarios, anualizados con $\sqrt{252}$. No se usa el spot: DE-LU tuvo 147 horas con precio negativo.}
     \end{column}
   \end{columns}
   %\fuente{cálculo propio con datos de EEX vía Energy-Charts [6] hasta el 23-feb-2022 (Excel, hoja Volatilidad). EWMA solo para Cal-23.}
@@ -912,17 +912,61 @@
     \begin{column}{0.60\textwidth}
       \centering{\footnotesize\bfseries Cal-23: cambio de valor según la variación del precio (EUR millones)}\\[-1mm]
       \begin{tikzpicture}
-        \begin{axis}[cez,height=4.4cm,ybar,bar width=7pt,ymin=-2500,ymax=2500,
-          xtick={1,2,3,4,5,6},xticklabels={$-30\%$,$-20\%$,$-10\%$,$+10\%$,$+20\%$,$+30\%$},
-          xticklabel style={font=\scriptsize},enlarge x limits=0.1,legend style={at={(0.5,-0.2)},anchor=north,legend columns=3,font=\tiny},
-          extra x ticks={},axis x line=bottom,x axis line style={draw=none},
-          xtick style={draw=none},tick label style={font=\scriptsize},
-          x tick label style={yshift=0pt},every axis plot/.append style={draw=none}]
-          \addplot[fill=cezred] coordinates {(1,1046) (2,698) (3,349) (4,-349) (5,-698) (6,-1046)};
-          \addplot[fill=cezteal] coordinates {(1,-2135) (2,-1424) (3,-712) (4,712) (5,1424) (6,2135)};
-          \addplot[fill=cezblue] coordinates {(1,-1089) (2,-726) (3,-363) (4,363) (5,726) (6,1089)};
-          \legend{$\Delta V$ ventas a plazo,$\Delta I$ ingresos físicos,Efecto neto}
-          \draw[cezgray] (axis cs:0.4,0) -- (axis cs:6.6,0);
+        \begin{axis}[
+          cez,
+          height=4.4cm,
+          ybar,
+          bar width=7pt,
+          ymin=-2500,
+          ymax=2500,
+          xmin=0,
+          xmax=7,
+          xtick={1,2,3,4,5,6},
+          xticklabels={
+            $-30\%$,$-20\%$,$-10\%$,
+            $+10\%$,$+20\%$,$+30\%$
+          },
+          xticklabel style={font=\scriptsize},
+          enlarge x limits=false,
+          legend style={
+            at={(0.5,-0.2)},
+            anchor=north,
+            legend columns=3,
+            font=\tiny
+          },
+          extra x ticks={},
+          axis x line=bottom,
+          x axis line style={draw=none},
+          xtick style={draw=none},
+          tick label style={font=\scriptsize},
+          x tick label style={yshift=0pt},
+          every axis plot/.append style={draw=none}
+        ]
+
+          \addplot[fill=cezred] coordinates {
+            (1,1046) (2,698) (3,349)
+            (4,-349) (5,-698) (6,-1046)
+          };
+
+          \addplot[fill=cezteal] coordinates {
+            (1,-2135) (2,-1424) (3,-712)
+            (4,712) (5,1424) (6,2135)
+          };
+
+          \addplot[fill=cezblue] coordinates {
+            (1,-1089) (2,-726) (3,-363)
+            (4,363) (5,726) (6,1089)
+          };
+
+          \legend{
+            $\Delta V$ ventas a plazo,
+            $\Delta I$ ingresos físicos,
+            Efecto neto
+          }
+
+          \draw[cezgray]
+            (axis cs:0,0) -- (axis cs:7,0);
+
         \end{axis}
       \end{tikzpicture}
     \end{column}
@@ -933,7 +977,8 @@
       Neto $=(Q_T-Q_h)P_0s$\\[0.5mm]
       {\scriptsize $Q_h$: volumen vendido; \\
       $Q_T$: generación esperada; \\
-      $P_0$: precio al corte; $s$: variación.}\\[2mm]
+      $P_0$: precio al corte; \\
+      $s$: variación.}\\[2mm]
       \kpi[4.6cm]{$-$EUR 1.046 mill.}{$\Delta V$ de 2023 con +30\%}\\[1mm]
       \kpi[4.6cm]{$-$EUR 1.387 mill.}{$\Delta V$ 2023+2024, +30\% ($\approx$CZK 33,9 mil mill.)}
     \end{column}
@@ -951,80 +996,20 @@
           xtick={1,2,3},xticklabels={$\geq 10\%$,$\geq 20\%$,$\geq 30\%$},enlarge x limits=0.22,
           legend style={at={(0.5,-0.2)},anchor=north,legend columns=2,font=\tiny},nodes near coords]
           \addplot[fill=cezred] coordinates {(1,28.8) (2,16.4) (3,8.7)};
-          \addplot[fill=cezamber] coordinates {(1,26.6) (2,13.3) (3,5.9)};
           \addplot[fill=cezblue] coordinates {(1,19.5) (2,5.6) (3,1.2)};
           \addplot[fill=cezgray] coordinates {(1,34.2) (2,10.5) (3,5.1)};
-          \legend{{$\sigma$ 60 d (72,4\%)},{EWMA (61,7\%)},{$\sigma$ completa (41,2\%)},{Frecuencia empírica}}
+          \legend{{$\sigma$ 60 d (72,4\%)},{$\sigma$ completa (41,2\%)},{Frecuencia empírica}}
         \end{axis}
       \end{tikzpicture}
     \end{column}
     \begin{column}{0.37\textwidth}
       \scriptsize
       \textbf{Modelo:} lognormal sin tendencia; horizonte de 21 días hábiles (supuesto).\\[1mm]
-      \textbf{Con EWMA:} alzas de 26,6, 13,3 y 5,9\%; bajas de 30,8, 12,2 y 2,8\%.\\[1.5mm]
       \textbf{Historia:} 275 ventanas traslapadas de una muestra alcista; bajas casi nulas.\\[2mm]
-      \caja{cezamber}{4.7cm}{\tiny Tres conceptos distintos: modelo, historia y escenario. Ninguno predice el futuro: el modelo normal subestima las colas y la volatilidad constante contradice el cambio de régimen.}
+      \caja{cezamber}{4.7cm}{\tiny Conceptos distintos: modelo e historia. Ninguno predice el futuro: el modelo normal subestima las colas y la volatilidad constante contradice el cambio de régimen.}
     \end{column}
   \end{columns}
   %\fuente{cálculo propio (Excel, hoja Probabilidades). Tabla completa, con bajas, en respaldo B.}
-\end{frame}
-
-% ================= 11. LIQUIDEZ =================
-\begin{frame}[t]{El riesgo se traduce en liquidez: dentro de $\pm$30\% sería manejable, con supuestos}
-  \begin{columns}[T]
-    \begin{column}{0.60\textwidth}
-      \centering{\footnotesize\bfseries Liquidez potencial requerida $L$ (CZK miles de millones), hipotética}\\[-1mm]
-      \begin{tikzpicture}
-        \begin{axis}[cez,height=3.2cm,ybar,bar width=9pt,ymin=0,ymax=46,
-          xtick={1,2,3},xticklabels={$+10\%$,$+20\%$,$+30\%$},enlarge x limits=0.22,
-          legend style={at={(0.5,-0.4)},anchor=north,legend columns=2,font=\tiny},nodes near coords]
-          \addplot[fill=cezteal!60] coordinates {(1,2.8) (2,5.7) (3,8.5)};
-          \addplot[fill=cezteal] coordinates {(1,5.7) (2,11.3) (3,17.0)};
-          \addplot[fill=cezblue] coordinates {(1,11.3) (2,22.6) (3,33.9)};
-          \draw[dashed,cezred,very thick] (axis cs:0.4,39.4) -- (axis cs:3.6,39.4);
-          \addlegendimage{dashed,cezred,very thick}
-          \legend{{$\theta=25\%$},{$\theta=50\%$},{$\theta=100\%$},{Liquidez de referencia: 39,4}}
-        \end{axis}
-      \end{tikzpicture}
-    \end{column}
-    \begin{column}{0.37\textwidth}
-      \footnotesize
-      $L=\theta\cdot\max(0,-\Delta V)$\\
-      {\scriptsize $\theta$: fracción de la pérdida aportada en efectivo (no observable).}\\[2mm]
-      \kpi[4.6cm]{1,16$\times$}{liquidez de referencia / exigencia ($\theta=100\%$, +30\%)}\\[1mm]
-      {\tiny Liquidez al 30-sep-2021: efectivo CZK 8.023 mill. + líneas comprometidas no dispuestas CZK 31.400 mill. (por confirmar) = CZK 39.423 mill.; deuda: CZK 141.245 mill. La repo de 4,50\% encarece financiar el margen.}
-    \end{column}
-  \end{columns}
-  \vspace{0mm}
-  \caja{cezred}{\textwidth}{\tiny Necesidad \textbf{hipotética}, no una obligación registrada por \v{C}EZ: depende de $\theta$, del porcentaje vendido y de que la liquidez de sep-2021 siguiera disponible.}
-  %\fuente{\v{C}EZ [3], [5]; cálculo propio (Excel, hojas Parametros y Sensibilidad).}
-\end{frame}
-
-% ================= 12. RETROSPECTIVA =================
-\begin{frame}[t]{Evidencia retrospectiva: la cola real superó con creces la rejilla de $\pm$30\%}
-  \begin{columns}[T]
-    \begin{column}{0.62\textwidth}
-      {\footnotesize\bfseries CZK miles de millones (órdenes de magnitud, no comparables uno a uno)}\\[2mm]
-      \begin{tikzpicture}[lab/.style={text width=3.1cm,align=right,font=\scriptsize,anchor=east},val/.style={font=\small\bfseries,anchor=west}]
-        \node[lab] at (0,2.4) {Alza de +30\% al corte ($\theta=100\%$)};
-        \fill[cezteal] (0.1,2.15) rectangle (0.1+33.9*0.0095,2.65); \node[val] at (0.2+33.9*0.0095,2.4) {33,9};
-        \node[lab] at (0,1.3) {Depósitos de margen informados, ago-2022 [14]};
-        \fill[cezamber] (0.1,1.05) rectangle (0.1+195*0.0095,1.55); \node[val] at (0.2+195*0.0095,1.3) {$>$195};
-        \node[lab] at (0,0.2) {Cambio de valor del Cal-23 a EUR 985 (hipotético)};
-        \fill[cezgray] (0.1,-0.05) rectangle (0.1+452.1*0.0095,0.45); \node[val] at (0.2+452.1*0.0095,0.2) {452,1};
-        \draw[cezgray] (0.1,-0.2) -- (0.1,2.85);
-      \end{tikzpicture}
-    \end{column}
-    \begin{column}{0.35\textwidth}
-      \footnotesize
-      \kpi[4.4cm]{EUR 985/MWh}{Cal-23 el 26-ago-2022: +530\% sobre el precio del corte [13]}\\[2mm]
-      Sobre el volumen vendido de 2023, el cambio de valor sería de unos $-$EUR 18.500 mill.\\[1.5mm]
-      \textbf{Lectura:} la planificación de liquidez debería considerar choques mayores que $\pm$30\%.
-    \end{column}
-  \end{columns}
-  \vspace{1mm}
-  \caja{cezgray}{\textwidth}{\scriptsize Información \textbf{posterior} al 23-feb-2022: no alimenta ningún cálculo ex ante. La cifra de depósitos de margen proviene de \v{C}EZ [14] y no fue releída en este trabajo.}
-  %\fuente{EEX [13]; \v{C}EZ [14]; cálculo propio (Excel, hojas Sensibilidad y Retro\_post\_corte).}
 \end{frame}
 
 % ================= 13. CONCLUSIONES =================
@@ -1044,10 +1029,10 @@
     \end{column}
   \end{columns}
   \vspace{1mm}
-  \caja{cezblue}{\textwidth}{\footnotesize \v{C}EZ podía estar bien cubierta en precio y aun así enfrentar presión de liquidez si el mercado se movía contra sus posiciones financieras. Con $\theta=100\%$ y +30\%, la exigencia sería CZK 33,9 mil millones, 1,16 veces cubierta por la liquidez de referencia.}
+  \caja{cezblue}{\textwidth}{\footnotesize \v{C}EZ podía estar bien cubierta en precio y aun así enfrentar presión de liquidez si el mercado se movía contra sus posiciones financieras. }
   \vspace{0.5mm}
 
-  {\tiny\color{cezgray}\textbf{Limitaciones:} faltan el precio pactado, la fracción con garantías, $\theta$, el hedge ratio al corte y los precios de 2022; los escenarios son hipotéticos y ningún modelo predice el futuro.}
+  {\tiny\color{cezgray}\textbf{Limitaciones:} Los escenarios son hipotéticos y ningún modelo predice el futuro.}
 \end{frame}
 
 % ================= 14. PREGUNTAS =================
@@ -1072,20 +1057,20 @@
   \setlength{\tabcolsep}{3.5pt}
   \begin{tabular}{@{}r r r r r r r r r@{}}
     \toprule
-    $s$ & $P_0(1+s)$ & $\Delta V$ 2023 & $\Delta I$ 2023 & Neto 2023 & $\Delta V$ 2024 & $\Delta V$ total & $\Delta V$ total & $L$ ($\theta=100\%$)\\
-    & EUR/MWh & EUR mill. & EUR mill. & EUR mill. & EUR mill. & EUR mill. & CZK mil mill. & CZK mil mill.\\ \midrule
-    $-30\%$ & 109,5 & $+1.046$ & $-2.135$ & $-1.089$ & $+341$ & $+1.387$ & $+33,9$ & 0\\
-    $-20\%$ & 125,1 & $+698$ & $-1.424$ & $-726$ & $+227$ & $+925$ & $+22,6$ & 0\\
-    $-10\%$ & 140,8 & $+349$ & $-712$ & $-363$ & $+114$ & $+462$ & $+11,3$ & 0\\
-    $+10\%$ & 172,1 & $-349$ & $+712$ & $+363$ & $-114$ & $-462$ & $-11,3$ & 11,3\\
-    $+20\%$ & 187,7 & $-698$ & $+1.424$ & $+726$ & $-227$ & $-925$ & $-22,6$ & 22,6\\
-    $+30\%$ & 203,4 & $-1.046$ & $+2.135$ & $+1.089$ & $-341$ & $-1.387$ & $-33,9$ & 33,9\\
+    $s$ & $P_0(1+s)$ & $\Delta V$ 2023 & $\Delta I$ 2023 & Neto 2023 & $\Delta V$ 2024 & $\Delta V$ total & $\Delta V$ total \\
+    & EUR/MWh & EUR mill. & EUR mill. & EUR mill. & EUR mill. & EUR mill. & CZK mil mill. \\ \midrule
+    $-30\%$ & 109,5 & $+1.046$ & $-2.135$ & $-1.089$ & $+341$ & $+1.387$ & $+33,9$ \\
+    $-20\%$ & 125,1 & $+698$ & $-1.424$ & $-726$ & $+227$ & $+925$ & $+22,6$ \\
+    $-10\%$ & 140,8 & $+349$ & $-712$ & $-363$ & $+114$ & $+462$ & $+11,3$ \\
+    $+10\%$ & 172,1 & $-349$ & $+712$ & $+363$ & $-114$ & $-462$ & $-11,3$ \\
+    $+20\%$ & 187,7 & $-698$ & $+1.424$ & $+726$ & $-227$ & $-925$ & $-22,6$ \\
+    $+30\%$ & 203,4 & $-1.046$ & $+2.135$ & $+1.089$ & $-341$ & $-1.387$ & $-33,9$ \\
     \bottomrule
   \end{tabular}
   \vspace{3mm}
 
   \begin{minipage}{0.95\textwidth}\raggedright\scriptsize
-  $P_0=156{,}43$; $Q_h=22{,}3$ TWh (2023) y 9,6 TWh (2024); $Q_T=45{,}5$ TWh; EUR/CZK 24,475. Liquidez de referencia: CZK 39,4 mil millones; con $\theta=50\%$, $L$ se reduce a la mitad y con $\theta=25\%$ a la cuarta parte.
+  $P_0=156{,}43$; $Q_h=22{,}3$ TWh (2023) y 9,6 TWh (2024); $Q_T=45{,}5$ TWh; EUR/CZK 24,475. 
   \end{minipage}
   %\fuente{cálculo propio (Excel, hoja Sensibilidad); supuestos en la hoja Parametros.}
 \end{frame}
@@ -1116,45 +1101,28 @@
   %\fuente{cálculo propio (Excel, hoja Probabilidades).}
 \end{frame}
 
-% ---- C. Conciliación ----
-\begin{frame}[t]{C. Conciliación entre el informe y el Excel}
-  \scriptsize
-  \renewcommand{\arraystretch}{1.25}
-  \begin{tabular}{@{}>{\bfseries}p{2.1cm}p{5.2cm}p{5.4cm}@{}}
-    \toprule
-    Elemento & Informe & Excel (usado en esta presentación)\\ \midrule
-    EUR/CZK & 24,860 (31-dic-2021); cotización del corte pendiente & 24,475 (ČNB, 23-feb-2022; BCE: 24,473). Efecto en CZK: exposición 85,4 (informe: 86,7); $\Delta V$ de $-30\%$: 33,9 (34,5); cobertura 1,16$\times$ (1,14$\times$); $\theta=50\%$: 17,0 (17,2); retrospectivo: 452 (459)\\
-    Precio pactado Cal-23 & 61,16 EUR/MWh (media del futuro ene-sep 2021, supuesto): valoración ilustrativa $-$EUR 2.124 mill. & 54,3 (proxy de \v{C}EZ, por confirmar): $-$EUR 2.277 mill. No se usa como cifra principal\\
-    Cifras en EUR & Exposición, sensibilidad, volatilidad y probabilidades & Coinciden con el informe\\
-    Control del Excel & --- & «Horas spot por día entre 23 y 25»: FALSO (afecta solo al contexto spot, no al subyacente)\\
-    Datos por confirmar & Líneas comprometidas (CZK 31.400 mill.), entregas de 44 a 47 TWh y margen $>$CZK 195 mil mill. & Marcados como parciales en el Excel\\
-    \bottomrule
-  \end{tabular}
-  %\fuente{Informe\_I\_Entrega; Excel\_Auditable\_CEZ (hojas Parametros, Exposicion, Sensibilidad, Controles, Retro\_post\_corte).}
-\end{frame}
-
 % ---- D. Referencias ----
 \begin{frame}[t]{D. Referencias (numeración del informe)}
   \tiny
   \setlength{\parskip}{0.6mm}
   \begin{columns}[T]
     \begin{column}{0.49\textwidth}
-      [1] A. Giannozzi y A. Kirilova, «When corporate risk management amplifies risks: Evidence from Europe's energy crisis in 2022», \emph{Journal of Banking \& Finance}, vol. 188, 107700, 2026.\par
-      [2] \v{C}EZ, a. s., «Consolidated financial statements of CEZ Group as of December 31, 2021 (IFRS)». Posterior al corte.\par
-      [3] \v{C}EZ, a. s., «Interim consolidated financial statements as of September 30, 2021 (unaudited, IFRS)».\par
-      [4] \v{C}EZ, a. s., «Investment story».\par
-      [5] \v{C}EZ, a. s., «Presentation on CEZ Group financial results in Q3 2021».\par
-      [6] Energy-Charts (Fraunhofer ISE), «Futuros energéticos (Base) para Alemania»; fuente original: EEX. Extracción propia.\par
-      [7] Energy-Charts, «Electricity production and spot prices in 2022»; fuente: ENTSO-E.\par
+      [1] A. Giannozzi y A. Kirilova, ``When corporate risk management amplifies risks: Evidence from Europe's energy crisis in 2022'', \emph{Journal of Banking \& Finance}, vol. 188, 107700, 2026.\par
+      [2] \v{C}EZ, a. s., ``Consolidated financial statements of CEZ Group as of December 31, 2021 (IFRS)''. Posterior al corte.\par
+      [3] \v{C}EZ, a. s., ``Interim consolidated financial statements as of September 30, 2021 (unaudited, IFRS)''.\par
+      [4] \v{C}EZ, a. s., ``Investment story''.\par
+      [5] \v{C}EZ, a. s., ``Presentation on CEZ Group financial results in Q3 2021''.\par
+      [6] Energy-Charts (Fraunhofer ISE), ``Futuros energéticos (Base) para Alemania''; fuente original: EEX. Extracción propia.\par
+      [7] Energy-Charts, ``Electricity production and spot prices in 2022''; fuente: ENTSO-E.\par
     \end{column}
     \begin{column}{0.49\textwidth}
-      [8] S\&P Global Commodity Insights, «Russian announcement of Donbas military operation raises risks for energy markets».\par
-      [9] Gas Strategies Group, «Pricewatch, Gas Matters Today».\par
-      [10] Česká národní banka, «CNB increases interest rates».\par
-      [11] \v{C}EZ, a. s., «Presentation on CEZ Group financial results in Q2 2021».\par
-      [13] European Energy Exchange, «EEX markets remain open despite the situation on the German power derivatives market», 2022.\par
-      [14] \v{C}EZ, a. s., «CEZ Group earned over CZK 80 billion in 2022, will pay more than CZK 100 billion to the Czech State this year».\par
-      [15] Energy-Charts, «Electricity production and spot prices in 2021»; precios CZ y DE-LU: Bundesnetzagentur | SMARD.de (CC BY 4.0).\par
+      [8] S\&P Global Commodity Insights, ``Russian announcement of Donbas military operation raises risks for energy markets''.\par
+      [9] Gas Strategies Group, ``Pricewatch, Gas Matters Today''.\par
+      [10] Česká národní banka, ``CNB increases interest rates''.\par
+      [11] \v{C}EZ, a. s., ``Presentation on CEZ Group financial results in Q2 2021''.\par
+      [13] European Energy Exchange, ``EEX markets remain open despite the situation on the German power derivatives market'', 2022.\par
+      [14] \v{C}EZ, a. s., ``CEZ Group earned over CZK 80 billion in 2022, will pay more than CZK 100 billion to the Czech State this year''.\par
+      [15] Energy-Charts, ``Electricity production and spot prices in 2021''; precios CZ y DE-LU: Bundesnetzagentur | SMARD.de (CC BY 4.0).\par
       Tipo de cambio: ČNB, tipo de cambio del 23-feb-2022 (Excel, hoja Parametros).
     \end{column}
   \end{columns}

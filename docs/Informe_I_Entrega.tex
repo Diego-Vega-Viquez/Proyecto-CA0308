@@ -145,7 +145,7 @@
     pdftitle={Informe de avance del proyecto},
     pdfauthor={Anthonny Flores Rojas,
                Andrey Gonzalez Bastos,
-               Diego Vega}
+               Diego Vega Víquez}
 }
 
 \usepackage[capitalise]{cleveref}
@@ -324,7 +324,7 @@
         \texttt{andrey.gonzalezbastos@ucr.ac.cr}
     }
     \and
-    {Diego Vega}
+    {Diego Vega Víquez}
     \thanks{
         Escuela de Matemáticas,
         Universidad de Costa Rica.
@@ -365,7 +365,7 @@ Por todo lo mencionado anteriormente, es que la evaluación de la exposición de
 
 El costo de esta estrategia ya era visible antes del corte: las preventas redujeron en CZK 4.305 millones los ingresos por electricidad de nueve meses porque se liquidaron por debajo del precio de mercado \parencite[p.~21]{cez_interim_q3_2021}. Asimismo, la liquidez de referencia al 30 de septiembre de 2021 era de CZK 8.023 millones en efectivo \parencite[p.~2]{cez_interim_q3_2021} y de CZK 31.400 millones en líneas comprometidas no dispuestas (40.000 menos 8.600 dispuestos; cifra de una diapositiva por confirmar \parencite{cez_q3_2021}), frente a una deuda de CZK 141.245 millones \parencite[pp.~3, 19, 20]{cez_interim_q3_2021}.
 
-La Tabla~\ref{tab:mercado} resume los indicadores al corte. El contrato anual alemán para 2023 cotizaba a EUR 156,43/MWh el 23 de febrero de 2022, 82\% más que el 30 de septiembre de 2021 (EUR 85,86) y tres veces el nivel de enero de 2021 (EUR 51,25). En el mercado spot, el promedio diario de la subasta Day Ahead pasó de EUR 100,66 (CZ) y 96,84 (DE-LU) en 2021 a EUR 183,22 y 178,97 en el cuarto trimestre, y a 166,76 y 147,16 entre el 1 de enero y el 23 de febrero de 2022. Además, el diferencial medio entre la República Checa y Alemania-Luxemburgo fue de EUR 5,85/MWh (5,7\% del precio medio de Alemania-Luxemburgo), con correlación de 0,976 entre promedios diarios, y los precios coincidieron en 46,6\% de las horas, lo que indica acoplamiento de mercados y un riesgo de base menor que el riesgo de nivel.
+La Tabla~\ref{tab:mercado} resume los indicadores al corte. El contrato anual alemán para 2023 cotizaba a EUR 156,43/MWh el 23 de febrero de 2022, 82\% más que el 30 de septiembre de 2021 (EUR 85,86) y tres veces el nivel de enero de 2021 (EUR 51,25). En el mercado spot, el promedio diario de la subasta Day Ahead pasó de EUR 100,66 (CZ) y 96,84 (DE-LU) en 2021 a EUR 183,22 y 178,97 en el cuarto trimestre, y a 166,76 y 147,16 entre el 1 de enero y el 23 de febrero de 2022. Además, el diferencial medio entre la República Checa y Alemania-Luxemburgo fue de EUR 5,85/MWh (5,7\% del precio medio de Alemania-Luxemburgo), con correlación de 0,976 entre promedios diarios, y los precios coincidieron en 46,6\% de las horas, lo que indica acoplamiento de mercados y un riesgo de base menor que el riesgo de nivel; \textcite{entsoe_sdac} y \textcite{ote_market_coupling}.
 
 \sw
 \begin{table}[ht]
@@ -380,10 +380,10 @@ La Tabla~\ref{tab:mercado} resume los indicadores al corte. El contrato anual al
 				Spot Day Ahead CZ / DE-LU & Último día, 23-feb-2022: EUR 136,63 / 130,09 (promedio diario) & \textcite{energycharts_spot2022},  \\
 				Gas TTF & EUR 88,85/MWh (23-feb-2022); máximo previo de EUR 182,78 el 21-dic-2021 & \textcite{platts_ttf_2022},  \\
 				Derechos de emisión EUA & EUR 94,67/t, contrato más cercano (cierre del 23-feb-2022); EUR 61,66 al 30-sep-2021 & \textcite{gasstrategies_2022}; \parencite[p.~18]{cez_interim_q3_2021},  \\
-				EUR/CZK & CZK 24,860 al 31-dic-2021; cotización del 23-feb-2022 pendiente & \parencite[p.~30]{cez_fs_2021},  \\
-				Tasas & Repo checa a dos semanas 4,50\% desde el 4-feb-2022 (antes 3,75\%); PRIBOR pendiente & \textcite{cnb_2022},  \\
-				Regulación & EMIR: compensación central obligatoria sobre EUR 4.000 millones de nocional bruto en materias primas; sin compensación, valoración diaria y garantías & \parencite[p.~18]{GIANNOZZI2026107700}; norma primaria por verificar, / \\
-				Competencia & ČEZ genera cerca de 58\% de la electricidad checa; competidores y cuotas pendientes & \parencite[p.~11]{cez_fs_2021},  \\
+				EUR/CZK & CZK 24,860 al 31-dic-2021 & \parencite[p.~30]{cez_fs_2021},  \\
+				Tasas & Repo checa a dos semanas 4,50\% desde el 4-feb-2022 (antes 3,75\%)& \textcite{cnb_2022},  \\
+				Regulación & EMIR: compensación central obligatoria sobre EUR 4.000 millones de nocional bruto en materias primas; sin compensación, valoración diaria y garantías & \parencite[p.~18]{GIANNOZZI2026107700}\\
+				Competencia & ČEZ genera cerca de 58\% de la electricidad checa & \parencite[p.~11]{cez_fs_2021},  \\
 			\bottomrule
 		\end{tabularx}
 	\caption{Estado del mercado en la fecha de corte.}
@@ -425,10 +425,9 @@ En cuanto a la volatilidad, se calcularon rendimientos logarítmicos diarios del
 				126 días & 57,2\% & 34,4\% & 126 \\
 				252 días & 43,7\% & 28,8\% & 252 \\
 				Historial completo & 41,2\% & 27,5\% & 295 \\
-				EWMA ($\lambda=0{,}94$) & 61,7\% & --- & 295 \\
 			\bottomrule
 		\end{tabular}
-	\caption{Volatilidad anualizada del futuro base alemán (cálculo propio  ;Excel, hoja Volatilidad).}
+	\caption{Volatilidad anualizada del futuro base alemán (cálculo propio; Excel, hoja Volatilidad).}
 	\label{tab:vol}
 \end{table}
 \ew
@@ -439,9 +438,7 @@ Para analizar la sensibilidad de la posición, sea $Q_h$ el volumen vendido, $Q_
 
 La necesidad de liquidez se acota con $L=\theta\cdot\max(0,-\Delta V)$, donde $\theta$, la fracción de la pérdida aportada en efectivo, no se conoce. Con $\theta=100\%$ y un alza de 30\%, la exigencia es de CZK 34.500 millones, 1,14 veces cubierta por la liquidez de referencia de CZK 39.423 millones; con $\theta=50\%$ sería de CZK 17.200 millones. De esta manera, dentro de $\pm30\%$ la posición sería manejable respecto de la liquidez de septiembre de 2021, aunque el resultado depende de $\theta$, del porcentaje vendido y de que esa liquidez siguiera disponible.
 
-En cuanto a las probabilidades, con un modelo lognormal sin tendencia, volatilidad EWMA de 61,7\% y horizonte de 21 días hábiles (un mes bursátil, supuesto), la probabilidad de un alza de al menos 10, 20 y 30\% es de 26,6, 13,3 y 5,9\%; la de una baja, de 30,8, 12,2 y 2,8\% (Anexo~B). La frecuencia empírica de ventanas de 21 días del propio futuro es 34,2, 10,5 y 5,1\% para alzas y casi nula para bajas, pero se calcula con ventanas traslapadas en una muestra alcista. Se trata, por lo tanto, de tres conceptos distintos (modelo, historia y escenario) y ninguno predice el futuro, puesto que el modelo normal subestima las colas y el supuesto de volatilidad constante contradice el cambio de régimen de la Tabla~\ref{tab:vol}.
-
-Como evidencia retrospectiva, el mismo futuro llegó a EUR 985/MWh el 26 de agosto de 2022 \parencite{eex_2022}, 530\% sobre el precio del corte. Aplicado al volumen de 2023, el cambio de valor sería de unos $-$EUR 18.500 millones (CZK 459.000 millones), frente a depósitos de margen que ČEZ informó por más de CZK 195.000 millones en agosto de 2022 \parencite{cez_pr_2023}, cifra tomada del documento de selección y no releída. La rejilla de $\pm30\%$ queda así muy por debajo de la cola que se materializó, por lo que la planificación de liquidez debería considerar choques mayores.
+En cuanto a las probabilidades, con un modelo lognormal sin tendencia, la probabilidad de un alza de al menos 10, 20 y 30\% es de 26,6, 13,3 y 5,9\%; la de una baja, de 30,8, 12,2 y 2,8\% (Anexo~B). La frecuencia empírica de ventanas de 21 días del propio futuro es 34,2, 10,5 y 5,1\% para alzas y casi nula para bajas, pero se calcula con ventanas traslapadas en una muestra alcista. Se trata, por lo tanto, de dos conceptos distintos (modelo e historia) y ninguno predice el futuro, puesto que el modelo normal subestima las colas y el supuesto de volatilidad constante contradice el cambio de régimen de la Tabla~\ref{tab:vol}.
 
 En conclusión, el 23 de febrero de 2022 ČEZ estaba larga en electricidad por su generación y corta por unas ventas a plazo que cubrían 49\% de 2023 y 21\% de 2024, con un mercado que había triplicado sus precios. Su riesgo central no era económico sino de liquidez: las pérdidas de valoración de la posición corta podían exigir efectivo antes del cobro de la producción, el mecanismo descrito por Giannozzi y Kirilova. La información faltante (precio pactado, fracción con garantías, $\theta$, hedge ratio al corte y precios de 2022) se detalla en el Anexo~E.
 
@@ -475,18 +472,18 @@ En conclusión, el 23 de febrero de 2022 ČEZ estaba larga en electricidad por s
 \setlength{\tabcolsep}{3pt}
 \begin{tabular}{rrrrrrrrr}
 \toprule
-$s$ & $P_0(1+s)$ & $\Delta V$ 2023 & $\Delta I$ 2023 & Neto 2023 & $\Delta V$ 2024 & $\Delta V$ total & $\Delta V$ total & $L$ ($\theta=100\%$) \\
- & EUR/MWh & EUR mill. & EUR mill. & EUR mill. & EUR mill. & EUR mill. & CZK mil mill. & CZK mil mill. \\
+$s$ & $P_0(1+s)$ & $\Delta V$ 2023 & $\Delta I$ 2023 & Neto 2023 & $\Delta V$ 2024 & $\Delta V$ total & $\Delta V$ total \\
+ & EUR/MWh & EUR mill. & EUR mill. & EUR mill. & EUR mill. & EUR mill. & CZK mil mill. \\
 \midrule
-$-30\%$ & 109,5 & $+1.046$ & $-2.135$ & $-1.089$ & $+341$ & $+1.387$ & $+34,5$ & 0 \\
-$-20\%$ & 125,1 & $+698$ & $-1.424$ & $-726$ & $+227$ & $+925$ & $+23,0$ & 0 \\
-$-10\%$ & 140,8 & $+349$ & $-712$ & $-363$ & $+114$ & $+462$ & $+11,5$ & 0 \\
-$+10\%$ & 172,1 & $-349$ & $+712$ & $+363$ & $-114$ & $-462$ & $-11,5$ & 11,5 \\
-$+20\%$ & 187,7 & $-698$ & $+1.424$ & $+726$ & $-227$ & $-925$ & $-23,0$ & 23,0 \\
-$+30\%$ & 203,4 & $-1.046$ & $+2.135$ & $+1.089$ & $-341$ & $-1.387$ & $-34,5$ & 34,5 \\
+$-30\%$ & 109,5 & $+1.046$ & $-2.135$ & $-1.089$ & $+341$ & $+1.387$ & $+34,5$ \\
+$-20\%$ & 125,1 & $+698$ & $-1.424$ & $-726$ & $+227$ & $+925$ & $+23,0$ \\
+$-10\%$ & 140,8 & $+349$ & $-712$ & $-363$ & $+114$ & $+462$ & $+11,5$ \\
+$+10\%$ & 172,1 & $-349$ & $+712$ & $+363$ & $-114$ & $-462$ & $-11,5$ \\
+$+20\%$ & 187,7 & $-698$ & $+1.424$ & $+726$ & $-227$ & $-925$ & $-23,0$ \\
+$+30\%$ & 203,4 & $-1.046$ & $+2.135$ & $+1.089$ & $-341$ & $-1.387$ & $-34,5$ \\
 \bottomrule
 \end{tabular}
-\caption{Sensibilidad. $P_0=156{,}43$, $Q_h=22{,}3$ TWh (2023) y 9,6 TWh (2024), $Q_T=45{,}5$ TWh, CZK 24,860/EUR. Liquidez de referencia: CZK 39,4 mil millones; con $\theta=50\%$, $L$ se reduce a la mitad. Cálculo propio; supuestos en el Excel.}
+\caption{Sensibilidad. $P_0=156{,}43$, $Q_h=22{,}3$ TWh (2023) y 9,6 TWh (2024), $Q_T=45{,}5$ TWh, CZK 24,860/EUR. Cálculo propio; supuestos en el Excel.}
 \end{table}
 
 \begin{table}[H]
@@ -502,7 +499,6 @@ Estimador de $\sigma$ & 10\% & 20\% & 30\% & 10\% & 20\% & 30\% \\
 126 días (57,2\%) & 25,5 & 11,8 & 4,7 & 28,9 & 10,2 & 1,9 \\
 252 días (43,7\%) & 20,7 & 6,6 & 1,6 & 22,0 & 4,4 & 0,3 \\
 Historial completo (41,2\%) & 19,5 & 5,6 & 1,2 & 20,5 & 3,5 & 0,2 \\
-EWMA (61,7\%) & 26,6 & 13,3 & 5,9 & 30,8 & 12,2 & 2,8 \\
 \midrule
 Frecuencia empírica, 275 ventanas & 34,2 & 10,5 & 5,1 & 0,7 & 0,0 & 0,0 \\
 \bottomrule

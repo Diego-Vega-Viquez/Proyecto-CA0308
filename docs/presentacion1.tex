@@ -1,0 +1,1128 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[spanish,es-noshorthands]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs,array}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usetikzlibrary{arrows.meta,positioning,calc}
+
+% ---------- Paleta ----------
+\definecolor{cezblue}{HTML}{1B3A5C}
+\definecolor{cezteal}{HTML}{1F7A8C}
+\definecolor{cezamber}{HTML}{D08A1E}
+\definecolor{cezred}{HTML}{B3394A}
+\definecolor{cezgray}{HTML}{5F6B76}
+\definecolor{cezlight}{HTML}{EEF2F6}
+
+% ---------- Estilo Beamer ----------
+\setbeamercolor{normal text}{fg=black!85,bg=white}
+\setbeamercolor{structure}{fg=cezblue}
+\setbeamercolor{frametitle}{fg=cezblue}
+\setbeamercolor{itemize item}{fg=cezteal}
+\setbeamercolor{itemize subitem}{fg=cezteal}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}[circle]
+\setbeamersize{text margin left=8mm,text margin right=8mm}
+\setbeamerfont{frametitle}{size=\fontsize{12.5}{14.5}\selectfont,series=\bfseries}
+\setbeamertemplate{frametitle}{%
+  \vskip2.5mm
+  \begin{minipage}[t]{\textwidth}\raggedright
+    \usebeamerfont{frametitle}\usebeamercolor[fg]{frametitle}\insertframetitle
+  \end{minipage}\par
+  \vskip0.8mm
+  {\color{cezteal}\rule{\textwidth}{0.6pt}}%
+}
+\setbeamertemplate{footline}{%
+  \hbox to\paperwidth{%
+    \hspace{8mm}{\tiny\color{cezgray}\v{C}EZ, a. s. \,|\, Contexto y exposición al riesgo \,|\, Corte: 23-feb-2022}\hfill
+    {\tiny\color{cezgray}\insertframenumber}\hspace{8mm}}%
+  \vskip3mm}
+
+% ---------- Macros ----------
+\newcommand{\fuente}[1]{\vfill{\raggedright\tiny\color{cezgray}Fuente: #1\par}}
+\newcommand{\kpi}[3][3.2cm]{\begin{tikzpicture}\node[fill=cezlight,rounded corners=3pt,
+  text width=#1,inner sep=3pt,align=center]{{\large\bfseries\color{cezblue}#2}\\[-1pt]
+  {\scriptsize\color{cezgray}#3}};\end{tikzpicture}}
+\newcommand{\caja}[3]{\begin{tikzpicture}\node[draw=#1,fill=#1!8,rounded corners=3pt,
+  text width=#2,inner sep=5pt,align=left,line width=0.8pt]{#3};\end{tikzpicture}}
+
+\newcommand{\fila}[4]{\node[lab,fill=#3,anchor=west] at (0,#1) {#2};
+  \node[tag,fill=#3,anchor=west] at (3.0,#1) {#4};}
+
+% ---------- Estilo de gráficos ----------
+\pgfplotsset{
+  cez/.style={width=\linewidth,height=5.3cm,tick label style={font=\scriptsize},
+    label style={font=\scriptsize},legend style={font=\scriptsize,draw=none,fill=none},
+    axis lines=left,ymajorgrids=true,grid style={gray!25},
+    every node near coord/.append style={font=\tiny}}}
+\pgfplotsset{/pgf/number format/.cd,use comma,fixed,precision=1}
+
+\title{\textquestiondown Dónde estaba parada \v{C}EZ y qué riesgo enfrentaba?}
+\subtitle{Contexto y exposición al riesgo — Entregable 1}
+\author{Anthonny Flores Rojas \and Andrey González Bastos \and Diego Vega}
+\institute{Escuela de Matemáticas, Universidad de Costa Rica\\
+  Valoración de Instrumentos Financieros (CA0308) — Prof. Daniel Vargas Carrillo}
+\date{Fecha de corte del análisis: 23 de febrero de 2022}
+
+\setlength{\abovedisplayskip}{1pt}\setlength{\belowdisplayskip}{1pt}
+\setlength{\abovedisplayshortskip}{0pt}\setlength{\belowdisplayshortskip}{0pt}
+\begin{document}
+
+% ================= 1. PORTADA =================
+\begin{frame}[plain]
+  \vspace{4mm}
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[cezblue] (current page.north west) rectangle ([yshift=-3.1cm]current page.north east);
+    \fill[cezteal] ([yshift=-3.1cm]current page.north west) rectangle ([yshift=-3.2cm]current page.north east);
+  \end{tikzpicture}
+  \vspace{-2mm}
+  {\color{white}\fontsize{19}{22}\selectfont\bfseries \textquestiondown Dónde estaba parada \v{C}EZ\\ y qué riesgo enfrentaba?\par}
+  \vspace{1.5mm}
+  {\color{white!85!cezblue}\small Contexto y exposición al riesgo \hfill Entregable 1\par}
+  \vspace{16mm}
+  {\small\bfseries Anthonny Flores Rojas \,$\cdot$\, Andrey González Bastos \,$\cdot$\, Diego Vega Víquez\par}
+  \vspace{2mm}
+  {\footnotesize Escuela de Matemáticas, Universidad de Costa Rica\par
+   Valoración de Instrumentos Financieros (CA0308) \\ Prof. Daniel Vargas Carrillo\par}
+  \vspace{3cm}
+  %\caja{cezteal}{7.2cm}{\footnotesize\textbf{Fecha de corte:} 23 de febrero de 2022\\ Solo información disponible a esa fecha; los hechos posteriores se presentan como evidencia retrospectiva.}
+\end{frame}
+
+% ================= 2. PROBLEMA =================
+\begin{frame}[t]{Una cobertura razonable puede convertirse en un problema de caja}
+  \centering
+  \vspace{1mm}
+  \begin{tikzpicture}[node distance=4mm,
+     b/.style={rounded corners=3pt,text width=2.85cm,minimum height=1.9cm,inner sep=4pt,
+       align=center,font=\footnotesize,text=white},
+     a/.style={-{Stealth[length=2.5mm]},thick,cezgray}]
+    \node[b,fill=cezteal] (a1) {\textbf{1. Cobertura}\\ Vende electricidad a plazo y fija el precio};
+    \node[b,fill=cezgray,right=of a1] (a2) {\textbf{2. El mercado sube}\\ El precio supera el pactado};
+    \node[b,fill=cezred,right=of a2] (a3) {\textbf{3. Valoración diaria}\\ Pérdida de la posición corta y, con garantías, margen};
+    \node[b,fill=cezamber,right=of a3] (a4) {\textbf{4. Efectivo hoy}\\ El cobro de la producción llega después};
+    \draw[a] (a1)--(a2); \draw[a] (a2)--(a3); \draw[a] (a3)--(a4);
+  \end{tikzpicture}
+  \vspace{3mm}
+
+  \begin{minipage}{0.92\textwidth}\raggedright\small
+  Los contratos cotizados se valoran a mercado a diario y exigen margen inicial y de variación en efectivo:
+  la compensación económica ocurre en la entrega, pero la liquidación del margen es diaria.
+  \end{minipage}
+  \vspace{3mm}
+
+  \caja{cezblue}{0.9\textwidth}{\centering\small\textbf{Pregunta central:} al 23 de febrero de 2022, \textquestiondown qué posición tenía \v{C}EZ,
+    qué magnitud podía alcanzar el riesgo y por qué podía convertirse en presión de liquidez?}
+  %\fuente{Giannozzi y Kirilova [1]. Sus resultados corresponden a su muestra de empresas energéticas; aquí se usan como mecanismo explicativo y no se atribuyen a \v{C}EZ.}
+\end{frame}
+
+% ================= 3. EMPRESA =================
+\begin{frame}[t]{\v{C}EZ domina la generación checa y vende por adelantado buena parte de su producción}
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \kpi[3.2cm]{58\%}{de la electricidad checa}\hspace{1mm}%
+      \kpi[3.2cm]{69,8\%}{del capital es del Estado}\\[1mm]
+      \kpi[3.2cm]{58\%}{de los ingresos operativos: electricidad, 9M 2021}\hspace{1mm}%
+      \kpi[3.2cm]{51\%}{del EBITDA: Generación, 9M 2021}\\[1.5mm]
+      {\scriptsize Genera y comercializa electricidad, calor, gas y carbón. Combina ventas a plazo, compras a plazo de derechos de emisión y cobertura cambiaria.}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \centering{\footnotesize\bfseries Generación vendida a plazo al 30-sep-2021}\\[-1mm]
+      \begin{tikzpicture}
+        \begin{axis}[cez,height=3.5cm,ybar,bar width=20pt,ymin=0,ymax=100,symbolic x coords={2022,2023,2024},
+          xtick=data,ymajorgrids=false,yticklabels={},ytick=\empty,axis y line=none,
+          nodes near coords={\pgfmathprintnumber[precision=0]{\pgfplotspointmeta}\%},
+          every node near coord/.append style={font=\small\bfseries}]
+          \addplot[fill=cezteal] coordinates {(2022,79) (2023,49) (2024,21)};
+        \end{axis}
+      \end{tikzpicture}\\[1mm]
+      \caja{cezamber}{5.9cm}{\scriptsize Costo ya visible: las preventas redujeron en \textbf{CZK 4.305 mill.} los ingresos por electricidad de nueve meses, al liquidarse bajo el mercado.}
+    \end{column}
+  \end{columns}
+  %\fuente{[2], [3], [5]. Año de entrega en el eje horizontal; porcentaje de la generación de cada año.}
+\end{frame}
+
+% ================= 4. MERCADO =================
+\begin{frame}[t]{El precio eléctrico se triplicó y las ventas a plazo quedaron muy por debajo del mercado}
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \centering{\footnotesize\bfseries Futuro anual base DE, entrega 2023 (EUR/MWh)}\\[-1mm]
+      \begin{tikzpicture}
+        \begin{axis}[cez,height=3.2cm,ybar,bar width=15pt,ymin=0,ymax=185,ymajorgrids=false,
+          axis y line=none,ytick=\empty,xtick={1,2,3},xticklabels={4-ene-21,30-sep-21,23-feb-22},
+          enlarge x limits=0.25,nodes near coords={\pgfmathprintnumber[precision=2]{\pgfplotspointmeta}},
+          every node near coord/.append style={font=\small\bfseries}]
+          \addplot[fill=cezblue] coordinates {(1,51.25) (2,85.86) (3,156.43)};
+        \end{axis}
+      \end{tikzpicture}\\[-1mm]
+      {\tiny\color{cezgray}+82\% vs. 30-sep-2021; $\approx$3 veces enero de 2021}\\[1.5mm]
+      \caja{cezred}{4.9cm}{\tiny \v{C}EZ vendió \textbf{37 TWh de 2022 a EUR 54,1/MWh}, con el mercado de años cercanos ya sobre EUR 150/MWh: pérdida de valoración \emph{antes} del salto de febrero.}
+    \end{column}
+    \begin{column}{0.60\textwidth}
+      \renewcommand{\arraystretch}{1.12}
+      \scriptsize
+      \begin{tabular}{@{}>{\bfseries}p{1.75cm}p{5.0cm}p{0.8cm}@{}}
+        \toprule
+        Variable & Valor al corte (23-feb-2022) \\ \midrule
+        Gas TTF & EUR 88,85/MWh (máx. previo 182,78) \\
+        EUA & EUR 94,67/t; +53\% vs. sep-2021 \\
+        Spot DA & CZ / DE-LU: EUR 166,76 / 147,16 en 2022 (2021: 100,66 / 96,84) \\
+        Tasas & Repo ČNB 4,50\% (antes 3,75\%) \\
+        EUR/CZK & 24,475 (ČNB, 23-feb-2022) \\
+        Regulación & EMIR: compensación central; si no, valoración diaria y garantías \\
+        Competencia & \v{C}EZ $\approx$58\%; competidores no cuantificados \\
+        \bottomrule
+      \end{tabular}
+    \end{column}
+  \end{columns}
+  %\fuente{[3], [5]--[10], [15]; tipo de cambio: Excel, hoja Parametros.}
+\end{frame}
+
+% ================= 5. SUBYACENTE =================
+% Serie incrustada: columnas = días desde 4-ene-2021 | Cal-23 (EUR/MWh) | Cal-24 (EUR/MWh)
+% Fuente: Excel, hoja Retornos (EEX vía Energy-Charts).
+\begin{frame}[t]{El subyacente es el futuro anual alemán de 2023, que se disparó hacia el corte}
+  \begin{columns}[T]
+    \begin{column}{0.60\textwidth}
+      \begin{tikzpicture}
+        \begin{axis}[cez,height=4.9cm,xmin=0,xmax=430,ymin=0,ymax=185,
+          xtick={0,87,178,270,362,415},xticklabels={ene-21,abr-21,jul-21,oct-21,ene-22,23-feb},
+          ylabel={EUR/MWh},legend pos=north west]
+          \addplot[cezblue,very thick] table[row sep=\\,header=false,x index=0,y index=1]{
+0 51.25 50.43\\
+1 50.02 49.56\\
+2 50.03 49.55\\
+3 50.92 49.78\\
+4 51.15 49.78\\
+7 50.63 49.00\\
+8 50.91 49.18\\
+9 49.57 48.13\\
+10 49.29 47.51\\
+11 47.77 46.81\\
+14 47.91 46.72\\
+15 48.60 47.27\\
+16 49.06 47.52\\
+17 49.66 48.05\\
+18 50.00 48.20\\
+21 49.53 47.85\\
+22 48.68 47.09\\
+23 48.43 46.97\\
+24 49.31 47.55\\
+25 49.03 47.53\\
+28 48.55 46.85\\
+29 49.57 47.76\\
+30 51.05 48.98\\
+31 51.87 49.83\\
+32 52.88 50.36\\
+35 53.53 51.03\\
+36 53.35 50.88\\
+37 53.57 50.99\\
+38 52.70 50.31\\
+39 52.41 49.84\\
+42 52.72 49.81\\
+43 53.02 50.07\\
+44 52.58 49.75\\
+45 52.54 49.68\\
+46 52.44 49.59\\
+49 51.74 49.01\\
+50 52.08 49.60\\
+51 53.11 50.34\\
+52 53.77 50.88\\
+53 53.09 50.35\\
+56 53.33 50.59\\
+57 53.25 50.36\\
+58 52.85 49.89\\
+59 53.12 50.10\\
+60 53.82 50.87\\
+63 54.13 51.31\\
+64 54.69 52.13\\
+65 55.65 53.10\\
+66 55.68 53.10\\
+67 55.92 53.31\\
+70 55.96 53.13\\
+71 55.11 52.41\\
+72 55.45 52.67\\
+73 56.04 52.99\\
+74 55.28 52.27\\
+77 56.23 53.20\\
+78 55.80 52.83\\
+79 55.41 52.52\\
+80 54.86 52.17\\
+81 55.61 52.71\\
+84 55.55 52.55\\
+85 55.94 52.87\\
+86 56.11 53.32\\
+87 56.56 53.72\\
+92 57.24 54.35\\
+93 57.10 54.16\\
+94 56.60 53.86\\
+95 56.31 53.90\\
+98 56.82 54.31\\
+99 56.93 54.40\\
+100 55.82 53.66\\
+101 56.67 54.30\\
+102 56.83 54.62\\
+105 56.91 54.61\\
+106 56.59 54.55\\
+107 56.90 54.75\\
+108 57.77 55.55\\
+109 57.07 55.00\\
+112 57.11 54.84\\
+113 57.46 55.03\\
+114 57.27 54.91\\
+115 57.93 55.40\\
+116 58.17 55.73\\
+119 58.71 56.32\\
+120 58.43 56.02\\
+121 58.69 56.40\\
+122 60.02 57.87\\
+123 60.29 58.03\\
+126 62.30 60.21\\
+127 62.79 60.67\\
+128 64.08 61.80\\
+129 63.45 61.10\\
+130 64.88 62.47\\
+133 64.72 62.15\\
+134 62.92 60.99\\
+135 58.08 56.06\\
+136 61.12 59.07\\
+137 61.36 59.58\\
+140 61.08 59.28\\
+141 61.66 59.90\\
+142 62.18 60.22\\
+143 60.53 58.83\\
+144 60.08 58.13\\
+147 59.84 57.85\\
+148 60.97 58.76\\
+149 59.93 57.79\\
+150 59.12 57.03\\
+151 59.70 57.45\\
+154 60.23 57.90\\
+155 61.23 58.66\\
+156 61.79 59.10\\
+157 62.36 59.46\\
+158 61.49 58.65\\
+161 61.82 58.73\\
+162 60.46 57.51\\
+163 60.82 57.90\\
+164 60.08 57.23\\
+165 60.86 57.72\\
+168 61.37 58.09\\
+169 61.75 58.26\\
+170 62.76 58.72\\
+171 63.00 58.94\\
+172 62.78 58.67\\
+175 62.96 58.86\\
+176 63.75 59.51\\
+177 64.22 59.84\\
+178 65.18 60.30\\
+179 64.92 60.00\\
+182 65.27 60.48\\
+183 64.40 59.80\\
+184 63.43 59.33\\
+185 62.88 59.50\\
+186 63.73 60.46\\
+189 63.13 60.00\\
+190 63.16 59.98\\
+191 63.35 60.16\\
+192 63.10 59.67\\
+193 63.36 59.61\\
+196 63.37 59.32\\
+197 61.92 58.48\\
+198 62.32 58.53\\
+199 61.89 57.75\\
+200 62.20 58.15\\
+203 63.88 59.15\\
+204 64.05 59.40\\
+205 65.11 60.15\\
+206 65.52 60.35\\
+207 65.28 60.09\\
+210 66.81 60.90\\
+211 66.40 60.55\\
+212 66.68 60.61\\
+213 67.05 60.88\\
+214 68.73 61.42\\
+217 69.19 62.00\\
+218 69.74 62.63\\
+219 70.23 63.00\\
+220 70.84 63.40\\
+221 70.05 62.67\\
+224 71.12 63.35\\
+225 71.25 63.37\\
+226 71.20 63.40\\
+227 68.27 61.81\\
+228 68.58 62.15\\
+231 69.94 62.94\\
+232 71.10 63.88\\
+233 70.57 63.49\\
+234 70.87 63.74\\
+235 71.63 64.56\\
+238 73.41 66.09\\
+239 73.43 66.41\\
+240 73.64 67.06\\
+241 74.50 67.82\\
+242 75.03 68.13\\
+245 75.85 68.65\\
+246 76.02 68.65\\
+247 76.68 69.00\\
+248 77.82 69.70\\
+249 77.22 68.97\\
+252 78.28 69.85\\
+253 76.27 68.88\\
+254 77.27 69.97\\
+255 74.39 67.83\\
+256 75.98 69.00\\
+259 76.23 69.20\\
+260 75.68 68.87\\
+261 76.38 69.35\\
+262 78.75 70.93\\
+263 81.78 73.00\\
+266 85.70 74.92\\
+267 84.31 73.90\\
+268 84.99 74.80\\
+269 85.86 74.63\\
+270 86.64 75.35\\
+273 90.25 77.43\\
+274 94.35 78.33\\
+275 83.00 72.17\\
+276 82.65 71.31\\
+277 81.01 70.00\\
+280 82.40 70.30\\
+281 82.38 70.59\\
+282 84.01 71.40\\
+283 86.26 72.32\\
+284 87.52 72.53\\
+287 86.70 71.73\\
+288 85.55 71.10\\
+289 86.83 72.43\\
+290 85.15 71.50\\
+291 86.02 72.25\\
+294 86.59 72.34\\
+295 86.10 70.97\\
+296 86.61 71.80\\
+297 83.26 71.20\\
+298 82.10 70.49\\
+301 81.22 70.47\\
+302 82.88 71.33\\
+303 85.70 73.04\\
+304 85.38 73.41\\
+305 84.88 73.23\\
+308 86.30 74.47\\
+309 85.15 74.03\\
+310 83.57 73.84\\
+311 84.72 74.80\\
+312 85.18 75.47\\
+315 87.40 76.02\\
+316 90.60 77.27\\
+317 92.80 78.12\\
+318 92.35 78.21\\
+319 91.64 77.75\\
+322 92.43 78.10\\
+323 93.14 78.99\\
+324 94.84 79.68\\
+325 97.71 81.52\\
+326 97.35 81.95\\
+329 98.80 83.25\\
+330 99.62 84.17\\
+331 100.49 84.86\\
+332 102.24 85.30\\
+333 104.17 86.28\\
+336 107.06 87.72\\
+337 112.32 92.47\\
+338 123.56 97.13\\
+339 116.66 93.50\\
+340 114.93 91.30\\
+343 120.54 93.09\\
+344 117.45 91.05\\
+345 115.65 89.50\\
+346 124.50 90.33\\
+347 121.86 90.01\\
+350 128.00 91.81\\
+351 144.60 98.00\\
+352 143.91 93.97\\
+353 132.00 90.97\\
+354 132.00 90.97\\
+357 120.50 88.63\\
+358 126.75 88.85\\
+359 125.14 88.55\\
+360 120.11 87.03\\
+361 120.11 87.03\\
+364 121.63 89.20\\
+365 139.88 96.89\\
+366 134.70 96.34\\
+367 133.00 94.85\\
+368 126.98 95.40\\
+371 123.25 94.80\\
+372 121.39 93.23\\
+373 116.39 91.75\\
+374 113.59 90.77\\
+375 117.48 93.08\\
+378 114.17 92.22\\
+379 116.38 92.50\\
+380 116.58 90.52\\
+381 118.31 90.55\\
+382 122.63 92.13\\
+385 127.78 92.55\\
+386 132.92 94.00\\
+387 134.65 95.35\\
+388 141.46 99.10\\
+389 145.00 102.46\\
+392 142.50 103.78\\
+393 131.00 100.67\\
+394 137.88 105.25\\
+395 136.01 104.48\\
+396 142.37 106.49\\
+399 140.40 106.00\\
+400 143.25 107.00\\
+401 140.21 106.50\\
+402 136.50 105.00\\
+403 141.16 107.90\\
+406 145.72 108.78\\
+407 139.79 106.20\\
+408 136.50 103.99\\
+409 136.13 102.75\\
+410 137.94 104.18\\
+413 138.81 105.75\\
+414 147.98 112.00\\
+415 156.43 118.88\\
+          };
+          \addplot[cezamber,thick] table[row sep=\\,header=false,x index=0,y index=2]{
+0 51.25 50.43\\
+1 50.02 49.56\\
+2 50.03 49.55\\
+3 50.92 49.78\\
+4 51.15 49.78\\
+7 50.63 49.00\\
+8 50.91 49.18\\
+9 49.57 48.13\\
+10 49.29 47.51\\
+11 47.77 46.81\\
+14 47.91 46.72\\
+15 48.60 47.27\\
+16 49.06 47.52\\
+17 49.66 48.05\\
+18 50.00 48.20\\
+21 49.53 47.85\\
+22 48.68 47.09\\
+23 48.43 46.97\\
+24 49.31 47.55\\
+25 49.03 47.53\\
+28 48.55 46.85\\
+29 49.57 47.76\\
+30 51.05 48.98\\
+31 51.87 49.83\\
+32 52.88 50.36\\
+35 53.53 51.03\\
+36 53.35 50.88\\
+37 53.57 50.99\\
+38 52.70 50.31\\
+39 52.41 49.84\\
+42 52.72 49.81\\
+43 53.02 50.07\\
+44 52.58 49.75\\
+45 52.54 49.68\\
+46 52.44 49.59\\
+49 51.74 49.01\\
+50 52.08 49.60\\
+51 53.11 50.34\\
+52 53.77 50.88\\
+53 53.09 50.35\\
+56 53.33 50.59\\
+57 53.25 50.36\\
+58 52.85 49.89\\
+59 53.12 50.10\\
+60 53.82 50.87\\
+63 54.13 51.31\\
+64 54.69 52.13\\
+65 55.65 53.10\\
+66 55.68 53.10\\
+67 55.92 53.31\\
+70 55.96 53.13\\
+71 55.11 52.41\\
+72 55.45 52.67\\
+73 56.04 52.99\\
+74 55.28 52.27\\
+77 56.23 53.20\\
+78 55.80 52.83\\
+79 55.41 52.52\\
+80 54.86 52.17\\
+81 55.61 52.71\\
+84 55.55 52.55\\
+85 55.94 52.87\\
+86 56.11 53.32\\
+87 56.56 53.72\\
+92 57.24 54.35\\
+93 57.10 54.16\\
+94 56.60 53.86\\
+95 56.31 53.90\\
+98 56.82 54.31\\
+99 56.93 54.40\\
+100 55.82 53.66\\
+101 56.67 54.30\\
+102 56.83 54.62\\
+105 56.91 54.61\\
+106 56.59 54.55\\
+107 56.90 54.75\\
+108 57.77 55.55\\
+109 57.07 55.00\\
+112 57.11 54.84\\
+113 57.46 55.03\\
+114 57.27 54.91\\
+115 57.93 55.40\\
+116 58.17 55.73\\
+119 58.71 56.32\\
+120 58.43 56.02\\
+121 58.69 56.40\\
+122 60.02 57.87\\
+123 60.29 58.03\\
+126 62.30 60.21\\
+127 62.79 60.67\\
+128 64.08 61.80\\
+129 63.45 61.10\\
+130 64.88 62.47\\
+133 64.72 62.15\\
+134 62.92 60.99\\
+135 58.08 56.06\\
+136 61.12 59.07\\
+137 61.36 59.58\\
+140 61.08 59.28\\
+141 61.66 59.90\\
+142 62.18 60.22\\
+143 60.53 58.83\\
+144 60.08 58.13\\
+147 59.84 57.85\\
+148 60.97 58.76\\
+149 59.93 57.79\\
+150 59.12 57.03\\
+151 59.70 57.45\\
+154 60.23 57.90\\
+155 61.23 58.66\\
+156 61.79 59.10\\
+157 62.36 59.46\\
+158 61.49 58.65\\
+161 61.82 58.73\\
+162 60.46 57.51\\
+163 60.82 57.90\\
+164 60.08 57.23\\
+165 60.86 57.72\\
+168 61.37 58.09\\
+169 61.75 58.26\\
+170 62.76 58.72\\
+171 63.00 58.94\\
+172 62.78 58.67\\
+175 62.96 58.86\\
+176 63.75 59.51\\
+177 64.22 59.84\\
+178 65.18 60.30\\
+179 64.92 60.00\\
+182 65.27 60.48\\
+183 64.40 59.80\\
+184 63.43 59.33\\
+185 62.88 59.50\\
+186 63.73 60.46\\
+189 63.13 60.00\\
+190 63.16 59.98\\
+191 63.35 60.16\\
+192 63.10 59.67\\
+193 63.36 59.61\\
+196 63.37 59.32\\
+197 61.92 58.48\\
+198 62.32 58.53\\
+199 61.89 57.75\\
+200 62.20 58.15\\
+203 63.88 59.15\\
+204 64.05 59.40\\
+205 65.11 60.15\\
+206 65.52 60.35\\
+207 65.28 60.09\\
+210 66.81 60.90\\
+211 66.40 60.55\\
+212 66.68 60.61\\
+213 67.05 60.88\\
+214 68.73 61.42\\
+217 69.19 62.00\\
+218 69.74 62.63\\
+219 70.23 63.00\\
+220 70.84 63.40\\
+221 70.05 62.67\\
+224 71.12 63.35\\
+225 71.25 63.37\\
+226 71.20 63.40\\
+227 68.27 61.81\\
+228 68.58 62.15\\
+231 69.94 62.94\\
+232 71.10 63.88\\
+233 70.57 63.49\\
+234 70.87 63.74\\
+235 71.63 64.56\\
+238 73.41 66.09\\
+239 73.43 66.41\\
+240 73.64 67.06\\
+241 74.50 67.82\\
+242 75.03 68.13\\
+245 75.85 68.65\\
+246 76.02 68.65\\
+247 76.68 69.00\\
+248 77.82 69.70\\
+249 77.22 68.97\\
+252 78.28 69.85\\
+253 76.27 68.88\\
+254 77.27 69.97\\
+255 74.39 67.83\\
+256 75.98 69.00\\
+259 76.23 69.20\\
+260 75.68 68.87\\
+261 76.38 69.35\\
+262 78.75 70.93\\
+263 81.78 73.00\\
+266 85.70 74.92\\
+267 84.31 73.90\\
+268 84.99 74.80\\
+269 85.86 74.63\\
+270 86.64 75.35\\
+273 90.25 77.43\\
+274 94.35 78.33\\
+275 83.00 72.17\\
+276 82.65 71.31\\
+277 81.01 70.00\\
+280 82.40 70.30\\
+281 82.38 70.59\\
+282 84.01 71.40\\
+283 86.26 72.32\\
+284 87.52 72.53\\
+287 86.70 71.73\\
+288 85.55 71.10\\
+289 86.83 72.43\\
+290 85.15 71.50\\
+291 86.02 72.25\\
+294 86.59 72.34\\
+295 86.10 70.97\\
+296 86.61 71.80\\
+297 83.26 71.20\\
+298 82.10 70.49\\
+301 81.22 70.47\\
+302 82.88 71.33\\
+303 85.70 73.04\\
+304 85.38 73.41\\
+305 84.88 73.23\\
+308 86.30 74.47\\
+309 85.15 74.03\\
+310 83.57 73.84\\
+311 84.72 74.80\\
+312 85.18 75.47\\
+315 87.40 76.02\\
+316 90.60 77.27\\
+317 92.80 78.12\\
+318 92.35 78.21\\
+319 91.64 77.75\\
+322 92.43 78.10\\
+323 93.14 78.99\\
+324 94.84 79.68\\
+325 97.71 81.52\\
+326 97.35 81.95\\
+329 98.80 83.25\\
+330 99.62 84.17\\
+331 100.49 84.86\\
+332 102.24 85.30\\
+333 104.17 86.28\\
+336 107.06 87.72\\
+337 112.32 92.47\\
+338 123.56 97.13\\
+339 116.66 93.50\\
+340 114.93 91.30\\
+343 120.54 93.09\\
+344 117.45 91.05\\
+345 115.65 89.50\\
+346 124.50 90.33\\
+347 121.86 90.01\\
+350 128.00 91.81\\
+351 144.60 98.00\\
+352 143.91 93.97\\
+353 132.00 90.97\\
+354 132.00 90.97\\
+357 120.50 88.63\\
+358 126.75 88.85\\
+359 125.14 88.55\\
+360 120.11 87.03\\
+361 120.11 87.03\\
+364 121.63 89.20\\
+365 139.88 96.89\\
+366 134.70 96.34\\
+367 133.00 94.85\\
+368 126.98 95.40\\
+371 123.25 94.80\\
+372 121.39 93.23\\
+373 116.39 91.75\\
+374 113.59 90.77\\
+375 117.48 93.08\\
+378 114.17 92.22\\
+379 116.38 92.50\\
+380 116.58 90.52\\
+381 118.31 90.55\\
+382 122.63 92.13\\
+385 127.78 92.55\\
+386 132.92 94.00\\
+387 134.65 95.35\\
+388 141.46 99.10\\
+389 145.00 102.46\\
+392 142.50 103.78\\
+393 131.00 100.67\\
+394 137.88 105.25\\
+395 136.01 104.48\\
+396 142.37 106.49\\
+399 140.40 106.00\\
+400 143.25 107.00\\
+401 140.21 106.50\\
+402 136.50 105.00\\
+403 141.16 107.90\\
+406 145.72 108.78\\
+407 139.79 106.20\\
+408 136.50 103.99\\
+409 136.13 102.75\\
+410 137.94 104.18\\
+413 138.81 105.75\\
+414 147.98 112.00\\
+415 156.43 118.88\\
+          };
+          \legend{Cal-22,Cal-23}
+          \node[font=\scriptsize\bfseries,cezblue,anchor=south east] at (axis cs:415,160) {156,43};
+          \node[font=\scriptsize\bfseries,cezamber,anchor=north east] at (axis cs:415,80) {118,88};
+        \end{axis}
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{0.37\textwidth}
+      \footnotesize
+      \scriptsize
+      \textbf{Contrato:} futuro anual base, Alemania, entrega 2023 (EUR/MWh).\\[1mm]
+      \textbf{Mercado y datos:} EEX, vía Energy-Charts; 295 rendimientos (4-ene-2021 a 23-feb-2022).\\[1mm]
+      \textbf{Por qué no el spot:} \v{C}EZ cubre con ventas a plazo; el diferencial CZ--DE-LU es de EUR 5,85/MWh con correlación 0,976, así que el riesgo de base es menor que el de nivel.\\[1mm]
+      \textbf{Por qué no Cal-22:} su serie termina el 29-dic-2021.
+    \end{column}
+  \end{columns}
+  \fuente{EEX según Energy-Charts; extracción propia (Excel, hoja Retornos). Cal-24 es contrato secundario.}
+\end{frame}
+
+% ================= 6. POSICION =================
+\begin{frame}[t]{\v{C}EZ gana con su producción, pero pierde en sus ventas a plazo cuando el precio sube}
+  \centering
+  \begin{tikzpicture}[
+     lab/.style={rounded corners=3pt,text width=2.7cm,minimum height=1.15cm,align=left,inner sep=4pt,font=\footnotesize\bfseries,text=white},
+     tag/.style={rounded corners=3pt,minimum width=1.5cm,minimum height=0.7cm,font=\scriptsize\bfseries,text=white,align=center},
+     desc/.style={text width=7.6cm,align=left,font=\footnotesize}]
+    \fila{0}{Capa física}{cezteal}{LARGA}
+    \node[desc,anchor=west] at (4.7,0) {Los ingresos de generación suben con el precio; entregas externas esperadas de 44 a 47 TWh al año [5].};
+    \fila{-1.3}{Capa financiera}{cezred}{CORTA}
+    \node[desc,anchor=west] at (4.7,-1.3) {Las ventas a plazo fijan el precio y pierden valor cuando el precio sube: 49\% de 2023 y 21\% de 2024 [3].};
+    \fila{-2.6}{Capa económica neta}{cezblue}{LARGA}
+    \node[desc,anchor=west] at (4.7,-2.6) {Larga sobre el volumen no vendido: 51\% de 2023 y 79\% de 2024.};
+    \fila{-3.9}{Capa de liquidez}{cezamber}{CORTA}
+    \node[desc,anchor=west] at (4.7,-3.9) {Si hay garantías, la pérdida de valoración exige efectivo antes de que se cobre la producción [1].};
+  \end{tikzpicture}
+  %\fuente{\v{C}EZ [3], [5]; Giannozzi y Kirilova [1]. El alcance exacto de los derivados con garantías no consta en los estados revisados; \v{C}EZ registra los depósitos de margen en cuentas por cobrar comerciales [1].}
+\end{frame}
+
+% ================= 7. EXPOSICION =================
+\begin{frame}[t]{Cerca de EUR 4.600 millones en ventas a plazo dependían del precio de la electricidad}
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \small
+      \textbf{Cal-23 (49\% vendido)}
+      \[ Q_h = 0{,}49\times 45{,}5 = 22{,}3\ \text{TWh}\]
+      \[ 22{,}3\times 156{,}43 = \text{EUR } 3.488\ \text{mill.} \ (\approx\text{CZK } 85{,}4\ \text{mil mill.})\]
+      \textbf{Cal-24 (21\% vendido)}
+      \[ 9{,}6\ \text{TWh}\times 118{,}88 = \text{EUR } 1.136\ \text{mill.}\]
+      {\tiny Supuesto: 45,5 TWh, punto medio del rango publicado (44--47). Los porcentajes vendidos son del 30-sep-2021; cada 10 puntos más sobre 2023 suman 4,6 TWh y EUR 712 mill.}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \centering
+      \kpi[5.3cm]{EUR 3.488 mill.}{Cal-23: volumen vendido a mercado}\\[1mm]
+      \kpi[5.3cm]{EUR 1.136 mill.}{Cal-24: volumen vendido a mercado}\\[1mm]
+      \kpi[5.3cm]{EUR 4.624 mill.}{Exposición total 2023+2024}
+    \end{column}
+  \end{columns}
+  \vspace{0mm}
+  \caja{cezamber}{\textwidth}{\scriptsize\textbf{No confundir:} es el dinero cuyo valor depende del subyacente; no es el nocional contable ni el efectivo exigido en garantías.}
+  %\fuente{\v{C}EZ [3], [5]; cálculo propio (Excel, hoja Exposicion); EUR/CZK 24,475.}
+\end{frame}
+
+% ================= 8. VOLATILIDAD =================
+\begin{frame}[t]{La volatilidad casi se duplicó al acortar la ventana: el mercado cambió de régimen}
+  \begin{columns}[T]
+    \begin{column}{0.60\textwidth}
+      \centering{\footnotesize\bfseries Volatilidad anualizada del futuro base alemán (\%)}\\[2mm]
+      \begin{tikzpicture}
+        \begin{axis}[cez,height=4.6cm,ybar,bar width=11pt,ymin=0,ymax=90,
+          symbolic x coords={{60 d},{126 d},{252 d},{Completo},{EWMA}},xtick=data,
+          legend style={at={(0.5,1.0)},anchor=south,legend columns=2,font=\scriptsize},enlarge x limits=0.12,nodes near coords]
+          \addplot[fill=cezblue] coordinates {({60 d},72.4) ({126 d},57.2) ({252 d},43.7) ({Completo},41.2) ({EWMA},61.7)};
+          \addplot[fill=cezamber] coordinates {({60 d},42.1) ({126 d},34.4) ({252 d},28.8) ({Completo},27.5)};
+          \legend{Cal-23,Cal-24}
+        \end{axis}
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{0.37\textwidth}
+      \kpi[4.6cm]{41\% $\to$ 72\%}{historial completo frente a 60 días}\\[1mm]
+      \kpi[4.6cm]{14,0\%}{máximo rendimiento diario (4-ene-2022): 3,1 desviaciones diarias de 60 días}\\[1.5mm]
+      {\tiny Rendimientos logarítmicos diarios, anualizados con $\sqrt{252}$; EWMA con $\lambda=0{,}94$. No se usa el spot: DE-LU tuvo 147 horas con precio negativo.}
+    \end{column}
+  \end{columns}
+  %\fuente{cálculo propio con datos de EEX vía Energy-Charts [6] hasta el 23-feb-2022 (Excel, hoja Volatilidad). EWMA solo para Cal-23.}
+\end{frame}
+
+% ================= 9. SENSIBILIDAD =================
+\begin{frame}[t]{Si el precio sube, las ventas a plazo pierden y los ingresos físicos lo compensan solo en parte}
+  \begin{columns}[T]
+    \begin{column}{0.60\textwidth}
+      \centering{\footnotesize\bfseries Cal-23: cambio de valor según la variación del precio (EUR millones)}\\[-1mm]
+      \begin{tikzpicture}
+        \begin{axis}[cez,height=4.4cm,ybar,bar width=7pt,ymin=-2500,ymax=2500,
+          xtick={1,2,3,4,5,6},xticklabels={$-30\%$,$-20\%$,$-10\%$,$+10\%$,$+20\%$,$+30\%$},
+          xticklabel style={font=\scriptsize},enlarge x limits=0.1,legend style={at={(0.5,-0.2)},anchor=north,legend columns=3,font=\tiny},
+          extra x ticks={},axis x line=bottom,x axis line style={draw=none},
+          xtick style={draw=none},tick label style={font=\scriptsize},
+          x tick label style={yshift=0pt},every axis plot/.append style={draw=none}]
+          \addplot[fill=cezred] coordinates {(1,1046) (2,698) (3,349) (4,-349) (5,-698) (6,-1046)};
+          \addplot[fill=cezteal] coordinates {(1,-2135) (2,-1424) (3,-712) (4,712) (5,1424) (6,2135)};
+          \addplot[fill=cezblue] coordinates {(1,-1089) (2,-726) (3,-363) (4,363) (5,726) (6,1089)};
+          \legend{$\Delta V$ ventas a plazo,$\Delta I$ ingresos físicos,Efecto neto}
+          \draw[black!60] (axis cs:0.4,0) -- (axis cs:6.6,0);
+        \end{axis}
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{0.37\textwidth}
+      \footnotesize
+      $\Delta V=-Q_hP_0s$ \ ventas a plazo\\
+      $\Delta I=Q_TP_0s$ \ ingresos físicos\\
+      Neto $=(Q_T-Q_h)P_0s$\\[0.5mm]
+      {\scriptsize $Q_h$: volumen vendido; $Q_T$: generación esperada; $P_0$: precio al corte; $s$: variación.}\\[2mm]
+      \kpi[4.6cm]{$-$EUR 1.046 mill.}{$\Delta V$ de 2023 con +30\%}\\[1mm]
+      \kpi[4.6cm]{$-$EUR 1.387 mill.}{$\Delta V$ 2023+2024, +30\% ($\approx$CZK 33,9 mil mill.)}
+    \end{column}
+  \end{columns}
+  %\fuente{cálculo propio, $P_0=156{,}43$ EUR/MWh, $Q_h=22{,}3$ TWh, $Q_T=45{,}5$ TWh (Excel, hoja Sensibilidad). Escenarios hipotéticos; tabla completa en respaldo A.}
+\end{frame}
+
+% ================= 10. PROBABILIDADES =================
+\begin{frame}[t]{Un alza de 30\% en un mes era poco probable según los modelos, pero no despreciable}
+  \begin{columns}[T]
+    \begin{column}{0.60\textwidth}
+      \centering{\footnotesize\bfseries Probabilidad (\%) de alza $\geq x$ del Cal-23 en 21 días hábiles}\\[-1mm]
+      \begin{tikzpicture}
+        \begin{axis}[cez,height=4.3cm,ybar,bar width=12pt,ymin=0,ymax=42,
+          xtick={1,2,3},xticklabels={$\geq 10\%$,$\geq 20\%$,$\geq 30\%$},enlarge x limits=0.22,
+          legend style={at={(0.5,-0.2)},anchor=north,legend columns=2,font=\tiny},nodes near coords]
+          \addplot[fill=cezred] coordinates {(1,28.8) (2,16.4) (3,8.7)};
+          \addplot[fill=cezamber] coordinates {(1,26.6) (2,13.3) (3,5.9)};
+          \addplot[fill=cezblue] coordinates {(1,19.5) (2,5.6) (3,1.2)};
+          \addplot[fill=cezgray] coordinates {(1,34.2) (2,10.5) (3,5.1)};
+          \legend{{$\sigma$ 60 d (72,4\%)},{EWMA (61,7\%)},{$\sigma$ completa (41,2\%)},{Frecuencia empírica}}
+        \end{axis}
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{0.37\textwidth}
+      \scriptsize
+      \textbf{Modelo:} lognormal sin tendencia; horizonte de 21 días hábiles (supuesto).\\[1mm]
+      \textbf{Con EWMA:} alzas de 26,6, 13,3 y 5,9\%; bajas de 30,8, 12,2 y 2,8\%.\\[1.5mm]
+      \textbf{Historia:} 275 ventanas traslapadas de una muestra alcista; bajas casi nulas.\\[2mm]
+      \caja{cezamber}{4.7cm}{\tiny Tres conceptos distintos: modelo, historia y escenario. Ninguno predice el futuro: el modelo normal subestima las colas y la volatilidad constante contradice el cambio de régimen.}
+    \end{column}
+  \end{columns}
+  %\fuente{cálculo propio (Excel, hoja Probabilidades). Tabla completa, con bajas, en respaldo B.}
+\end{frame}
+
+% ================= 11. LIQUIDEZ =================
+\begin{frame}[t]{El riesgo se traduce en liquidez: dentro de $\pm$30\% sería manejable, con supuestos}
+  \begin{columns}[T]
+    \begin{column}{0.60\textwidth}
+      \centering{\footnotesize\bfseries Liquidez potencial requerida $L$ (CZK miles de millones), hipotética}\\[-1mm]
+      \begin{tikzpicture}
+        \begin{axis}[cez,height=3.2cm,ybar,bar width=9pt,ymin=0,ymax=46,
+          xtick={1,2,3},xticklabels={$+10\%$,$+20\%$,$+30\%$},enlarge x limits=0.22,
+          legend style={at={(0.5,-0.4)},anchor=north,legend columns=2,font=\tiny},nodes near coords]
+          \addplot[fill=cezteal!60] coordinates {(1,2.8) (2,5.7) (3,8.5)};
+          \addplot[fill=cezteal] coordinates {(1,5.7) (2,11.3) (3,17.0)};
+          \addplot[fill=cezblue] coordinates {(1,11.3) (2,22.6) (3,33.9)};
+          \draw[dashed,cezred,very thick] (axis cs:0.4,39.4) -- (axis cs:3.6,39.4);
+          \addlegendimage{dashed,cezred,very thick}
+          \legend{{$\theta=25\%$},{$\theta=50\%$},{$\theta=100\%$},{Liquidez de referencia: 39,4}}
+        \end{axis}
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{0.37\textwidth}
+      \footnotesize
+      $L=\theta\cdot\max(0,-\Delta V)$\\
+      {\scriptsize $\theta$: fracción de la pérdida aportada en efectivo (no observable).}\\[2mm]
+      \kpi[4.6cm]{1,16$\times$}{liquidez de referencia / exigencia ($\theta=100\%$, +30\%)}\\[1mm]
+      {\tiny Liquidez al 30-sep-2021: efectivo CZK 8.023 mill. + líneas comprometidas no dispuestas CZK 31.400 mill. (por confirmar) = CZK 39.423 mill.; deuda: CZK 141.245 mill. La repo de 4,50\% encarece financiar el margen.}
+    \end{column}
+  \end{columns}
+  \vspace{0mm}
+  \caja{cezred}{\textwidth}{\tiny Necesidad \textbf{hipotética}, no una obligación registrada por \v{C}EZ: depende de $\theta$, del porcentaje vendido y de que la liquidez de sep-2021 siguiera disponible.}
+  %\fuente{\v{C}EZ [3], [5]; cálculo propio (Excel, hojas Parametros y Sensibilidad).}
+\end{frame}
+
+% ================= 12. RETROSPECTIVA =================
+\begin{frame}[t]{Evidencia retrospectiva: la cola real superó con creces la rejilla de $\pm$30\%}
+  \begin{columns}[T]
+    \begin{column}{0.62\textwidth}
+      {\footnotesize\bfseries CZK miles de millones (órdenes de magnitud, no comparables uno a uno)}\\[2mm]
+      \begin{tikzpicture}[lab/.style={text width=3.1cm,align=right,font=\scriptsize,anchor=east},val/.style={font=\small\bfseries,anchor=west}]
+        \node[lab] at (0,2.4) {Alza de +30\% al corte ($\theta=100\%$)};
+        \fill[cezteal] (0.1,2.15) rectangle (0.1+33.9*0.0095,2.65); \node[val] at (0.2+33.9*0.0095,2.4) {33,9};
+        \node[lab] at (0,1.3) {Depósitos de margen informados, ago-2022 [14]};
+        \fill[cezamber] (0.1,1.05) rectangle (0.1+195*0.0095,1.55); \node[val] at (0.2+195*0.0095,1.3) {$>$195};
+        \node[lab] at (0,0.2) {Cambio de valor del Cal-23 a EUR 985 (hipotético)};
+        \fill[cezgray] (0.1,-0.05) rectangle (0.1+452.1*0.0095,0.45); \node[val] at (0.2+452.1*0.0095,0.2) {452,1};
+        \draw[black!50] (0.1,-0.2) -- (0.1,2.85);
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{0.35\textwidth}
+      \footnotesize
+      \kpi[4.4cm]{EUR 985/MWh}{Cal-23 el 26-ago-2022: +530\% sobre el precio del corte [13]}\\[2mm]
+      Sobre el volumen vendido de 2023, el cambio de valor sería de unos $-$EUR 18.500 mill.\\[1.5mm]
+      \textbf{Lectura:} la planificación de liquidez debería considerar choques mayores que $\pm$30\%.
+    \end{column}
+  \end{columns}
+  \vspace{1mm}
+  \caja{cezgray}{\textwidth}{\scriptsize Información \textbf{posterior} al 23-feb-2022: no alimenta ningún cálculo ex ante. La cifra de depósitos de margen proviene de \v{C}EZ [14] y no fue releída en este trabajo.}
+  %\fuente{EEX [13]; \v{C}EZ [14]; cálculo propio (Excel, hojas Sensibilidad y Retro\_post\_corte).}
+\end{frame}
+
+% ================= 13. CONCLUSIONES =================
+\begin{frame}[t]{Conclusión: el riesgo central de \v{C}EZ no era económico, sino de liquidez}
+  \begin{columns}[T]
+    \begin{column}{0.32\textwidth}
+      \caja{cezteal}{3.9cm}{\tiny\textbf{\scriptsize \textquestiondown Dónde estaba parada?}\\[1mm]
+      Larga en electricidad por su generación y corta por ventas a plazo: 49\% de 2023 y 21\% de 2024, con un mercado que había triplicado sus precios.}
+    \end{column}
+    \begin{column}{0.32\textwidth}
+      \caja{cezred}{3.9cm}{\tiny\textbf{\scriptsize \textquestiondown Qué riesgo enfrentaba?}\\[1mm]
+      EUR 4.624 mill. dependían del precio; volatilidad de 41\% a 72\% según la ventana; +30\% implicaba $-$EUR 1.387 mill. en la posición vendida.}
+    \end{column}
+    \begin{column}{0.32\textwidth}
+      \caja{cezamber}{3.9cm}{\tiny\textbf{\scriptsize \textquestiondown Por qué importa?}\\[1mm]
+      Las pérdidas de valoración podían exigir efectivo antes del cobro de la producción: el mecanismo de Giannozzi y Kirilova [1].}
+    \end{column}
+  \end{columns}
+  \vspace{1mm}
+  \caja{cezblue}{\textwidth}{\footnotesize \v{C}EZ podía estar bien cubierta en precio y aun así enfrentar presión de liquidez si el mercado se movía contra sus posiciones financieras. Con $\theta=100\%$ y +30\%, la exigencia sería CZK 33,9 mil millones, 1,16 veces cubierta por la liquidez de referencia.}
+  \vspace{0.5mm}
+
+  {\tiny\color{cezgray}\textbf{Limitaciones:} faltan el precio pactado, la fracción con garantías, $\theta$, el hedge ratio al corte y los precios de 2022; los escenarios son hipotéticos y ningún modelo predice el futuro.}
+\end{frame}
+
+% ================= 14. PREGUNTAS =================
+\begin{frame}[plain]
+  \centering
+  \vspace{22mm}
+  {\color{cezblue}\fontsize{26}{30}\selectfont\bfseries Preguntas\par}
+  \vspace{2mm}
+  {\color{cezteal}\rule{4cm}{1pt}\par}
+  \vspace{3mm}
+  {\small\color{cezgray} \textexclamdown Muchas Gracias!\par}
+\end{frame}
+
+% ===================== RESPALDO =====================
+\appendix
+
+% ---- A. Tabla de sensibilidad ----
+\begin{frame}[t]{A. Tabla de sensibilidad completa}
+  \centering
+  \scriptsize
+  \renewcommand{\arraystretch}{1.2}
+  \setlength{\tabcolsep}{3.5pt}
+  \begin{tabular}{@{}r r r r r r r r r@{}}
+    \toprule
+    $s$ & $P_0(1+s)$ & $\Delta V$ 2023 & $\Delta I$ 2023 & Neto 2023 & $\Delta V$ 2024 & $\Delta V$ total & $\Delta V$ total & $L$ ($\theta=100\%$)\\
+    & EUR/MWh & EUR mill. & EUR mill. & EUR mill. & EUR mill. & EUR mill. & CZK mil mill. & CZK mil mill.\\ \midrule
+    $-30\%$ & 109,5 & $+1.046$ & $-2.135$ & $-1.089$ & $+341$ & $+1.387$ & $+33,9$ & 0\\
+    $-20\%$ & 125,1 & $+698$ & $-1.424$ & $-726$ & $+227$ & $+925$ & $+22,6$ & 0\\
+    $-10\%$ & 140,8 & $+349$ & $-712$ & $-363$ & $+114$ & $+462$ & $+11,3$ & 0\\
+    $+10\%$ & 172,1 & $-349$ & $+712$ & $+363$ & $-114$ & $-462$ & $-11,3$ & 11,3\\
+    $+20\%$ & 187,7 & $-698$ & $+1.424$ & $+726$ & $-227$ & $-925$ & $-22,6$ & 22,6\\
+    $+30\%$ & 203,4 & $-1.046$ & $+2.135$ & $+1.089$ & $-341$ & $-1.387$ & $-33,9$ & 33,9\\
+    \bottomrule
+  \end{tabular}
+  \vspace{3mm}
+
+  \begin{minipage}{0.95\textwidth}\raggedright\scriptsize
+  $P_0=156{,}43$; $Q_h=22{,}3$ TWh (2023) y 9,6 TWh (2024); $Q_T=45{,}5$ TWh; EUR/CZK 24,475. Liquidez de referencia: CZK 39,4 mil millones; con $\theta=50\%$, $L$ se reduce a la mitad y con $\theta=25\%$ a la cuarta parte.
+  \end{minipage}
+  %\fuente{cálculo propio (Excel, hoja Sensibilidad); supuestos en la hoja Parametros.}
+\end{frame}
+
+% ---- B. Probabilidades ----
+\begin{frame}[t]{B. Probabilidades de variación del Cal-23 en 21 días hábiles}
+  \centering
+  \scriptsize
+  \renewcommand{\arraystretch}{1.2}
+  \begin{tabular}{@{}l rrr rrr@{}}
+    \toprule
+    & \multicolumn{3}{c}{Alza $\geq x$ (\%)} & \multicolumn{3}{c}{Baja $\geq x$ (\%)}\\
+    \cmidrule(lr){2-4}\cmidrule(lr){5-7}
+    Estimador de $\sigma$ & 10\% & 20\% & 30\% & 10\% & 20\% & 30\%\\ \midrule
+    60 días (72,4\%) & 28,8 & 16,4 & 8,7 & 34,5 & 16,8 & 5,5\\
+    126 días (57,2\%) & 25,5 & 11,8 & 4,7 & 28,9 & 10,2 & 1,9\\
+    252 días (43,7\%) & 20,7 & 6,6 & 1,6 & 22,0 & 4,4 & 0,3\\
+    Historial completo (41,2\%) & 19,5 & 5,6 & 1,2 & 20,5 & 3,5 & 0,2\\
+    EWMA (61,7\%) & 26,6 & 13,3 & 5,9 & 30,8 & 12,2 & 2,8\\ \midrule
+    Frecuencia empírica (275 ventanas) & 34,2 & 10,5 & 5,1 & 0,7 & 0,0 & 0,0\\
+    \bottomrule
+  \end{tabular}
+  \vspace{3mm}
+
+  \begin{minipage}{0.95\textwidth}\raggedright\scriptsize
+  Modelo lognormal sin tendencia. La frecuencia empírica usa ventanas traslapadas, por lo que las observaciones no son independientes, y la muestra (2021 a febrero de 2022) tuvo una tendencia alcista marcada.
+  \end{minipage}
+  %\fuente{cálculo propio (Excel, hoja Probabilidades).}
+\end{frame}
+
+% ---- C. Conciliación ----
+\begin{frame}[t]{C. Conciliación entre el informe y el Excel}
+  \scriptsize
+  \renewcommand{\arraystretch}{1.25}
+  \begin{tabular}{@{}>{\bfseries}p{2.1cm}p{5.2cm}p{5.4cm}@{}}
+    \toprule
+    Elemento & Informe & Excel (usado en esta presentación)\\ \midrule
+    EUR/CZK & 24,860 (31-dic-2021); cotización del corte pendiente & 24,475 (ČNB, 23-feb-2022; BCE: 24,473). Efecto en CZK: exposición 85,4 (informe: 86,7); $\Delta V$ de $-30\%$: 33,9 (34,5); cobertura 1,16$\times$ (1,14$\times$); $\theta=50\%$: 17,0 (17,2); retrospectivo: 452 (459)\\
+    Precio pactado Cal-23 & 61,16 EUR/MWh (media del futuro ene-sep 2021, supuesto): valoración ilustrativa $-$EUR 2.124 mill. & 54,3 (proxy de \v{C}EZ, por confirmar): $-$EUR 2.277 mill. No se usa como cifra principal\\
+    Cifras en EUR & Exposición, sensibilidad, volatilidad y probabilidades & Coinciden con el informe\\
+    Control del Excel & --- & «Horas spot por día entre 23 y 25»: FALSO (afecta solo al contexto spot, no al subyacente)\\
+    Datos por confirmar & Líneas comprometidas (CZK 31.400 mill.), entregas de 44 a 47 TWh y margen $>$CZK 195 mil mill. & Marcados como parciales en el Excel\\
+    \bottomrule
+  \end{tabular}
+  %\fuente{Informe\_I\_Entrega; Excel\_Auditable\_CEZ (hojas Parametros, Exposicion, Sensibilidad, Controles, Retro\_post\_corte).}
+\end{frame}
+
+% ---- D. Referencias ----
+\begin{frame}[t]{D. Referencias (numeración del informe)}
+  \tiny
+  \setlength{\parskip}{0.6mm}
+  \begin{columns}[T]
+    \begin{column}{0.49\textwidth}
+      [1] A. Giannozzi y A. Kirilova, «When corporate risk management amplifies risks: Evidence from Europe's energy crisis in 2022», \emph{Journal of Banking \& Finance}, vol. 188, 107700, 2026.\par
+      [2] \v{C}EZ, a. s., «Consolidated financial statements of CEZ Group as of December 31, 2021 (IFRS)». Posterior al corte.\par
+      [3] \v{C}EZ, a. s., «Interim consolidated financial statements as of September 30, 2021 (unaudited, IFRS)».\par
+      [4] \v{C}EZ, a. s., «Investment story».\par
+      [5] \v{C}EZ, a. s., «Presentation on CEZ Group financial results in Q3 2021».\par
+      [6] Energy-Charts (Fraunhofer ISE), «Futuros energéticos (Base) para Alemania»; fuente original: EEX. Extracción propia.\par
+      [7] Energy-Charts, «Electricity production and spot prices in 2022»; fuente: ENTSO-E.\par
+    \end{column}
+    \begin{column}{0.49\textwidth}
+      [8] S\&P Global Commodity Insights, «Russian announcement of Donbas military operation raises risks for energy markets».\par
+      [9] Gas Strategies Group, «Pricewatch, Gas Matters Today».\par
+      [10] Česká národní banka, «CNB increases interest rates».\par
+      [11] \v{C}EZ, a. s., «Presentation on CEZ Group financial results in Q2 2021».\par
+      [13] European Energy Exchange, «EEX markets remain open despite the situation on the German power derivatives market», 2022.\par
+      [14] \v{C}EZ, a. s., «CEZ Group earned over CZK 80 billion in 2022, will pay more than CZK 100 billion to the Czech State this year».\par
+      [15] Energy-Charts, «Electricity production and spot prices in 2021»; precios CZ y DE-LU: Bundesnetzagentur | SMARD.de (CC BY 4.0).\par
+      Tipo de cambio: ČNB, tipo de cambio del 23-feb-2022 (Excel, hoja Parametros).
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\end{document}

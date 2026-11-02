@@ -234,19 +234,6 @@
 \newcommand{\czk}{\texttt{CZK}\,}
 
 %====================================================================
-% 14. CLASIFICACIÓN DE DATOS
-%====================================================================
-
-% Categoría A: datos publicados
-\newcommand{\catA}{\textbf{[A]}}
-
-% Categoría B: cálculos propios
-\newcommand{\catB}{\textbf{[B]}}
-
-% Categoría C: datos no disponibles o no verificables
-\newcommand{\catC}{\textbf{[C]}}
-
-%====================================================================
 % 15. COMANDOS AUXILIARES DEL INFORME
 %====================================================================
 
@@ -262,18 +249,6 @@
     \textcolor{red!70!black}{\textit{[#1]}}
 }
 
-% Estados para tablas de avance
-\newcommand{\done}{%
-    \textcolor{green!45!black}{\textbf{Completado}}
-}
-
-\newcommand{\wip}{%
-    \textcolor{orange!80!black}{\textbf{En curso}}
-}
-
-\newcommand{\todo}{%
-    \textcolor{red!70!black}{\textbf{Pendiente}}
-}
 
 %====================================================================
 % ENTORNO PARA CÓDIGO PYTHON
@@ -330,7 +305,7 @@
 %====================================================================
 
 \title{
-    \textbf{Nombre del informe}\\[0.4em]
+    \textbf{Analisis financiero sobre CEZ y sus protecciones preguerra Ruso--Ucraniana}\\[0.4em]
     \large Informe de anteproyecto
 }
 
@@ -381,7 +356,6 @@ Sumado a lo anterior, los autores analizan datos de empresas energéticas europe
 
 La selección de ČEZ, a. s., responde a criterios financieros y no a la disponibilidad de datos. En primer lugar, la empresa pertenece a la muestra del artículo, pues figura entre las que informan en qué partida del balance registran los depósitos de margen, en este caso «cuentas por cobrar comerciales, margen y colaterales» \parencite[Apéndice A3, p.~16]{GIANNOZZI2026107700}. En segundo lugar, genera cerca de 58\% de la electricidad checa \parencite[p.~11]{cez_fs_2021} y el Estado posee 69,8\% de su capital \parencite[p.~10]{cez_interim_q3_2021}. En tercer lugar, vende por adelantado su generación y lo cuantifica antes del corte: 79\%, 49\% y 21\% de la generación de 2022, 2023 y 2024 al 30 de septiembre de 2021 \parencite[p.~27]{cez_interim_q3_2021}. En cuarto lugar, su exposición es sobre todo eléctrica (el gas aporta 5,8\% de su generación, \parencite{cez_story_2022}), lo que permite aislar un subyacente. Finalmente, su balance al 30 de septiembre de 2021 se publicó el 9 de noviembre de 2021, antes del corte.
 
-El análisis se limita a lo que podía conocerse el {23 de febrero de 2022}, último día hábil anterior al 24 de febrero, cuando se registran los mayores rendimientos diarios del gas y la electricidad \parencite[p.~3]{GIANNOZZI2026107700}. Todos los precios, volatilidades y probabilidades usan observaciones hasta esa fecha inclusive, mientras que los hechos posteriores aparecen solo como evidencia retrospectiva (Sección~\ref{sec:sens}).
 
 Por todo lo mencionado anteriormente, es que la evaluación de la exposición de ČEZ a una tensión de liquidez en la fecha de corte se vuelve una tarea central en el presente informe. Es por esto que se procede, en primer lugar, a describir el contexto de la empresa y del mercado; en segundo lugar, a definir el subyacente y la posición financiera; en tercer lugar, a cuantificar la exposición monetaria y la volatilidad; y, por último, a analizar la sensibilidad, las probabilidades y las conclusiones.
 
@@ -421,11 +395,11 @@ El significado financiero de estos niveles es directo. ČEZ vendió 37 TWh de 20
 
 \section{Subyacente y posición financiera}
 
-El \textbf{subyacente principal} es el precio del futuro anual base de electricidad de Alemania con entrega en 2023, cotizado en EEX en EUR/MWh. Se prefiere al spot porque ČEZ cubre su producción con ventas a plazo y no con contratos de entrega al día siguiente, por lo que los precios spot se emplean como indicador complementario y no se mezclan con los de futuros. Tampoco se usa el contrato de 2022, pues su serie termina el 29 de diciembre de 2021, de modo que a la fecha de corte no existe un precio anual para ese año, y la parte restante de 2022 requeriría precios mensuales o trimestrales que el archivo no contiene. El contrato de 2023 es el anual más cercano, con serie continua hasta el corte y 49\% de la generación vendida, mientras que el de 2024 es secundario.
+El {subyacente principal} es el precio del futuro anual base de electricidad de Alemania con entrega en 2023, cotizado en EEX en EUR/MWh. Se prefiere al spot porque ČEZ cubre su producción con ventas a plazo y no con contratos de entrega al día siguiente, por lo que los precios spot se emplean como indicador complementario y no se mezclan con los de futuros. Tampoco se usa el contrato de 2022, pues su serie termina el 29 de diciembre de 2021, de modo que a la fecha de corte no existe un precio anual para ese año, y la parte restante de 2022 requeriría precios mensuales o trimestrales que el archivo no contiene. El contrato de 2023 es el anual más cercano, con serie continua hasta el corte y 49\% de la generación vendida, mientras que el de 2024 es secundario.
 
 Sumado a lo anterior, ČEZ informa coberturas alemanas para suministros checos de 2021 a 2024 \parencite{cez_q2_2021}, lo que respalda el uso del mercado alemán. No obstante, sus documentos no identifican el contrato exacto, la bolsa ni la cámara de compensación, y el riesgo de base entre los mercados checo y alemán se acota con el diferencial spot de la sección anterior. La serie es homogénea (cada columna es un año de entrega fijo, sin empalmes) y coincide con valores publicados (EUR 315,00 el 21 de diciembre de 2021 para 2022 \parencite{platts_2021_dec} y EUR 985,00 el 26 de agosto de 2022 para 2023 \parencite{eex_2022}); por esta razón se interpreta como precios de liquidación, aunque el método de extracción requiere verificación (Anexo~D).
 
-La \textbf{posición} se descompone en cuatro capas. La capa física es larga, pues los ingresos de generación suben con el precio de la electricidad, con entregas externas esperadas de 44 a 47 TWh al año \parencite{cez_q3_2021}. La capa financiera es corta, ya que las ventas a plazo fijan un precio y pierden valor cuando el precio sube. La capa económica neta es larga sobre el volumen no vendido, 51\% de 2023 y 79\% de 2024. Finalmente, la capa de liquidez es corta ante alzas: si los contratos se negocian con garantías, la pérdida de valoración exige efectivo antes de que se cobre la producción.
+La {posición} se descompone en cuatro capas. La capa física es larga, pues los ingresos de generación suben con el precio de la electricidad, con entregas externas esperadas de 44 a 47 TWh al año \parencite{cez_q3_2021}. La capa financiera es corta, ya que las ventas a plazo fijan un precio y pierden valor cuando el precio sube. La capa económica neta es larga sobre el volumen no vendido, 51\% de 2023 y 79\% de 2024. Finalmente, la capa de liquidez es corta ante alzas: si los contratos se negocian con garantías, la pérdida de valoración exige efectivo antes de que se cobre la producción.
 
 Por esto, una cobertura razonable puede generar tensión de liquidez, dado que la compensación económica ocurre en la entrega, mientras que la liquidación del margen es diaria. Es importante señalar que el alcance exacto de los derivados sujetos a garantías no consta en los estados revisados; solo se sabe que ČEZ registra los depósitos de margen en cuentas por cobrar comerciales \parencite[p.~16]{GIANNOZZI2026107700}.
 

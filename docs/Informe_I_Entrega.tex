@@ -276,6 +276,41 @@
 }
 
 %====================================================================
+% ENTORNO PARA CÓDIGO PYTHON
+%====================================================================
+
+\lstdefinestyle{pythonstyle}{
+    language=Python,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue!65!black}\bfseries,
+    commentstyle=\color{green!35!black}\itshape,
+    stringstyle=\color{orange!60!black},
+    numberstyle=\tiny\color{gray},
+    numbers=left,
+    numbersep=10pt,
+    stepnumber=1,
+    backgroundcolor=\color{gray!5},
+    frame=single,
+    rulecolor=\color{gray!35},
+    framerule=0.4pt,
+    framesep=8pt,
+    breaklines=true,
+    breakatwhitespace=false,
+    breakindent=0pt,
+    showstringspaces=false,
+    keepspaces=true,
+    columns=fullflexible,
+    tabsize=4,
+    captionpos=b,
+    aboveskip=12pt,
+    belowskip=12pt
+}
+
+\lstnewenvironment{pythoncode}[1][]%
+    {\lstset{style=pythonstyle,#1}}%
+    {}
+
+%====================================================================
 % 16. DATOS INSTITUCIONALES
 %====================================================================
 
@@ -332,9 +367,12 @@
 	
 	
 	\maketitle
+
 	\tableofcontents   % opcional; muchos papers largos lo incluyen
+
+	\newpage
 	
-% =====================================================================
+
 \section{Introducción}\label{sec:intro}
 
 Giannozzi y Kirilova \parencite{GIANNOZZI2026107700} investigan por qué una cobertura 
@@ -359,8 +397,8 @@ de la electricidad checa \parencite[p.~11]{cez_fs_2021} y el Estado posee 69,8\%
 capital \parencite[p.~10]{cez_interim_q3_2021}. Tercero, vende por adelantado su generación 
 y lo cuantifica antes del corte: 79\%, 49\% y 21\% de la generación de 2022, 2023 y 
 2024 al 30 de septiembre de 2021 \parencite[p.~27]{cez_interim_q3_2021}. 
-Cuarto, su exposición es sobre todo eléctrica (el gas aporta 5,8\% de su generación 
-, \parencite{cez_story_2022}), lo que permite aislar un subyacente. 
+Cuarto, su exposición es sobre todo eléctrica (el gas aporta 5,8\% de su generación, 
+\parencite{cez_story_2022}), lo que permite aislar un subyacente. 
 Quinto, su balance al 30 de septiembre de 2021 se publicó el 9 de noviembre de 2021, 
 antes del corte.
 
@@ -372,37 +410,436 @@ posteriores aparecen solo como evidencia retrospectiva (Sección~\ref{sec:sens})
 
 \section{Contexto de la empresa y del mercado en la fecha de corte}
 
-\textbf{Empresa.} ČEZ genera, distribuye y comercializa electricidad y calor, además de gas, servicios energéticos y carbón \parencite[p.~10]{cez_interim_q3_2021}. Las ventas de electricidad fueron CZK 90.496 millones de unos ingresos operativos de CZK 155.955 millones en nueve meses de 2021 (58\% , \parencite[p.~21]{cez_interim_q3_2021}) y el segmento de Generación aportó CZK 24.271 millones de un EBITDA consolidado de CZK 47.520 millones (51\% , \parencite[pp.~24--25]{cez_interim_q3_2021}). Su estrategia combina ventas de electricidad a plazo, compras a plazo de derechos de emisión y cobertura del tipo de cambio de ingresos en euros \parencite{cez_q3_2021}. El costo ya era visible antes del corte: las preventas redujeron en CZK 4.305 millones los ingresos por electricidad de nueve meses porque se liquidaron por debajo del precio de mercado \parencite[p.~21]{cez_interim_q3_2021}. La liquidez de referencia al 30 de septiembre de 2021 era de CZK 8.023 millones en efectivo \parencite[p.~2]{cez_interim_q3_2021} y de CZK 31.400 millones en líneas comprometidas no dispuestas (40.000 menos 8.600 dispuestos; cifra de una diapositiva por confirmar \parencite{cez_q3_2021}), frente a una deuda de CZK 141.245 millones \parencite[pp.~3, 19, 20]{cez_interim_q3_2021}.
+\paragraph{Empresa.} ČEZ genera, distribuye y comercializa electricidad y calor, 
+además de gas, servicios energéticos y carbón \parencite[p.~10]{cez_interim_q3_2021}. 
+Las ventas de electricidad fueron CZK 90.496 millones de unos ingresos operativos de 
+CZK 155.955 millones en nueve meses de 2021 (58\% , \parencite[p.~21]{cez_interim_q3_2021}) 
+y el segmento de Generación aportó CZK 24.271 millones de un EBITDA consolidado de 
+CZK 47.520 millones (51\% , \parencite[pp.~24--25]{cez_interim_q3_2021}). Su estrategia 
+combina ventas de electricidad a plazo, compras a plazo de derechos de emisión y 
+cobertura del tipo de cambio de ingresos en euros \parencite{cez_q3_2021}. 
+El costo ya era visible antes del corte: las preventas redujeron en CZK 4.305 millones 
+los ingresos por electricidad de nueve meses porque se liquidaron por debajo del precio 
+de mercado \parencite[p.~21]{cez_interim_q3_2021}. La liquidez de referencia al 30 de 
+septiembre de 2021 era de CZK 8.023 millones en efectivo \parencite[p.~2]{cez_interim_q3_2021} 
+y de CZK 31.400 millones en líneas comprometidas no dispuestas (40.000 menos 8.600 dispuestos; 
+cifra de una diapositiva por confirmar \parencite{cez_q3_2021}), frente a una deuda de 
+CZK 141.245 millones \parencite[pp.~3, 19, 20]{cez_interim_q3_2021}.
 
-\textbf{Mercado.} La Tabla~\ref{tab:mercado} resume los indicadores al corte. El contrato anual alemán para 2023 cotizaba a EUR 156,43/MWh el 23 de febrero de 2022, 82\% más que el 30 de septiembre de 2021 (EUR 85,86) y tres veces el nivel de enero de 2021 (EUR 51,25) . En el mercado spot, el promedio diario de la subasta Day Ahead pasó de EUR 100,66 (CZ) y 96,84 (DE-LU) en 2021 a EUR 183,22 y 178,97 en el cuarto trimestre, y a 166,76 y 147,16 entre el 1 de enero y el 23 de febrero de 2022 . El diferencial medio entre la República Checa y Alemania-Luxemburgo fue de EUR 5,85/MWh (5,7\% del precio medio de Alemania-Luxemburgo), con correlación de 0,976 entre promedios diarios, y los precios coincidieron en 46,6\% de las horas, lo que indica acoplamiento de mercados y un riesgo de base menor que el riesgo de nivel .
+\paragraph{Mercado.} La Tabla~\ref{tab:mercado} resume los indicadores al corte. 
+El contrato anual alemán para 2023 cotizaba a EUR 156,43/MWh el 23 de febrero 
+de 2022, 82\% más que el 30 de septiembre de 2021 (EUR 85,86) y tres veces el 
+nivel de enero de 2021 (EUR 51,25) . En el mercado spot, el promedio diario de 
+la subasta Day Ahead pasó de EUR 100,66 (CZ) y 96,84 (DE-LU) en 2021 a EUR 183,22 
+y 178,97 en el cuarto trimestre, y a 166,76 y 147,16 entre el 1 de enero y el 
+23 de febrero de 2022 . El diferencial medio entre la República Checa y 
+Alemania-Luxemburgo fue de EUR 5,85/MWh (5,7\% del precio medio de Alemania-Luxemburgo), 
+con correlación de 0,976 entre promedios diarios, y los precios coincidieron en 46,6\% de 
+las horas, lo que indica acoplamiento de mercados y un riesgo de base menor que el riesgo 
+de nivel.
 
 \sw
 \begin{table}[ht]
-\centering
-\footnotesize
-\begin{tabularx}{\textwidth}{@{}>{\RaggedRight}p{3.0cm}>{\RaggedRight}X>{\RaggedRight}p{3.4cm}@{}}
-\toprule
-Indicador & Valor y fecha & Fuente y categoría \\
-\midrule
-Futuro base DE, entrega 2023 & EUR 156,43/MWh (23-feb-2022); 85,86 (30-sep-2021); 51,25 (4-ene-2021) & \textcite{energycharts_futuros_de},  \\
-Futuro base DE, entrega 2024 & EUR 118,88/MWh (23-feb-2022) & ídem,  \\
-Spot Day Ahead CZ / DE-LU & Último día, 23-feb-2022: EUR 136,63 / 130,09 (promedio diario) & \textcite{energycharts_spot2022},  \\
-Gas TTF & EUR 88,85/MWh (23-feb-2022); máximo previo de EUR 182,78 el 21-dic-2021 & \textcite{platts_ttf_2022},  \\
-Derechos de emisión EUA & EUR 94,67/t, contrato más cercano (cierre del 23-feb-2022); EUR 61,66 al 30-sep-2021 & \textcite{gasstrategies_2022}; \parencite[p.~18]{cez_interim_q3_2021},  \\
-EUR/CZK & CZK 24,860 al 31-dic-2021; cotización del 23-feb-2022 pendiente & \parencite[p.~30]{cez_fs_2021},  \\
-Tasas & Repo checa a dos semanas 4,50\% desde el 4-feb-2022 (antes 3,75\%); PRIBOR pendiente & \textcite{cnb_2022},  \\
-Regulación & EMIR: compensación central obligatoria sobre EUR 4.000 millones de nocional bruto en materias primas; sin compensación, valoración diaria y garantías & \parencite[p.~18]{GIANNOZZI2026107700}; norma primaria por verificar, / \\
-Competencia & ČEZ genera cerca de 58\% de la electricidad checa; competidores y cuotas pendientes & \parencite[p.~11]{cez_fs_2021},  \\
-\bottomrule
-\end{tabularx}
-\caption{Estado del mercado en la fecha de corte.}
-\label{tab:mercado}
+	\centering
+	\footnotesize
+		\begin{tabularx}{\textwidth}{@{}>{\RaggedRight}p{3.0cm}>{\RaggedRight}X>{\RaggedRight}p{3.4cm}@{}}
+			\toprule
+				Indicador & Valor y fecha & Fuente y categoría \\
+			\midrule
+				Futuro base DE, entrega 2023 & EUR 156,43/MWh (23-feb-2022); 85,86 (30-sep-2021); 51,25 (4-ene-2021) & \textcite{energycharts_futuros_de},  \\
+				Futuro base DE, entrega 2024 & EUR 118,88/MWh (23-feb-2022) & ídem,  \\
+				Spot Day Ahead CZ / DE-LU & Último día, 23-feb-2022: EUR 136,63 / 130,09 (promedio diario) & \textcite{energycharts_spot2022},  \\
+				Gas TTF & EUR 88,85/MWh (23-feb-2022); máximo previo de EUR 182,78 el 21-dic-2021 & \textcite{platts_ttf_2022},  \\
+				Derechos de emisión EUA & EUR 94,67/t, contrato más cercano (cierre del 23-feb-2022); EUR 61,66 al 30-sep-2021 & \textcite{gasstrategies_2022}; \parencite[p.~18]{cez_interim_q3_2021},  \\
+				EUR/CZK & CZK 24,860 al 31-dic-2021; cotización del 23-feb-2022 pendiente & \parencite[p.~30]{cez_fs_2021},  \\
+				Tasas & Repo checa a dos semanas 4,50\% desde el 4-feb-2022 (antes 3,75\%); PRIBOR pendiente & \textcite{cnb_2022},  \\
+				Regulación & EMIR: compensación central obligatoria sobre EUR 4.000 millones de nocional bruto en materias primas; sin compensación, valoración diaria y garantías & \parencite[p.~18]{GIANNOZZI2026107700}; norma primaria por verificar, / \\
+				Competencia & ČEZ genera cerca de 58\% de la electricidad checa; competidores y cuotas pendientes & \parencite[p.~11]{cez_fs_2021},  \\
+			\bottomrule
+		\end{tabularx}
+	\caption{Estado del mercado en la fecha de corte.}
+	\label{tab:mercado}
 \end{table}
 \ew
 
-El significado financiero de estos niveles es directo. ČEZ vendió 37 TWh de 2022 a EUR 54,1/MWh \parencite{cez_q3_2021}, mientras el mercado para años cercanos ya superaba EUR 150/MWh: las ventas a plazo estaban muy por debajo del precio de mercado, es decir, con pérdida de valoración, antes de que el precio se disparara en febrero. Los derechos de emisión se encarecieron 53\% desde septiembre , y ČEZ estima que cada EUR 1/t se traslada a la electricidad entre EUR 0,6 y 0,7/MWh \parencite{cez_story_2022}. Una repo de 4,50\% encarece además financiar los depósitos de margen. Cuanto mayor es el precio, mayor es la pérdida de la posición vendida y, si hay garantías, mayor el efectivo que debe aportarse, que es el canal que el artículo identifica.
+El significado financiero de estos niveles es directo. ČEZ vendió 37 TWh de 2022 a 
+EUR 54,1/MWh \parencite{cez_q3_2021}, mientras el mercado para años cercanos ya superaba 
+EUR 150/MWh: las ventas a plazo estaban muy por debajo del precio de mercado, es decir, 
+con pérdida de valoración, antes de que el precio se disparara en febrero. Los derechos 
+de emisión se encarecieron 53\% desde septiembre , y ČEZ estima que cada EUR 1/t se 
+traslada a la electricidad entre EUR 0,6 y 0,7/MWh \parencite{cez_story_2022}. 
+Una repo de 4,50\% encarece además financiar los depósitos de margen. Cuanto mayor 
+es el precio, mayor es la pérdida de la posición vendida y, si hay garantías, mayor 
+el efectivo que debe aportarse, que es el canal que el artículo identifica.
+
+\section{Subyacente y posición financiera}
+
+El \textbf{subyacente principal} es el precio del futuro anual base de electricidad de 
+Alemania con entrega en 2023, cotizado en EEX en EUR/MWh. Se prefiere al spot porque ČEZ 
+cubre su producción con ventas a plazo, no con contratos de entrega al día siguiente; 
+los precios spot son un indicador complementario y no se mezclan con los de futuros. 
+Tampoco se usa el contrato de 2022: su serie termina el 29 de diciembre de 2021, 
+de modo que a la fecha de corte no existe un precio anual para ese año, y 
+la parte restante de 2022 requeriría precios mensuales o trimestrales que el archivo 
+no contiene . El contrato de 2023 es el anual más cercano, con serie continua hasta el 
+corte y 49\% de la generación vendida. El de 2024 es secundario. ČEZ informa coberturas 
+alemanas para suministros checos de 2021 a 2024 \parencite{cez_q2_2021}, lo que respalda 
+el uso del mercado alemán, pero sus documentos no identifican el contrato exacto, la bolsa 
+ni la cámara de compensación  ;el riesgo de base entre los mercados checo y alemán se acota 
+con el diferencial spot de la sección anterior. La serie es homogénea (cada columna es 
+un año de entrega fijo, sin empalmes), coincide con valores publicados (EUR 315,00 el 
+21 de diciembre de 2021 para 2022 \parencite{platts_2021_dec} y EUR 985,00 el 
+26 de agosto de 2022 para 2023 \parencite{eex_2022}) y por eso se interpreta como precios de
+ liquidación, aunque el método de extracción requiere verificación (Anexo~D).
+
+La \textbf{posición} se descompone en cuatro capas. La física es larga: 
+los ingresos de generación suben con el precio de la electricidad, con entregas 
+externas esperadas de 44 a 47 TWh al año \parencite{cez_q3_2021}. La financiera es corta: 
+las ventas a plazo fijan un precio y pierden valor cuando el precio sube. 
+La económica neta es larga sobre el volumen no vendido, 51\% de 2023 y 79\% de 2024. 
+La de liquidez es corta ante alzas: si los contratos se negocian con garantías, 
+la pérdida de valoración exige efectivo antes de que se cobre la producción. 
+Por eso una cobertura razonable puede generar tensión de liquidez: la compensación 
+económica ocurre en la entrega, mientras que la liquidación del margen es diaria. 
+El alcance exacto de los derivados sujetos a garantías no consta en los estados revisados; 
+solo se sabe que ČEZ registra los depósitos de margen en cuentas por cobrar comerciales 
+\parencite[p.~16]{GIANNOZZI2026107700}.
+
+% ===================== 4 =====================
+
+\section{Exposición monetaria y volatilidad}
+
+\paragraph{Exposición.} 
+Con 49\% de la generación de 2023 vendida al 30 de septiembre de 2021 y entregas esperadas de
+ 45,5 TWh (punto medio del rango publicado, supuesto ), el volumen vendido es de 22,3 TWh 
+ (21,6 a 23,0 con el rango). Valorado al precio del corte, representa 
+ $22{,}3\times156{,}43=\text{EUR }3.488$ millones (CZK 86.700 millones al tipo de cambio 
+ de diciembre de 2021); la venta de 2024 (21\%, 9,6 TWh a EUR 118,88) suma EUR 1.136 millones. 
+ Esta cifra es el dinero cuyo valor depende del subyacente, no el nocional contable ni 
+ el efectivo exigido. El porcentaje vendido es el de septiembre de 2021 y pudo cambiar 
+ hasta febrero de 2022; cada diez puntos adicionales sobre 2023 sumarían 4,6 TWh y 
+ EUR 712 millones. El precio pactado de 2023 no consta en los documentos; con la media 
+ del futuro entre enero y septiembre de 2021 (EUR 61,16/MWh, supuesto) la valoración 
+ de la posición corta sería de $-$EUR 2.124 millones, una cifra ilustrativa que 
+ probablemente subestima la pérdida si ČEZ vendió antes a precios menores. 
+ De los 37 TWh de 2022 quedaban por entregar 31,5 TWh (311 de 365 días, entrega uniforme 
+ supuesta), pero sin precio al corte no pueden valorarse.
+
+\paragraph{Volatilidad.} Se calcularon rendimientos logarítmicos diarios del futuro de 
+2023 entre el 5 de enero de 2021 y el 23 de febrero de 2022 (295 observaciones) y se 
+anualizaron con $\sqrt{252}$ (Tabla~\ref{tab:vol}). La volatilidad se duplica al acortar 
+la ventana: de 41\% con todo el historial a 72\% con 60 días, lo que describe un cambio 
+de régimen y no un parámetro estable. El máximo rendimiento diario fue 14,0\% (4 de enero 
+de 2022). La volatilidad de los precios spot no se calcula en logaritmos porque 
+Alemania-Luxemburgo registró 147 horas con precio negativo, y además no equivale a la del 
+contrato usado para cubrir.
+
+\sw
+\begin{table}[ht]
+	\centering
+	\footnotesize
+		\begin{tabular}{lrrr}
+			\toprule
+				Estimador (datos hasta 23-feb-2022) & Cal-23 & Cal-24 & Observaciones \\
+			\midrule
+				60 días & 72,4\% & 42,1\% & 60 \\
+				126 días & 57,2\% & 34,4\% & 126 \\
+				252 días & 43,7\% & 28,8\% & 252 \\
+				Historial completo & 41,2\% & 27,5\% & 295 \\
+				EWMA ($\lambda=0{,}94$) & 61,7\% & --- & 295 \\
+			\bottomrule
+		\end{tabular}
+	\caption{Volatilidad anualizada del futuro base alemán (cálculo propio  ;Excel, hoja Volatilidad).}
+	\label{tab:vol}
+\end{table}
+\ew
+
+\section{Sensibilidad, probabilidades y conclusiones}\label{sec:sens}
+
+\paragraph{Sensibilidad.} Con $Q_h$ el volumen vendido, $Q_T$ la generación esperada, 
+$P_0$ el precio del corte y $s$ la variación, $\Delta V=-Q_hP_0s$ es el cambio de valor de 
+la posición corta, $\Delta I=Q_TP_0s$ el de los ingresos físicos y su suma es el efecto neto,
+ $(Q_T-Q_h)P_0s$ (Anexo~B). Para 2023, una variación de $\pm10$, $\pm20$ y $\pm30\%$ cambia 
+ el valor de la posición vendida en $\mp$EUR 349, 698 y 1.046 millones, mientras que los 
+ ingresos físicos varían en $\pm$EUR 712, 1.424 y 2.135 millones; el efecto neto es de 
+ $\pm$EUR 363, 726 y 1.089 millones. Si se añade 2024, la variación de la posición vendida 
+ llega a $\mp$EUR 1.387 millones (CZK 34.500 millones) con $\pm30\%$. La necesidad de 
+ liquidez se acota con $L=\theta\cdot\max(0,-\Delta V)$, donde $\theta$, la fracción de la 
+ pérdida aportada en efectivo, no se conoce . Con $\theta=100\%$ y un alza de 30\%, 
+ la exigencia es de CZK 34.500 millones, 1,14 veces cubierta por la liquidez de referencia 
+ de CZK 39.423 millones; con $\theta=50\%$ sería de CZK 17.200 millones. Dentro de $\pm30\%$ 
+ la posición sería manejable respecto de la liquidez de septiembre de 2021, pero el resultado 
+ depende de $\theta$, del porcentaje vendido y de que esa liquidez siguiera disponible.
+
+\paragraph{Probabilidades.} Con un modelo lognormal sin tendencia, volatilidad EWMA de 
+61,7\% y horizonte de 21 días hábiles (un mes bursátil, supuesto), la probabilidad de un 
+alza de al menos 10, 20 y 30\% es de 26,6, 13,3 y 5,9\%; la de una baja, de 30,8, 12,2 y 
+2,8\% (Anexo~B). La frecuencia empírica de ventanas de 21 días del propio futuro es 34,2, 
+10,5 y 5,1\% para alzas y casi nula para bajas, pero se calcula con ventanas traslapadas 
+en una muestra alcista. Son tres conceptos distintos (modelo, historia y escenario) y 
+ninguno predice el futuro: el modelo normal subestima las colas y el supuesto de volatilidad 
+constante contradice el cambio de régimen de la Tabla~\ref{tab:vol}.
+
+\paragraph{Evidencia posterior, que no estaba disponible al corte.} El mismo futuro llegó a 
+EUR 985/MWh el 26 de agosto de 2022 \parencite{eex_2022}, 530\% sobre el precio del corte. 
+Aplicado al volumen de 2023, el cambio de valor sería de unos $-$EUR 18.500 millones 
+(CZK 459.000 millones ), frente a depósitos de margen que ČEZ informó por más de CZK 195.000 
+millones en agosto de 2022 \parencite{cez_pr_2023}, cifra tomada del documento de selección 
+y no releída. La rejilla de $\pm30\%$ queda así muy por debajo de la cola que se materializó, 
+y la planificación de liquidez debería considerar choques mayores.
+
+\paragraph{Conclusión.} El 23 de febrero de 2022 ČEZ estaba larga en electricidad por su 
+generación y corta por unas ventas a plazo que cubrían 49\% de 2023 y 21\% de 2024 con un 
+mercado que había triplicado sus precios. Su riesgo central no era económico sino de 
+liquidez: las pérdidas de valoración de la posición corta podían exigir efectivo antes del 
+cobro de la producción, el mecanismo descrito por Giannozzi y Kirilova. La información 
+faltante (precio pactado, fracción con garantías, $\theta$, hedge ratio al corte y precios 
+de 2022) se detalla en el Anexo~E.
+
+%====================================================================
+% APÉNDICE: CÓDIGO DE EXTRACCIÓN DE DATOS
+%====================================================================
+
+\clearpage
+\appendix
+
+\section{Gráficos}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{images/fig_futuros.png}
+\caption{Subyacente principal: precios diarios de los futuros anuales base de Alemania para entrega 2023 y 2024, hasta el 23 de febrero de 2022. Fuente: EEX, según Energy-Charts \parencite{energycharts_futuros_de}; extracción propia.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{images/fig_spot.png}
+\caption{Contexto spot (no es el subyacente): promedios diarios de la subasta Day Ahead de República Checa y Alemania-Luxemburgo. Fuente: \parencite{energycharts_spot2021,energycharts_spot2022}; los promedios son cálculo propio.}
+\end{figure}
+
+\section{Tablas}
+
+\sw
+\begin{table}[H]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{rrrrrrrrr}
+\toprule
+$s$ & $P_0(1+s)$ & $\Delta V$ 2023 & $\Delta I$ 2023 & Neto 2023 & $\Delta V$ 2024 & $\Delta V$ total & $\Delta V$ total & $L$ ($\theta=100\%$) \\
+ & EUR/MWh & EUR mill. & EUR mill. & EUR mill. & EUR mill. & EUR mill. & CZK mil mill. & CZK mil mill. \\
+\midrule
+$-30\%$ & 109,5 & $+1.046$ & $-2.135$ & $-1.089$ & $+341$ & $+1.387$ & $+34,5$ & 0 \\
+$-20\%$ & 125,1 & $+698$ & $-1.424$ & $-726$ & $+227$ & $+925$ & $+23,0$ & 0 \\
+$-10\%$ & 140,8 & $+349$ & $-712$ & $-363$ & $+114$ & $+462$ & $+11,5$ & 0 \\
+$+10\%$ & 172,1 & $-349$ & $+712$ & $+363$ & $-114$ & $-462$ & $-11,5$ & 11,5 \\
+$+20\%$ & 187,7 & $-698$ & $+1.424$ & $+726$ & $-227$ & $-925$ & $-23,0$ & 23,0 \\
+$+30\%$ & 203,4 & $-1.046$ & $+2.135$ & $+1.089$ & $-341$ & $-1.387$ & $-34,5$ & 34,5 \\
+\bottomrule
+\end{tabular}
+\caption{Sensibilidad. $P_0=156{,}43$, $Q_h=22{,}3$ TWh (2023) y 9,6 TWh (2024), $Q_T=45{,}5$ TWh, CZK 24,860/EUR. Liquidez de referencia: CZK 39,4 mil millones; con $\theta=50\%$, $L$ se reduce a la mitad. Cálculo propio; supuestos en el Excel.}
+\end{table}
+
+\begin{table}[H]
+\centering
+\footnotesize
+\begin{tabular}{lrrrrrr}
+\toprule
+ & \multicolumn{3}{c}{Alza $\ge x$} & \multicolumn{3}{c}{Baja $\ge x$} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+Estimador de $\sigma$ & 10\% & 20\% & 30\% & 10\% & 20\% & 30\% \\
+\midrule
+60 días (72,4\%) & 28,8 & 16,4 & 8,7 & 34,5 & 16,8 & 5,5 \\
+126 días (57,2\%) & 25,5 & 11,8 & 4,7 & 28,9 & 10,2 & 1,9 \\
+252 días (43,7\%) & 20,7 & 6,6 & 1,6 & 22,0 & 4,4 & 0,3 \\
+Historial completo (41,2\%) & 19,5 & 5,6 & 1,2 & 20,5 & 3,5 & 0,2 \\
+EWMA (61,7\%) & 26,6 & 13,3 & 5,9 & 30,8 & 12,2 & 2,8 \\
+\midrule
+Frecuencia empírica, 275 ventanas & 34,2 & 10,5 & 5,1 & 0,7 & 0,0 & 0,0 \\
+\bottomrule
+\end{tabular}
+\caption{Probabilidad (\%) de variaciones del futuro Cal-23 en 21 días hábiles: modelo lognormal sin tendencia y frecuencia empírica con ventanas traslapadas.}
+\end{table}
+\ew
+
+\section{Código utilizado para la obtención de datos históricos}
+\label{ap:codigo_futuros}
+
+\noindent
+El presente sección del apéndice documenta el procedimiento computacional
+empleado para obtener la serie histórica de precios de futuros
+de electricidad utilizada en el análisis. Los datos proceden
+de la plataforma Energy-Charts, desarrollada por Fraunhofer ISE,
+que identifica a European Energy Exchange (EEX) como la fuente
+original de la información presentada en su visualización
+de futuros energéticos
+\parencite{energycharts_futuros_de}.
+
+\vspace{0.2cm}
+
+\noindent
+Debido a que la plataforma no ofrece una opción de descarga
+directa para la serie consultada, se recurre a un procedimiento
+de extracción mediante Python para generar el archivo
+\texttt{futuros\_DE\_historico.csv}. Este archivo constituye
+un producto del procesamiento propio de los datos disponibles
+en la visualización y no corresponde a un documento distribuido
+directamente por EEX ni por Energy-Charts.
+
+\vspace{0.2cm}
+
+\noindent
+La inclusión del código tiene como propósito facilitar
+la trazabilidad del procedimiento, permitir su revisión
+y contribuir a la reproducibilidad de los resultados.
+En particular, permite examinar el mecanismo de extracción
+de los valores, su asociación con las fechas de negociación
+y las operaciones realizadas para construir el archivo final.
+La posibilidad de reproducir exactamente los resultados
+depende de la disponibilidad y estructura de los datos
+en la plataforma al momento de ejecutar el procedimiento.
+
+\vspace{0.3cm}
+
+\subsection{Implementación en Python}
+\label{ap:implementacion_python}
+
+\noindent
+El siguiente código corresponde al procedimiento utilizado
+para generar el archivo CSV empleado en el análisis.
+
+\vspace{0.2cm}
+
+\begin{pythoncode}[
+    caption={Código Python para la obtención de precios históricos de futuros},
+    label={cod:extraccion_futuros}
+]
+"""
+Descarga los "Futuros energéticos (Base)" de Energy-Charts (Fraunhofer ISE / EEX)
+y los guarda en CSV con UNA COLUMNA POR AÑO DE ENTREGA (2022, 2023, ... 2036)
+y una fila por día de negociación.
+
+Instalación (una sola vez):   pip install requests pandas
+Uso:                          python energy_charts_futuros.py
+                              python energy_charts_futuros.py --pais DE --sep ";"
+                              python energy_charts_futuros.py --calendario D
+
+Cada ejecución baja el histórico completo (desde 01.01.2021) y actualiza
+  <salida>/futuros_DE_historico.csv
+y guarda además el JSON original del día en <salida>/crudo/.
+Las fechas sin datos en la fuente quedan como filas con celdas vacías.
+Programarlo a diario con cron (Linux/Mac) o el Programador de tareas (Windows).
+"""
+import argparse
+import json
+from datetime import datetime
+from pathlib import Path
+
+import pandas as pd
+import requests
+
+URL = "https://energy-charts.info/charts/price_futures/data/{pais}/{archivo}"
+HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+           "Referer": "https://energy-charts.info/charts/price_futures/chart.htm"}
 
 
+def descargar(pais: str, archivo: str):
+    url = URL.format(pais=pais.lower(), archivo=archivo)
+    r = requests.get(url, headers=HEADERS, timeout=60)
+    r.raise_for_status()
+    return url, r.json()
+
+
+def a_tabla(series: list) -> pd.DataFrame:
+    """Lista de series [{name, data, xAxisValues}, ...] -> tabla fecha x año de entrega."""
+    fechas = next((s["xAxisValues"] for s in series if s.get("xAxisValues")), None)
+    if not fechas:
+        raise ValueError("El JSON no trae 'xAxisValues' (eje de fechas).")
+    idx = pd.to_datetime(fechas, format="%d.%m.%Y")
+    n = len(idx)
+    cols = {}
+    for s in series:
+        # 'data' viene rellenado con nulls al final: se recorta al largo del eje de fechas
+        cols[str(s["name"])] = pd.Series(s["data"][:n], index=idx, dtype="float64")
+    df = pd.DataFrame(cols)
+    df.index.name = "fecha"
+    return df.dropna(how="all").sort_index()
+
+
+def rellenar_saltos(df: pd.DataFrame, freq: str):
+    """Inserta filas vacías en las fechas sin datos de la fuente y devuelve (tabla, rangos_faltantes)."""
+    completo = pd.date_range(df.index.min(), df.index.max(), freq=freq)
+    faltan = completo.difference(df.index)
+    df = df.reindex(df.index.union(completo))
+    df.index.name = "fecha"
+
+    # Agrupa las fechas faltantes consecutivas (según el calendario elegido) en rangos
+    rangos = []
+    pos = completo.get_indexer(faltan)
+    for p, d in zip(pos, faltan):
+        if rangos and p == rangos[-1][2] + 1:
+            rangos[-1][1] = d
+            rangos[-1][2] = p
+        else:
+            rangos.append([d, d, p])
+    return df, [(ini, fin) for ini, fin, _ in rangos]
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--pais", default="DE", help="código de país (DE, FR, ...)")
+    ap.add_argument("--archivo", default="power_year.json",
+                    help="archivo de datos (por defecto power_year.json = contratos anuales)")
+    ap.add_argument("--salida", default="energy_charts_datos")
+    ap.add_argument("--sep", default=",", help='separador del CSV; usa ";" si lo abres en Excel en español')
+    ap.add_argument("--calendario", default="B", choices=["B", "D"],
+                    help="B = días hábiles (por defecto), D = todos los días naturales; "
+                         "define qué fechas sin datos se rellenan como vacías")
+    a = ap.parse_args()
+
+    out = Path(a.salida); (out / "crudo").mkdir(parents=True, exist_ok=True)
+    url, js = descargar(a.pais, a.archivo)
+    hoy = datetime.now().strftime("%Y-%m-%d")
+    (out / "crudo" / f"{a.pais}_{hoy}.json").write_text(json.dumps(js, ensure_ascii=False), encoding="utf-8")
+
+    nuevo = a_tabla(js)
+    hist = out / f"futuros_{a.pais}_historico.csv"
+    if hist.exists():
+        previo = pd.read_csv(hist, sep=a.sep, index_col="fecha", parse_dates=True)
+        nuevo = nuevo.combine_first(previo)      # lo nuevo manda; se conservan filas antiguas
+        nuevo = nuevo[sorted(nuevo.columns)]
+
+    # Detecta saltos reales en las fechas y deja esas filas vacías
+    nuevo, saltos = rellenar_saltos(nuevo.sort_index().dropna(how="all"), a.calendario)
+    nuevo.to_csv(hist, sep=a.sep, encoding="utf-8-sig", float_format="%.2f")
+
+    print("Fuente:", url)
+    print(f"Guardado: {hist}  ({len(nuevo)} días, columnas: {', '.join(nuevo.columns)})")
+    print("Último día:", nuevo.index.max().date())
+    if saltos:
+        print(f"Saltos en las fechas de la fuente ({len(saltos)}), dejados vacíos:")
+        for ini, fin in saltos:
+            print(f"  {ini.date()}" if ini == fin else f"  {ini.date()} -> {fin.date()}")
+    else:
+        print("Sin saltos en las fechas.")
+    print(nuevo.tail(3).round(2).to_string())
+
+
+if __name__ == "__main__":
+    main()
+\end{pythoncode}
+
+\vspace{0.2cm}
+
+\noindent
+El resultado del procedimiento es el archivo
+\texttt{futuros\_DE\_historico.csv}, que contiene la serie
+histórica utilizada en el estudio. Para verificar la
+consistencia de los datos, corresponde contrastar una
+muestra de fechas y precios con los registros de la fuente
+original, además de revisar que las transformaciones
+aplicadas durante la extracción no alteren los valores
+observados.
 
 
 \end{document}

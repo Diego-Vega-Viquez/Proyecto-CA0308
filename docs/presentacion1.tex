@@ -6,25 +6,44 @@
 \usepackage[spanish,es-noshorthands]{babel}
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs,array}
+\usepackage{colortbl}
 \usepackage{tikz}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.16}
 \usetikzlibrary{arrows.meta,positioning,calc}
 
 % ---------- Paleta ----------
-\definecolor{cezblue}{HTML}{1B3A5C}
-\definecolor{cezteal}{HTML}{1F7A8C}
-\definecolor{cezamber}{HTML}{D08A1E}
-\definecolor{cezred}{HTML}{B3394A}
-\definecolor{cezgray}{HTML}{5F6B76}
-\definecolor{cezlight}{HTML}{EEF2F6}
+% Principal: azul marino | Secundario: azul acero | Acento: verde esmeralda
+% Adverso (solo pérdidas): ladrillo apagado | Auxiliar: gris pizarra | Fondo: azul-verde muy claro
+\definecolor{cezblue}{HTML}{12304D}   % color principal (azul marino)
+\definecolor{cezteal}{HTML}{1E7A93}   % color secundario (azul acero)
+\definecolor{cezamber}{HTML}{2B8059}  % acento (verde esmeralda)
+\definecolor{cezred}{HTML}{9E3347}    % adverso / pérdidas (se conserva por significado)
+\definecolor{cezgray}{HTML}{56667A}   % auxiliar (gris pizarra)
+\definecolor{cezlight}{HTML}{EAF2F3}  % fondo de recuadros
+\definecolor{cezink}{HTML}{1B2B38}    % texto principal
+\definecolor{cezgrid}{HTML}{D2DFE2}   % rejillas y líneas finas
 
 % ---------- Estilo Beamer ----------
-\setbeamercolor{normal text}{fg=black!85,bg=white}
+\setbeamercolor{normal text}{fg=cezink,bg=white}
 \setbeamercolor{structure}{fg=cezblue}
 \setbeamercolor{frametitle}{fg=cezblue}
 \setbeamercolor{itemize item}{fg=cezteal}
 \setbeamercolor{itemize subitem}{fg=cezteal}
+\setbeamercolor{enumerate item}{fg=cezteal}
+\setbeamercolor{title}{fg=cezblue}
+\setbeamercolor{subtitle}{fg=cezteal}
+\setbeamercolor{author}{fg=cezink}
+\setbeamercolor{institute}{fg=cezgray}
+\setbeamercolor{date}{fg=cezgray}
+\setbeamercolor{block title}{fg=white,bg=cezblue}
+\setbeamercolor{block body}{fg=cezink,bg=cezlight}
+\setbeamercolor{block title alerted}{fg=white,bg=cezred}
+\setbeamercolor{block body alerted}{fg=cezink,bg=cezred!8}
+\setbeamercolor{block title example}{fg=white,bg=cezteal}
+\setbeamercolor{block body example}{fg=cezink,bg=cezteal!8}
+\setbeamercolor{alerted text}{fg=cezred}
+\setbeamercolor{footline}{fg=cezgray}
 \setbeamertemplate{navigation symbols}{}
 \setbeamertemplate{itemize item}[circle]
 \setbeamersize{text margin left=8mm,text margin right=8mm}
@@ -58,7 +77,7 @@
 \pgfplotsset{
   cez/.style={width=\linewidth,height=5.3cm,tick label style={font=\scriptsize},
     label style={font=\scriptsize},legend style={font=\scriptsize,draw=none,fill=none},
-    axis lines=left,ymajorgrids=true,grid style={gray!25},
+    axis lines=left,ymajorgrids=true,grid style={cezgrid},
     every node near coord/.append style={font=\tiny}}}
 \pgfplotsset{/pgf/number format/.cd,use comma,fixed,precision=1}
 
@@ -72,6 +91,7 @@
 \setlength{\abovedisplayskip}{1pt}\setlength{\belowdisplayskip}{1pt}
 \setlength{\abovedisplayshortskip}{0pt}\setlength{\belowdisplayshortskip}{0pt}
 \begin{document}
+\arrayrulecolor{cezblue}
 
 % ================= 1. PORTADA =================
 \begin{frame}[plain]
@@ -133,13 +153,26 @@
     \begin{column}{0.46\textwidth}
       \centering{\footnotesize\bfseries Generación vendida a plazo al 30-sep-2021}\\[-1mm]
       \begin{tikzpicture}
-        \begin{axis}[cez,height=3.5cm,ybar,bar width=20pt,ymin=0,ymax=100,symbolic x coords={2022,2023,2024},
-          xtick=data,ymajorgrids=false,yticklabels={},ytick=\empty,axis y line=none,
-          nodes near coords={\pgfmathprintnumber[precision=0]{\pgfplotspointmeta}\%},
-          every node near coord/.append style={font=\small\bfseries}]
-          \addplot[fill=cezteal] coordinates {(2022,79) (2023,49) (2024,21)};
-        \end{axis}
-      \end{tikzpicture}\\[1mm]
+  \begin{axis}[
+    cez,
+    height=3.5cm,
+    ybar,
+    bar width=20pt,
+    ymin=0,
+    ymax=100,
+    symbolic x coords={2022,2023,2024},
+    xtick=data,
+    enlarge x limits=0.20,
+    ymajorgrids=false,
+    yticklabels={},
+    ytick=\empty,
+    axis y line=none,
+    nodes near coords={\pgfmathprintnumber[precision=0]{\pgfplotspointmeta}\%},
+    every node near coord/.append style={font=\small\bfseries}
+  ]
+    \addplot[fill=cezteal] coordinates {(2022,79) (2023,49) (2024,21)};
+  \end{axis}
+\end{tikzpicture}\\[1mm]
       \caja{cezamber}{5.9cm}{\scriptsize Costo ya visible: las preventas redujeron en \textbf{CZK 4.305 mill.} los ingresos por electricidad de nueve meses, al liquidarse bajo el mercado.}
     \end{column}
   \end{columns}
@@ -889,7 +922,7 @@
           \addplot[fill=cezteal] coordinates {(1,-2135) (2,-1424) (3,-712) (4,712) (5,1424) (6,2135)};
           \addplot[fill=cezblue] coordinates {(1,-1089) (2,-726) (3,-363) (4,363) (5,726) (6,1089)};
           \legend{$\Delta V$ ventas a plazo,$\Delta I$ ingresos físicos,Efecto neto}
-          \draw[black!60] (axis cs:0.4,0) -- (axis cs:6.6,0);
+          \draw[cezgray] (axis cs:0.4,0) -- (axis cs:6.6,0);
         \end{axis}
       \end{tikzpicture}
     \end{column}
@@ -979,7 +1012,7 @@
         \fill[cezamber] (0.1,1.05) rectangle (0.1+195*0.0095,1.55); \node[val] at (0.2+195*0.0095,1.3) {$>$195};
         \node[lab] at (0,0.2) {Cambio de valor del Cal-23 a EUR 985 (hipotético)};
         \fill[cezgray] (0.1,-0.05) rectangle (0.1+452.1*0.0095,0.45); \node[val] at (0.2+452.1*0.0095,0.2) {452,1};
-        \draw[black!50] (0.1,-0.2) -- (0.1,2.85);
+        \draw[cezgray] (0.1,-0.2) -- (0.1,2.85);
       \end{tikzpicture}
     \end{column}
     \begin{column}{0.35\textwidth}

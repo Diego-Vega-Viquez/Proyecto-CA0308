@@ -1,0 +1,606 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[spanish,es-noshorthands]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs,array}
+\usepackage{colortbl}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usetikzlibrary{arrows.meta,positioning,calc}
+
+\newcommand{\comillas}[1]{``#1''}
+
+% ---------- Paleta ----------
+\definecolor{cezblue}{HTML}{12304D}   % color principal (azul marino)
+\definecolor{cezteal}{HTML}{1E7A93}   % color secundario (azul acero)
+\definecolor{cezamber}{HTML}{2B8059}  % acento (verde esmeralda)
+\definecolor{cezred}{HTML}{9E3347}    % adverso / pérdidas
+\definecolor{cezgray}{HTML}{56667A}   % auxiliar (gris pizarra)
+\definecolor{cezlight}{HTML}{EAF2F3}  % fondo de recuadros
+\definecolor{cezink}{HTML}{1B2B38}    % texto principal
+\definecolor{cezgrid}{HTML}{D2DFE2}   % rejillas y líneas finas
+
+% ---------- Estilo Beamer ----------
+\setbeamercolor{normal text}{fg=cezink,bg=white}
+\setbeamercolor{structure}{fg=cezblue}
+\setbeamercolor{frametitle}{fg=cezblue}
+\setbeamercolor{itemize item}{fg=cezteal}
+\setbeamercolor{itemize subitem}{fg=cezteal}
+\setbeamercolor{enumerate item}{fg=cezteal}
+\setbeamercolor{title}{fg=cezblue}
+\setbeamercolor{subtitle}{fg=cezteal}
+\setbeamercolor{author}{fg=cezink}
+\setbeamercolor{institute}{fg=cezgray}
+\setbeamercolor{date}{fg=cezgray}
+\setbeamercolor{block title}{fg=white,bg=cezblue}
+\setbeamercolor{block body}{fg=cezink,bg=cezlight}
+\setbeamercolor{block title alerted}{fg=white,bg=cezred}
+\setbeamercolor{block body alerted}{fg=cezink,bg=cezred!8}
+\setbeamercolor{block title example}{fg=white,bg=cezteal}
+\setbeamercolor{block body example}{fg=cezink,bg=cezteal!8}
+\setbeamercolor{alerted text}{fg=cezred}
+\setbeamercolor{footline}{fg=cezgray}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}[circle]
+\setbeamersize{text margin left=8mm,text margin right=8mm}
+\setbeamerfont{frametitle}{size=\fontsize{12.5}{14.5}\selectfont,series=\bfseries}
+\setbeamertemplate{frametitle}{%
+  \vskip2.5mm
+  \begin{minipage}[t]{\textwidth}\raggedright
+    \usebeamerfont{frametitle}\usebeamercolor[fg]{frametitle}\insertframetitle
+  \end{minipage}\par
+  \vskip0.8mm
+  {\color{cezteal}\rule{\textwidth}{0.6pt}}%
+}
+\setbeamertemplate{footline}{%
+  \hbox to\paperwidth{%
+    \hspace{8mm}{\tiny\color{cezgray}\v{C}EZ, a. s. \,|\, Diseño y valoración de la cobertura \,|\, Corte: 23-feb-2022}\hfill
+    {\tiny\color{cezgray}\insertframenumber}\hspace{8mm}}%
+  \vskip3mm}
+
+% ---------- Macros ----------
+\newcommand{\fuente}[1]{\vfill{\raggedright\tiny\color{cezgray}Fuente: #1\par}}
+\newcommand{\kpi}[3][3.2cm]{\begin{tikzpicture}\node[fill=cezlight,rounded corners=3pt,
+  text width=#1,inner sep=3pt,align=center]{{\large\bfseries\color{cezblue}#2}\\[-1pt]
+  {\scriptsize\color{cezgray}#3}};\end{tikzpicture}}
+\newcommand{\caja}[3]{\begin{tikzpicture}\node[draw=#1,fill=#1!8,rounded corners=3pt,
+  text width=#2,inner sep=5pt,align=left,line width=0.8pt]{#3};\end{tikzpicture}}
+
+% ---------- Estilo de gráficos ----------
+\pgfplotsset{
+  cez/.style={width=\linewidth,height=5.3cm,tick label style={font=\scriptsize},
+    label style={font=\scriptsize},legend style={font=\scriptsize,draw=none,fill=none},
+    axis lines=left,ymajorgrids=true,grid style={cezgrid},
+    every node near coord/.append style={font=\tiny}}}
+\pgfplotsset{/pgf/number format/.cd,use comma,fixed,precision=1}
+
+\title{\textquestiondown Qué instrumento, por cuánto, a qué precio y por qué?}
+\subtitle{Diseño y valoración de la cobertura — Entregable 2}
+\author{Anthonny Flores Rojas \and Andrey González Bastos \and Diego Vega Víquez}
+\institute{Escuela de Matemáticas, Universidad de Costa Rica\\
+  Valoración de Instrumentos Financieros (CA0308) — Prof. Daniel Vargas Carrillo}
+\date{Fecha de corte del análisis: 23 de febrero de 2022}
+
+\setlength{\abovedisplayskip}{1pt}\setlength{\belowdisplayskip}{1pt}
+\setlength{\abovedisplayshortskip}{0pt}\setlength{\belowdisplayshortskip}{0pt}
+\begin{document}
+\arrayrulecolor{cezblue}
+
+% ================= 1. PORTADA =================
+\begin{frame}[plain]
+  \vspace{1mm}
+  \begin{tikzpicture}[remember picture,overlay]
+    \fill[cezblue] (current page.north west) rectangle ([yshift=-3.1cm]current page.north east);
+    \fill[cezteal] ([yshift=-3.1cm]current page.north west) rectangle ([yshift=-3.2cm]current page.north east);
+  \end{tikzpicture}
+  \vspace{-2mm}
+  {\color{white}\fontsize{19}{22}\selectfont\bfseries \textquestiondown Qué instrumento, por cuánto,\\ a qué precio y por qué?\par}
+  \vspace{1.5mm}
+  {\color{white!85!cezblue}\small Diseño y valoración de la cobertura \hfill Entregable 2\par}
+  \vspace{18mm}
+  {\small\bfseries Anthonny Flores Rojas \,$\cdot$\, Andrey González Bastos \,$\cdot$\, Diego Vega Víquez\par}
+  \vspace{2mm}
+  {\footnotesize Escuela de Matemáticas, Universidad de Costa Rica\par
+   Valoración de Instrumentos Financieros (CA0308) \\ Prof. Daniel Vargas Carrillo\par}
+   \vspace{2cm}
+\end{frame}
+
+% ================= 2. CONTINUIDAD =================
+\begin{frame}[t]{La primera entrega dejó una capa financiera corta que pierde y exige caja ante alzas}
+  \centering
+  \kpi[3.3cm]{22,3 TWh}{\qquad vendidos a plazo \newline para 2023}\hspace{2mm}%
+  \kpi[3.1cm]{EUR 156,43}{Cal-23 al 23-feb-2022 (por MWh)}\hspace{2mm}%
+  \kpi[3.1cm]{$-$EUR 1.046 mill.}{cambio de valor ventas}\hspace{2mm}%
+  \kpi[3.1cm]{CZK 39.423 mill.}{liquidez de referencia}\\[1.5mm]
+  \begin{minipage}{0.94\textwidth}\raggedright\footnotesize
+  \medskip
+  \v{C}EZ está \textbf{larga} en generación y \textbf{corta} en ventas a plazo. Las alzas presionan su liquidez: los márgenes se pagan diariamente, pero la compensación llega en la entrega.
+  \medskip
+  \end{minipage}\\[1.5mm]
+  \begin{tikzpicture}[node distance=2mm,
+     s/.style={rounded corners=3pt,minimum width=2.0cm,minimum height=1.0cm,text width=1.9cm,align=center,
+       font=\scriptsize,text=white,inner sep=2pt},
+     a/.style={-{Stealth[length=2mm]},thick,cezgray}]
+    \node[s,fill=cezred] (r1) {\textbf{Riesgo}\\ identificado};
+    \node[s,fill=cezgray,right=of r1] (r2) {\textbf{Comparar}\\ instrumentos};
+    \node[s,fill=cezteal,right=of r2] (r3) {\textbf{Elegir}\\ la call};
+    \node[s,fill=cezteal,right=of r3] (r4) {\textbf{Valorar}\\ Black-76};
+    \node[s,fill=cezblue,right=of r4] (r5) {\textbf{Diseñar}\\ 30/70/100\%};
+    \node[s,fill=cezamber,right=of r5] (r6) {\textbf{Costo y}\\ liquidez};
+    \draw[a] (r1)--(r2); \draw[a] (r2)--(r3); \draw[a] (r3)--(r4); \draw[a] (r4)--(r5); \draw[a] (r5)--(r6);
+  \end{tikzpicture}\\[1.5mm]
+  \medskip
+  \caja{cezblue}{0.92\textwidth}{\centering\footnotesize\textbf{Pregunta central:} \textquestiondown qué instrumento se habría usado, por cuánto, a qué precio y por qué ese y no otro?}
+  %\fuente{Informe de la primera entrega; \v{C}EZ [1]; Giannozzi y Kirilova [2] (mecanismo, no información disponible al corte).}
+\end{frame}
+
+% ================= 3. COMPARACION =================
+\begin{frame}[t]{Cada instrumento protege una capa distinta: solo la call compensa la capa corta ante alzas}
+  \scriptsize
+  \renewcommand{\arraystretch}{1.18}
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{@{}>{\bfseries}p{2.2cm}>{\columncolor{cezlight}}p{4.0cm}p{3.9cm}p{3.7cm}@{}}
+    \toprule
+    Criterio & \textcolor{cezblue}{\textbf{Call comprada (elegida)}} & \textbf{Put comprada} & \textbf{Futuros (referencia)}\\ \midrule
+    Capa protege & Financiera corta & Económica neta larga & Vendido: capa larga. \newline Comprado: deshace la venta\\
+    Paga si el precio & Sube sobre $K$ & Baja bajo $K$ & Simétrico\\
+    Costo inicial & Prima & Prima & Sin prima; margen inicial\\
+    Pérdida máxima & La prima & La prima & Ilimitada\\
+    Caja ante un alza & Sin nuevas salidas; \newline paga al vencimiento & Sin nuevas salidas; \newline no compensa & Vendido: nuevas llamadas de margen\\
+    Veredicto & \textcolor{cezamber}{\textbf{ELEGIDA}} & Descartada como principal & Descartados\\
+    \bottomrule
+  \end{tabular}
+  %\vspace{4cm}
+  \bigskip
+
+  \caja{cezred}{\textwidth}{\tiny 
+  \textbf{Por qué no futuros:} Venderlos exigiría EUR 179 mill. de margen inicial y EUR 314 mill. adicionales ante un alza del 30\%, presionando la liquidez. Comprarlos implicaría cristalizar una pérdida de EUR 2.277 mill.
+  }
+  %\fuente{Informe, tabla 1; Excel, hojas COMPARACION, LIQUIDEZ y EXPOSICION. Margen de CME [11]; no equivale al de ECC [6].}
+\end{frame}
+
+% ================= 4. POR QUE LA CALL =================
+\begin{frame}[t]{Se elige la call porque el riesgo prioritario es perder ante alzas, no ante caídas}
+  \begin{columns}[T]
+    \begin{column}{0.54\textwidth}
+      \centering{\footnotesize\bfseries Nivel de 30\% (6,69 TWh): pago bruto y capa corta (EUR millones)}\\[-1mm]
+      \begin{tikzpicture}
+        \begin{axis}[cez,height=4.1cm,ybar,bar width=10pt,ymin=-450,ymax=450,
+          xtick={1,2},xticklabels={Alza de $+30\%$,Baja de $-30\%$},enlarge x limits=0.4,
+          legend style={at={(0.5,-0.22)},anchor=north,legend columns=3,font=\tiny},nodes near coords]
+          \addplot[fill=cezred] coordinates {(1,-314.0) (2,314.0)};
+          \addplot[fill=cezteal] coordinates {(1,314.0) (2,0)};
+          \addplot[fill=cezgray] coordinates {(1,0) (2,314.0)};
+          \legend{{Capa corta (parte cubierta)},{Pago call},{Pago put}}
+        \end{axis}
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{0.43\textwidth}
+      \scriptsize
+      \textbf{Ante +30\%:} las ventas de 2023 pierden EUR 1.046,5 mill.; la call, sobre ese volumen, paga exactamente esa cifra al vencimiento. La put vence sin valor.\\[2mm]
+      \caja{cezamber}{5.4cm}{\tiny\textbf{Precisión 1.} La call compensa el resultado económico, no el calendario de caja: \textbf{no elimina las llamadas de margen} de las posiciones existentes.}\\[1.5mm]
+      \caja{cezamber}{5.4cm}{\tiny\textbf{Precisión 2.} \v{C}EZ es larga neta: la call no reduce su riesgo económico total; cubre la capa corta y deja sin protección la caída del precio.}
+    \end{column}
+  \end{columns}
+  %\fuente{Informe, sección 2; Excel, hojas COMPARACION y ESCENARIOS. Pagos al vencimiento; EUR 314,0 mill. = 30\% de EUR 1.046,5 mill.}
+\end{frame}
+
+% ================= 5. BLACK-76 =================
+\begin{frame}[t]{Black-76 estima una prima ATM de EUR 22,89/MWh, igual para la call y la put}
+  \begin{columns}[T]
+    \begin{column}{0.54\textwidth}
+      \small
+      \[ C=e^{-rT}\!\left[F\,N(d_1)-K\,N(d_2)\right]\]
+      \[ P=e^{-rT}\!\left[K\,N(-d_2)-F\,N(-d_1)\right]\]
+      \[ d_1=\frac{\ln(F/K)+\tfrac12\sigma^2T}{\sigma\sqrt{T}},\qquad d_2=d_1-\sigma\sqrt{T}\]
+      \scriptsize
+      \renewcommand{\arraystretch}{1.15}
+      \begin{tabular}{@{}>{\bfseries\raggedright}p{2.4cm}>{\raggedright\arraybackslash}p{4.8cm}@{}}
+        \toprule
+        $F=K$ & EUR 156,43/MWh (Cal-23; strike ATM)\\
+        $T$ & 0,8 años (vencimiento supuesto: dic-2022)\\
+        $r$ & 0\% (tasa de política del BCE al corte)\\
+        $\sigma$ & 41,24\% (histórica, 295 rend.); sensibilidad: 57,18\% y 72,39\%\\
+        \bottomrule
+      \end{tabular}
+    \end{column}
+    \begin{column}{0.43\textwidth}
+      \centering
+      \kpi[5.2cm]{EUR 22,89/MWh}{prima teórica de la call = put ($\approx$14,6\% de $F$)}\\[1mm]
+      \kpi[5.2cm]{EUR 179,32/MWh}{punto de equilibrio de la call ($K$ + prima)}\\[1mm]
+      \caja{cezred}{5.2cm}{\tiny Black-76 valora opciones europeas sobre futuros . Las primas son \textbf{estimaciones teóricas con volatilidad histórica}, no cotizaciones de EEX: no hubo precios de liquidación ni volatilidad implícita al corte. Control: $C-P=0$.}
+    \end{column}
+  \end{columns}
+  %\fuente{Informe, sección 3; Excel, hoja BLACK76. Futuro: Energy-Charts (EEX) [3].}
+\end{frame}
+
+% ================= 6. SENSIBILIDAD A LA VOLATILIDAD =================
+\begin{frame}[t]{La prima depende de la volatilidad: de EUR 22,89 a 39,71/MWh según el estimador}
+  \begin{columns}[T]
+    \begin{column}{0.57\textwidth}
+      \centering{\footnotesize\bfseries Prima de la call ATM según la volatilidad (EUR/MWh)}\\[-1mm]
+      \begin{tikzpicture}
+        \begin{axis}[cez,height=4.8cm,xmin=25,xmax=95,ymin=10,ymax=55,
+          xlabel={Volatilidad anual (\%)},ylabel={EUR/MWh},xtick={30,40,50,60,70,80,90},legend pos=north west]
+          \addplot[cezteal,thick,mark=none] coordinates {(30,16.70) (40,22.21) (50,27.68) (60,33.09) (70,38.44) (80,43.72) (90,48.91)};
+          \addplot[only marks,mark=*,mark size=2.6pt,cezred] coordinates {(41.24,22.89) (57.18,31.57) (72.39,39.71)};
+          \legend{Malla de sensibilidad,Estimadores del informe}
+          \node[font=\scriptsize\bfseries,anchor=north west] at (axis cs:42.5,22.5) {22,89};
+          \node[font=\scriptsize\bfseries,anchor=north west] at (axis cs:58.5,31.2) {31,57};
+          \node[font=\scriptsize\bfseries,anchor=north west] at (axis cs:73.5,39.3) {39,71};
+        \end{axis}
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{0.40\textwidth}
+      \kpi[4.8cm]{$\approx$ EUR 0,55/MWh}{por cada punto porcentual de volatilidad}\\[1.5mm]
+      \scriptsize
+      \renewcommand{\arraystretch}{1.12}
+      \begin{tabular}{@{}lrr@{}}
+        \toprule
+        $\sigma$ & Prima total 30\% & Equilibrio\\ \midrule
+        41,24\% & EUR 153,1 mill. & 179,32\\
+        57,18\% & EUR 211,2 mill. & 188,00\\
+        72,39\% & EUR 265,7 mill. & 196,14\\ \bottomrule
+      \end{tabular}\\[1.5mm]
+      {\tiny La volatilidad casi se duplica al acortar la ventana (cambio de régimen), por eso las ventanas de 126 y 60 días son escenarios de sensibilidad.}
+    \end{column}
+  \end{columns}
+  %\fuente{Excel, hojas BLACK76 y MATRICES\_VALORACION. Primas teóricas, no cotizaciones observadas.}
+\end{frame}
+
+% ================= 7. DISEÑO: NIVELES =================
+\begin{frame}[t]{Cubrir 70\% o 100\% multiplica la prima por 2,3 y 3,3 y agota la holgura de liquidez}
+  \begin{columns}[T]
+    \begin{column}{0.62\textwidth}
+      \begin{center}
+        \textcolor{white}{text}\\
+        \scriptsize
+        \renewcommand{\arraystretch}{1.12}
+        \setlength{\tabcolsep}{3pt}
+        \begin{tabular}{@{}>{\bfseries\raggedright}p{5cm}>{\columncolor{cezlight}}r r r@{}}
+            \toprule
+            Base 22,3 TWh, $h=1$ & \textcolor{cezblue}{\textbf{30\%}} & \textbf{70\%} & \textbf{100\%}\\ \midrule
+            Volumen cubierto (TWh) & 6,69 & 15,61 & 22,30\\
+            Contratos (1 MW) & 764 & 1.782 & 2.546\\
+            Prima total (EUR mill.) & 153,1 & 357,3 & 510,4\\
+            Prima total (CZK mill.) & 3.747 & 8.744 & 12.492\\
+            Prima / liquidez ref. & 9,5\% & 22,2\% & 31,7\%\\
+            Pago / pérdida capa corta, +30\% & 30\% & 70\% & 100\%\\
+            Holgura +30\% (CZK mil mill.) & \textcolor{cezamber}{\textbf{1,86}} & \textcolor{cezred}{$-$3,14} & \textcolor{cezred}{$-$6,89}\\
+            \bottomrule
+        \end{tabular}
+      \end{center}
+    \end{column}
+    \begin{column}{0.35\textwidth}
+      \centering{\footnotesize\bfseries Prima total de la call (EUR mill.)}\\[-1mm]
+      \begin{tikzpicture}
+        \begin{axis}[cez,height=3.3cm,ybar,bar width=14pt,ymin=0,ymax=620,ymajorgrids=false,
+          axis y line=none,ytick=\empty,xtick={1,2,3},xticklabels={30\%,70\%,100\%},enlarge x limits=0.25,nodes near coords,
+          every node near coord/.append style={font=\scriptsize\bfseries}]
+          \addplot[fill=cezteal] coordinates {(1,153.1) (2,357.3) (3,510.4)};
+        \end{axis}
+      \end{tikzpicture}\\[1mm]
+      \caja{cezblue}{4.3cm}{\tiny Cada 10 puntos más de cobertura compensan EUR 104,7 mill. más de pérdida ante +30\%, pero cuestan EUR 51,0 mill. de prima cierta.}
+    \end{column}
+  \end{columns}
+  %\fuente{Informe, tabla 3; Excel, hojas COBERTURA y LIQUIDEZ. $\sigma$ principal; holgura con ventas 2023-2024, $\theta=100\%$.}
+\end{frame}
+
+% ================= 8. DIAGRAMA DE PAGOS =================
+\begin{frame}[t]{La call solo gana en neto sobre EUR 179,32/MWh: el pago bruto no incluye la prima}
+  \begin{columns}[T]
+    \begin{column}{0.49\textwidth}
+      \centering{\footnotesize\bfseries Call comprada: pago por MWh (EUR)}\\[-1mm]
+      \begin{tikzpicture}
+        \begin{axis}[cez,height=3.5cm,xmin=80,xmax=230,ymin=-35,ymax=80,xlabel={Precio del Cal-23 al vencimiento (EUR/MWh)},xlabel style={font=\tiny},
+          xtick={100,130,156.43,180,210},xticklabels={100,130,$K$,180,210},
+          legend style={at={(0.5,-0.4)},anchor=north,legend columns=2,font=\tiny}]
+          \addplot[cezteal,very thick] coordinates {(80,0) (156.43,0) (230,73.57)};
+          \addplot[cezred,thick,dashed] coordinates {(80,-22.89) (156.43,-22.89) (230,50.68)};
+          \legend{Pago bruto,Neto de prima}
+          \draw[black!50] (axis cs:80,0) -- (axis cs:230,0);
+          \draw[cezgray,dotted] (axis cs:179.32,-35) -- (axis cs:179.32,0);
+          \node[font=\tiny,anchor=north west,cezgray] at (axis cs:181,-3) {equilibrio: 179,32};
+        \end{axis}
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{0.49\textwidth}
+      \centering{\footnotesize\bfseries Put comprada: pago por MWh (EUR)}\\[-1mm]
+      \begin{tikzpicture}
+        \begin{axis}[cez,height=3.5cm,xmin=80,xmax=230,ymin=-35,ymax=80,xlabel={Precio del Cal-23 al vencimiento (EUR/MWh)},xlabel style={font=\tiny},
+          xtick={100,133.54,156.43,180,210},xticklabels={100,,$K$,180,210},
+          legend style={at={(0.5,-0.4)},anchor=north,legend columns=2,font=\tiny}]
+          \addplot[cezgray,very thick] coordinates {(80,76.43) (156.43,0) (230,0)};
+          \addplot[cezred,thick,dashed] coordinates {(80,53.54) (156.43,-22.89) (230,-22.89)};
+          \legend{Pago bruto,Neto de prima}
+          \draw[black!50] (axis cs:80,0) -- (axis cs:230,0);
+          \draw[cezgray,dotted] (axis cs:133.54,-35) -- (axis cs:133.54,0);
+          \node[font=\tiny,anchor=north east,cezgray] at (axis cs:132,-3) {equilibrio: 133,54};
+        \end{axis}
+      \end{tikzpicture}
+    \end{column}
+  \end{columns}
+  \vspace{1mm}
+  \caja{cezteal}{\textwidth}{\tiny $\pi(F_T)=\max(F_T-K,0)-c$, con $c=22{,}89$. Pago positivo si $F_T>156{,}43$; ganancia neta solo si $F_T>179{,}32$ ($+14{,}6\%$). Bajo $K$ se pierde toda la prima. Es el equilibrio de la opción aislada, no el de la empresa.}
+  %\fuente{Informe, sección 5 y anexo A; Excel, hojas ESCENARIOS y BLACK76. Prima teórica; sin costo financiero.}
+\end{frame}
+
+% ================= 9. ESCENARIOS =================
+\begin{frame}[t]{Con la call de 30\%, un alza de 30\% deja una ganancia neta de EUR 160,8 millones sobre la prima}
+  \begin{columns}[T]
+    \begin{column}{0.47\textwidth}
+      \centering{\footnotesize\bfseries Capa corta, con y sin call de 30\% (EUR millones)}\\[-1mm]
+      \begin{tikzpicture}
+        \begin{axis}[cez,height=4.6cm,xmin=-33,xmax=33,ymin=-1150,ymax=1150,
+          xtick={-30,-20,-10,0,10,20,30},xticklabels={$-30$,$-20$,$-10$,0,$+10$,$+20$,$+30$},
+          xlabel={Variación del precio (\%)},
+          legend style={at={(0.5,-0.3)},anchor=north,legend columns=1,font=\tiny}]
+          \addplot[cezred,thick] coordinates {(-30,1046.5) (-20,697.7) (-10,348.8) (0,0) (10,-348.8) (20,-697.7) (30,-1046.5)};
+          \addplot[cezteal,thick,dashed] coordinates {(-30,893.4) (-20,544.6) (-10,195.7) (0,-153.1) (10,-397.3) (20,-641.5) (30,-885.7)};
+          \legend{Capa corta sola,Capa corta + call 30\% (neto de prima)}
+          \draw[black!50] (axis cs:-33,0) -- (axis cs:33,0);
+        \end{axis}
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{0.50\textwidth}
+      \tiny
+      \renewcommand{\arraystretch}{1.12}
+      \setlength{\tabcolsep}{2.5pt}
+      \begin{tabular}{@{}rrrrr@{}}
+        \toprule
+        Var. & Precio & Call 30\% & \multicolumn{2}{c}{Resultado económico 2023}\\
+        & EUR/MWh & neta & sin cobertura & con call\\ \midrule
+        $-30\%$ & 109,50 & $-153,1$ & 3.751,3 & 3.598,2\\
+        $-20\%$ & 125,14 & $-153,1$ & 4.114,2 & 3.961,1\\
+        $-10\%$ & 140,79 & $-153,1$ & 4.477,1 & 4.324,0\\
+        $0\%$ & 156,43 & $-153,1$ & 4.840,1 & 4.687,0\\
+        $+10\%$ & 172,07 & $-48,5$ & 5.203,0 & 5.154,5\\
+        $+20\%$ & 187,72 & $+56,2$ & 5.565,9 & 5.622,1\\
+        \rowcolor{cezlight}$+30\%$ & 203,36 & $+160,8$ & 5.928,8 & 6.089,7\\
+        \bottomrule
+      \end{tabular}\\[1.5mm]
+      \caja{cezamber}{6.6cm}{\tiny Ante +30\%, la call paga EUR 314,0 mill., que compensan 30\% de la pérdida de la capa corta; el resultado total de \v{C}EZ crece en todos los escenarios y la call lo reduce en la prima (EUR 153,1 mill., 3,2\% del resultado sin cobertura) si el precio no supera el umbral.}
+    \end{column}
+  \end{columns}
+  %\fuente{Informe, tabla 4; Excel, hoja ESCENARIOS. EUR millones; pago bruto al vencimiento menos prima. Escenarios hipotéticos.}
+\end{frame}
+
+% ================= 10. LIQUIDEZ: HOLGURA =================
+\begin{frame}[t]{Solo el nivel de 30\% conserva holgura de liquidez ante un alza de 30\%}
+  \begin{columns}[T]
+    \begin{column}{0.58\textwidth}
+      \centering{\footnotesize\bfseries Holgura de liquidez ante +30\% (CZK miles de millones)}\\[-1mm]
+      \begin{tikzpicture}
+        \begin{axis}[cez,height=4.1cm,ybar,bar width=12pt,ymin=-40,ymax=12,
+          xtick={1,2,3},xticklabels={30\%,70\%,100\%},enlarge x limits=0.25,axis x line=bottom,x axis line style={draw=none},
+          xtick style={draw=none},legend style={at={(0.5,-0.2)},anchor=north,legend columns=3,font=\tiny},nodes near coords]
+          \addplot[fill=cezteal] coordinates {(1,1.86) (2,-3.14) (3,-6.89)};
+          \addplot[fill=cezgray] coordinates {(1,-6.47) (2,-22.57) (3,-34.64)};
+          \draw[cezamber,dashed,very thick] (axis cs:0.5,5.60) -- (axis cs:3.5,5.60);
+          \draw[black!60] (axis cs:0.5,0) -- (axis cs:3.5,0);
+          \addlegendimage{cezamber,dashed,very thick}
+          \legend{{Call comprada},{Futuro vendido (ref.)},{Sin cobertura: 5,60}}
+        \end{axis}
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{0.39\textwidth}
+      \kpi[4.6cm]{9,5\% de la liquidez}{prima del nivel de 30\%: CZK 3.747 mill.}\\[1mm]
+      \scriptsize
+      El margen heredado consume CZK 33,82 mil mill. ($\theta=100\%$, 2023 y 2024). La prima se paga al inicio y reduce la holgura por completo; esta financia como máximo una prima de 45\% de la base (5,60/12,49).\\[1.5mm]
+      \caja{cezred}{4.6cm}{\tiny \textbf{Sensible:} con $\sigma$ de 126 d la holgura cae a CZK 0,43 mil mill.; con 60 d es $-$0,90. Con $\theta=50\%$ los tres niveles serían financiables.}
+    \end{column}
+  \end{columns}
+  %\fuente{Informe, sección 4 y anexo D; Excel, hoja LIQUIDEZ. Liquidez de referencia: CZK 39,42 mil mill. (efectivo más líneas comprometidas al 30-sep-2021). Margen de futuros: referencia de CME.}
+\end{frame}
+
+% ================= 11. CONCEPTOS DE CAJA =================
+\begin{frame}[t]{Prima, garantías heredadas y pago de la call ocurren en fechas y montos distintos}
+  \centering
+  \begin{tikzpicture}[
+     c/.style={rounded corners=3pt,text width=3.6cm,minimum height=3.1cm,inner sep=5pt,align=left,font=\scriptsize,text=white},
+     a/.style={-{Stealth[length=2.5mm]},thick,cezgray}]
+    \node[c,fill=cezteal,anchor=north west] (i) at (0,0) {\textbf{\small Inicio ($t=0$)}\\[1mm]
+      Prima: \textbf{EUR 153,1 mill.} (CZK 3.747 mill.).\\
+      Costo financiero hasta el vencimiento: CZK 135 mill. (repo 4,50\%).\\
+      Comisión de compensación: EUR 16.725.\\
+      Sin margen para el comprador (régimen de prima supuesto).};
+    \node[c,fill=cezred,anchor=north west] (v) at (4.5,0) {\textbf{\small Durante la vida}\\[1mm]
+      Las llamadas de margen heredadas \textbf{subsisten}: EUR 1.381,8 mill. ante +30\% ($\theta=100\%$).\\
+      Efectivo de la call antes de $T$: \textbf{nulo} en este régimen.\\
+      Su revalorización (EUR 221,9 mill.) solo es caja si se vende o liquida a diario.};
+    \node[c,fill=cezamber,anchor=north west] (t) at (9.0,0) {\textbf{\small Vencimiento ($T=0{,}8$)}\\[1mm]
+      Pago de la call: \textbf{EUR 314,0 mill.}\\
+      Ganancia económica: EUR 160,8 mill. (pago $-$ prima).\\
+      Equivale a 22,7\% de las llamadas heredadas.};
+    \draw[a] ([yshift=-1cm]i.east) -- ([yshift=-1cm]v.west);
+    \draw[a] ([yshift=-1cm]v.east) -- ([yshift=-1cm]t.west);
+  \end{tikzpicture}\\[2mm]
+  \caja{cezblue}{0.94\textwidth}{\footnotesize La pérdida económica y la salida de efectivo no coinciden ni en monto ni en fecha. La ganancia al vencimiento \textbf{no} es efectivo disponible para atender llamadas de margen.}
+  %\fuente{Informe, sección 5; Excel, hoja LIQUIDEZ (secciones D, G y H). Régimen de liquidación al corte no verificado [6], [7]; repo de la ČNB [10].}
+\end{frame}
+
+% ================= 12. RECOMENDACION =================
+\begin{frame}[t]{Recomendación: comprar calls ATM para cubrir 30\% de la capa financiera corta de 2023}
+  \centering
+  \vspace{-3mm}
+  \caja{cezteal}{6.4cm}{\scriptsize\textbf{\small \textquestiondown Qué instrumento?}\\[0.5mm]
+    Call europea \textbf{comprada}, ATM ($K=156{,}43$), sobre el futuro Cal-23; vencimiento supuesto en diciembre de 2022.}\hspace{1mm}%
+  \caja{cezblue}{6.4cm}{\scriptsize\textbf{\small \textquestiondown Por cuánto?}\\[0.5mm]
+    30\% de 22,3 TWh: \textbf{6,69 TWh} y \textbf{764 contratos} de 1 MW.}\\[1.5mm]
+  \caja{cezamber}{6.4cm}{\scriptsize\textbf{\small \textquestiondown A qué precio?}\\[0.5mm]
+    Prima teórica de \textbf{EUR 22,89/MWh}: desembolso de \textbf{EUR 153,1 mill.} (CZK 3.747 mill., 9,5\% de la liquidez de referencia). Ganancia neta sobre EUR 179,32/MWh.}\hspace{1mm}%
+  \caja{cezred}{6.4cm}{\scriptsize\textbf{\small \textquestiondown Por qué ese y no otro?}\\[0.5mm]
+    Paga ante alzas sin crear nuevas llamadas de margen al comprador (régimen de prima supuesto); es el único nivel con holgura de liquidez (CZK 1,86 mil mill.).}\\[-1mm]
+  \caja{cezgray}{13.3cm}{\tiny\textbf{Limitaciones:} la prima es teórica y no resiste la volatilidad de 60 días; la call compensa al vencimiento y no elimina las llamadas de margen; aumenta la exposición neta al alza de una empresa ya larga y no protege la caída del precio; depende de $\theta$, del régimen de liquidación y de la liquidez al corte.}
+\end{frame}
+
+% ================= 13. PREGUNTAS =================
+\begin{frame}[plain]
+  \centering
+  \vspace{22mm}
+  {\color{cezblue}\fontsize{26}{30}\selectfont\bfseries Preguntas\par}
+  \vspace{2mm}
+  {\color{cezteal}\rule{4cm}{1pt}\par}
+  \vspace{3mm}
+  {\small\color{cezgray} \textexclamdown Muchas Gracias!\par}
+\end{frame}
+
+% ===================== RESPALDO =====================
+\appendix
+
+% ---- A. Holgura ----
+\begin{frame}[t]{A. Holgura de liquidez ante un alza de 30\% según las ventas heredadas incluidas}
+  \centering
+  \scriptsize
+  \renewcommand{\arraystretch}{1.2}
+  \setlength{\tabcolsep}{3.5pt}
+  \begin{tabular}{@{}l r r r r r r r r@{}}
+    \toprule
+    Ventas heredadas & $\theta$ & Consumo & Sin nueva & \multicolumn{3}{c}{Call o put comprada} & \multicolumn{2}{c}{Futuro vendido}\\
+    \cmidrule(lr){5-7}\cmidrule(lr){8-9}
+    incluidas & & heredado & cobertura & 30\% & 70\% & 100\% & 30\% & 100\%\\ \midrule
+    2023 & 100\% & 25,61 & 13,81 & 10,06 & 5,07 & 1,32 & 1,74 & $-$26,44\\
+    \rowcolor{cezlight}2023 y 2024 & 100\% & 33,82 & 5,60 & 1,86 & $-$3,14 & $-$6,89 & $-$6,47 & $-$34,64\\
+    2023 y 2024 & 50\% & 16,91 & 22,51 & 18,77 & 13,77 & 10,02 & 10,44 & $-$17,73\\
+    2023, 2024 y 2022 & 100\% & 70,32 & $-$30,90 & $-$34,65 & $-$39,64 & $-$43,39 & $-$42,97 & $-$71,15\\
+    2023, 2024 y 2022 & 50\% & 35,16 & 4,26 & 0,51 & $-$4,48 & $-$8,23 & $-$7,81 & $-$35,98\\
+    \bottomrule
+  \end{tabular}
+  \vspace{3mm}
+
+  \begin{minipage}{0.95\textwidth}\raggedright\scriptsize
+  CZK miles de millones; liquidez de referencia: 39,42. Fila resaltada: escenario principal. Las ventas de 2022 pendientes se valoran con el Cal-23 como cota inferior. Futuros: margen de referencia de CME (17,1\%), que no equivale al de ECC.
+  \end{minipage}
+  %\fuente{Informe, cuadro A1; Excel, hoja LIQUIDEZ, sección E.}
+\end{frame}
+
+% ---- B. Sensibilidades ----
+\begin{frame}[t]{B. Sensibilidad de la prima al nivel, al strike y al vencimiento}
+  \begin{columns}[T]
+    \begin{column}{0.49\textwidth}
+      \scriptsize\centering
+      {\bfseries Prima total de la call (EUR millones)}\\[1mm]
+      \renewcommand{\arraystretch}{1.15}
+      \begin{tabular}{@{}lrrr@{}}
+        \toprule
+        Nivel & 41,24\% & 57,18\% & 72,39\%\\ \midrule
+        30\% (6,69 TWh) & 153,1 & 211,2 & 265,7\\
+        70\% (15,61 TWh) & 357,3 & 492,9 & 619,9\\
+        100\% (22,30 TWh) & 510,4 & 704,1 & 885,6\\ \bottomrule
+      \end{tabular}\\[3mm]
+      {\bfseries Prima unitaria según el strike (EUR/MWh)}\\[1mm]
+      \begin{tabular}{@{}lrrr@{}}
+        \toprule
+        $K/F$ & 41,24\% & 57,18\% & 72,39\%\\ \midrule
+        90\% & 30,43 & 38,44 & 46,03\\
+        100\% & 22,89 & 31,57 & 39,71\\
+        110\% & 17,00 & 25,89 & 34,31\\
+        120\% & 12,50 & 21,22 & 29,70\\ \bottomrule
+      \end{tabular}
+    \end{column}
+    \begin{column}{0.49\textwidth}
+      \scriptsize\centering
+      {\bfseries Prima unitaria según el vencimiento (EUR/MWh)}\\[1mm]
+      \renewcommand{\arraystretch}{1.15}
+      \begin{tabular}{@{}lrrr@{}}
+        \toprule
+        $T$ (años) & 41,24\% & 57,18\% & 72,39\%\\ \midrule
+        0,25 & 12,84 & 17,78 & 22,47\\
+        0,50 & 18,13 & 25,06 & 31,60\\
+        0,80 & 22,89 & 31,57 & 39,71\\
+        1,00 & 25,55 & 35,21 & 44,21\\ \bottomrule
+      \end{tabular}\\[3mm]
+      \begin{minipage}{6.2cm}\raggedright\tiny
+      Columnas: volatilidad anual. Strike ATM y $T=0{,}8$ años son supuestos; el calendario de vencimientos de EEX quedó pendiente. Todas las primas son teóricas.
+      \end{minipage}
+    \end{column}
+  \end{columns}
+  %\fuente{Informe, cuadros A2 y A3; Excel, hojas MATRICES\_VALORACION y BLACK76.}
+\end{frame}
+
+% ---- C. Trayectoria de caja ----
+\begin{frame}[t]{C. Necesidad de caja por escenario con la call de 30\% frente a la liquidez de referencia}
+  \begin{columns}[T]
+    \begin{column}{0.62\textwidth}
+      \centering{\footnotesize\bfseries Necesidad de caja (CZK miles de millones), $\theta=100\%$, ventas 2023 y 2024}\\[-1mm]
+      \begin{tikzpicture}
+        \begin{axis}[cez,height=4.6cm,ybar stacked,bar width=14pt,ymin=0,ymax=46,
+          xtick={1,2,3,4,5,6,7},xticklabels={$-30\%$,$-20\%$,$-10\%$,0,$+10\%$,$+20\%$,$+30\%$},enlarge x limits=0.1,
+          legend style={at={(0.5,-0.14)},anchor=north,legend columns=3,font=\tiny},every node near coord/.append style={font=\tiny}]
+          \addplot[fill=cezred] coordinates {(1,0) (2,0) (3,0) (4,0) (5,11.27) (6,22.55) (7,33.82)};
+          \addplot[fill=cezteal] coordinates {(1,3.75) (2,3.75) (3,3.75) (4,3.75) (5,3.75) (6,3.75) (7,3.75)};
+          \draw[cezamber,dashed,very thick] (axis cs:0.4,39.42) -- (axis cs:7.6,39.42);
+          \addlegendimage{cezamber,dashed,very thick}
+          \legend{{Margen heredado},{Prima de la call},{Liquidez de referencia: 39,42}}
+        \end{axis}
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{0.35\textwidth}
+      \scriptsize
+      Ante +30\%, la necesidad total es CZK 37,57 mil mill. y deja una holgura de 1,86 frente a 39,42; sin nueva cobertura sería 5,60.\\[2mm]
+      \caja{cezgray}{4.4cm}{\tiny La prima es salida cierta en todos los escenarios; el pago de la call (CZK 7,68 mil mill. ante +30\%) llega al vencimiento y no se suma como caja durante la vida de la opción.}
+    \end{column}
+  \end{columns}
+  %\fuente{Informe, figura A3; Excel, hoja LIQUIDEZ, sección F.}
+\end{frame}
+
+% ---- D. Razón de cobertura y clasificación ----
+\begin{frame}[t]{D. Razón de cobertura y clasificación de la información utilizada}
+  \begin{columns}[T]
+    \begin{column}{0.47\textwidth}
+      \scriptsize
+      \textbf{Razón de cobertura.} La call y las ventas a plazo comparten subyacente (Cal-23), por lo que $h=1$ y volumen = base $\times$ nivel $\times\,h$.\\[2mm]
+      \renewcommand{\arraystretch}{1.12}
+      \begin{tabular}{@{}>{\raggedright}p{3.6cm}>{\raggedright\arraybackslash}p{2.3cm}@{}}
+        \toprule
+        Sensibilidad $h=0{,}8$ & 5,352 TWh; 611 contratos\\
+        $h^{*}$ mínima varianza (contado CZ sobre DE) & 0,68\\
+        Correlación de variaciones diarias CZ--DE & 0,896\\
+        $R^2$ de la regresión & 0,803\\ \bottomrule
+      \end{tabular}\\[1mm]
+      {\tiny $h^{*}$ y el contraste con el contado figuran solo en el Excel (hoja COBERTURA); no se usan para decidir.}
+    \end{column}
+    \begin{column}{0.50\textwidth}
+      \tiny
+      \renewcommand{\arraystretch}{1.12}
+      \begin{tabular}{@{}>{\bfseries\raggedright}p{1.9cm}>{\raggedright\arraybackslash}p{4.7cm}@{}}
+        \toprule
+        Observado & Cal-23 y Cal-24 al corte; ventas a plazo 2022 a 2024; efectivo y líneas al 30-sep-2021; tipo de cambio; repo; aviso de margen de CME\\ \midrule
+        Estimación propia & Volatilidad histórica; primas Black-76; contratos, nocionales y primas totales; margen de 17,1\%; escenarios y holguras\\ \midrule
+        Supuesto o pendiente & $T=0{,}8$ y $r=0$; $\theta$; régimen de liquidación de la opción; margen de ECC; precios de 2022; liquidez y porcentaje vendido en febrero de 2022; cotizaciones de opciones de EEX\\
+        \bottomrule
+      \end{tabular}
+    \end{column}
+  \end{columns}
+  %\fuente{Informe, cuadro A4; Excel, hojas COBERTURA y FUENTES\_CONTROL.}
+\end{frame}
+
+% ---- E. Referencias ----
+\begin{frame}[t]{E. Referencias}
+  \tiny
+  \setlength{\parskip}{0.6mm}
+  \begin{columns}[T]
+    \begin{column}{0.49\textwidth}
+      [1] \v{C}EZ, a. s., \comillas{Presentation on CEZ Group financial results in Q3 2021}.\par
+      [2] A. Giannozzi y A. Kirilova, \comillas{When corporate risk management amplifies risks: Evidence from Europe's energy crisis in 2022}, \emph{Journal of Banking \& Finance}, vol. 188, 107700, 2026.\par
+      [3] Energy-Charts (Fraunhofer ISE), \comillas{Futuros energéticos (Base) para Alemania}; fuente original: EEX. Extracción propia.\par
+      [4] \v{C}esk\'a n\'arodn\'i banka, \comillas{Kurzy devizového trhu}, fixing del 23-feb-2022.\par
+      [5] \v{C}EZ, a. s., \comillas{Interim consolidated financial statements as of September 30, 2021 (unaudited, IFRS)}.\par
+      [6] European Commodity Clearing AG, \comillas{ECC Derivative Market Margining}, ver. 1.16.\par
+    \end{column}
+    \begin{column}{0.49\textwidth}
+      [7] European Commodity Clearing AG, \comillas{ECC Clearing Circular 46/2020: Futures Style Options}.\par
+      [8] F. Black, \comillas{The Pricing of Commodity Contracts}, \emph{Journal of Financial Economics}, vol. 3, n.$^\circ$ 1-2, pp. 167-179, 1976.\par
+      [9] European Energy Exchange, \comillas{Power Futures}, especificaciones de contratos.\par
+      [10] \v{C}esk\'a n\'arodn\'i banka, \comillas{CNB increases interest rates}.\par
+      [11] CME Clearing, \comillas{Performance Bond Requirements}, aviso 22-004.\par
+      Cálculos: Excel auditable del Entregable 2 (hojas BLACK76, COBERTURA, ESCENARIOS y LIQUIDEZ).
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\end{document}

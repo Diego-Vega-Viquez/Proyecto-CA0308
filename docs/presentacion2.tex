@@ -375,17 +375,48 @@
     \begin{column}{0.58\textwidth}
       \centering{\footnotesize\bfseries Holgura de liquidez ante +30\% (CZK miles de millones)}\\[-1mm]
       \begin{tikzpicture}
-        \begin{axis}[cez,height=4.1cm,ybar,bar width=12pt,ymin=-40,ymax=12,
-          xtick={1,2,3},xticklabels={30\%,70\%,100\%},enlarge x limits=0.25,axis x line=bottom,x axis line style={draw=none},
-          xtick style={draw=none},legend style={at={(0.5,-0.2)},anchor=north,legend columns=3,font=\tiny},nodes near coords]
-          \addplot[fill=cezteal] coordinates {(1,1.86) (2,-3.14) (3,-6.89)};
-          \addplot[fill=cezgray] coordinates {(1,-6.47) (2,-22.57) (3,-34.64)};
-          \draw[cezamber,dashed,very thick] (axis cs:0.5,5.60) -- (axis cs:3.5,5.60);
-          \draw[black!60] (axis cs:0.5,0) -- (axis cs:3.5,0);
-          \addlegendimage{cezamber,dashed,very thick}
-          \legend{{Call comprada},{Futuro vendido (ref.)},{Sin cobertura: 5,60}}
-        \end{axis}
-      \end{tikzpicture}
+  \begin{axis}[
+    cez,
+    height=4.1cm,
+    ybar,
+    bar width=12pt,
+    ymin=-40,
+    ymax=12,
+    xmin=0.5,
+    xmax=3.5,
+    xtick={1,2,3},
+    xticklabels={30\%,70\%,100\%},
+    axis x line=none,
+    xtick style={draw=none},
+    legend style={
+      at={(0.5,-0.2)},
+      anchor=north,
+      legend columns=3,
+      font=\tiny
+    },
+    nodes near coords
+  ]
+    \addplot[fill=cezteal]
+      coordinates {(1,1.86) (2,-3.14) (3,-6.89)};
+
+    \addplot[fill=cezgray]
+      coordinates {(1,-6.47) (2,-22.57) (3,-34.64)};
+
+    \draw[cezamber,dashed,very thick]
+      (axis cs:0.5,5.60) -- (axis cs:3.5,5.60);
+
+    \draw[black!60]
+      (axis cs:0.5,0) -- (axis cs:3.5,0);
+
+    \addlegendimage{cezamber,dashed,very thick}
+
+    \legend{
+      {Call comprada},
+      {Futuro vendido (ref.)},
+      {Sin cobertura: 5,60}
+    }
+  \end{axis}
+\end{tikzpicture}
     \end{column}
     \begin{column}{0.39\textwidth}
       \kpi[4.6cm]{9,5\% de la liquidez}{prima del nivel de 30\%: CZK 3.747 mill.}\\[1mm]
